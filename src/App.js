@@ -1,10 +1,9 @@
+import Canvas from './components/Canvas/Canvas';
 function App() {
   return (
     <div className="App">
       <header>
-        <h1>
-            Logic Circuit Simulator
-        </h1>
+        <Canvas/>
       </header>
     </div>
   );

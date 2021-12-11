@@ -1,0 +1,22 @@
+.StartingNode {
+    height: 20px;
+    width: 20px;
+
+    cursor: pointer;
+
+
+    border-radius: 100%;
+    border: 1px solid #000;
+
+    &Undefined {
+        background-color: gray;
+    }
+
+    &True {
+        background-color: lime;
+    }
+
+    &False {
+        background-color: red;
+    }
+}

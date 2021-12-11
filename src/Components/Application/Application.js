@@ -22,7 +22,8 @@ class Application extends React.Component {
 
         switch ( args.type ) {
             case 'logicGate':
-                newElement = <LogicGate gateType={ args.gateLogic } getFocus={ this.getFocus } inputs={ [undefined, undefined] } readFocus = { this.readFocus } />;
+                // domyślnie 2 inputy
+                newElement = <LogicGate gateType={ args.gateLogic } getFocus={ this.getFocus } inputs={ 2 } readFocus = { this.readFocus } />;
                 break;
             case 'startingNode':
                 newElement = <StartingNode value={ args.value } getFocus={ this.getFocus } />;

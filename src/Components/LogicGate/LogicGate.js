@@ -12,22 +12,25 @@ const basicFunctions = {
 }
 
 class LogicGate extends React.Component {
-    // TODO Bramki powinny móc mieć różną ilość inputów
     constructor( {...props} ) {
         super();
         this.gateType = basicFunctions[props.gateType];
         this.state = {
-            inputs: props.inputs,
+            inputs: new Array(props.inputs).fill(undefined), // pusta tabela (undefined) o podanej długości
         }
+        console.log(this.state.inputs.length);
     }
 
     getValue = function () {
-        const inputs = this.state.inputs;
+        let inputs = [];
+        for (let i = 0; i < this.state.inputs.length; i++){
+            let inp = this.state.inputs[i];
 
-        // jezeli brakuje ktoregos inputa, nie da sie okreslic wyjscia (chyba ze OR)
-        if ( !inputs[0] || !inputs[1] ) return undefined;
-
-        let output = this.gateType([inputs[0].getValue(), inputs[1].getValue()]);
+            // jezeli brakuje ktoregos inputa, nie da sie okreslic wyjscia (chyba ze OR)
+            if (!inp) return undefined;
+            inputs.push(inp.getValue());
+        }
+        let output = this.gateType(inputs);
         return output;
     }
 

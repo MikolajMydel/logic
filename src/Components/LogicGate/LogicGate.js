@@ -4,7 +4,7 @@ import styles from "./LogicGate.module.scss";
 const gateClass = {
     'AND': styles.LogicGateAND,
     'OR': styles.LogicGateOR,
-    
+
 
 }
 
@@ -31,10 +31,10 @@ class LogicGate extends React.Component {
         if ( !inputs [0] || !inputs [1] ) return undefined;
 
         switch ( gateType ) {
-    
+
             case "AND":
                 return inputs [0].getValue() && inputs [1].getValue();
-                
+
             case "OR":
                 return inputs [0].getValue() || inputs [1].getValue();
 
@@ -42,9 +42,9 @@ class LogicGate extends React.Component {
                 return inputs [0].getValue() || inputs [1].getValue();
 
         }
-    
-        
-    
+
+
+
     }
 
     changeInput = ( index ) => {
@@ -57,15 +57,15 @@ class LogicGate extends React.Component {
     }
 
     render () {
-        
+
         let value = this.getValue();
 
         if ( value == undefined ) value = "undefined";
 
         const style = gateClass [ this.props.gateType ];
 
-        return ( 
-            <div className={`${styles.LogicGate} ${style}`} >  
+        return (
+            <div className={`${styles.LogicGate} ${style}`} >
                 <button className={styles.LogicGateInput} onClick={ () => this.changeInput(0) } >
 
                 </button>

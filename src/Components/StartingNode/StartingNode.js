@@ -19,14 +19,14 @@ class StartingNode extends React.Component {
     };
 
     getValue = () => this.state.value;
-    
+
 
     render() {
 
         const value = this.props.value;
         let style = null;
 
-        // styl na podstawie wartosci 
+        // styl na podstawie wartosci
         if ( value === undefined ) {
             style = styles.StartingNodeUndefined;
         } else {
@@ -36,7 +36,7 @@ class StartingNode extends React.Component {
         }
 
         return (
-            
+
             <div className={`${styles.StartingNode} ${style}`} onClick={ () => this.props.getFocus (this) } >
             </div>
         )

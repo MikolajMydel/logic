@@ -33,7 +33,7 @@ class Application extends React.Component {
         const actualElements = this.state.elements;
 
         let newElement = undefined;
-        
+
         switch ( args.type ) {
 
             case 'logicGate':
@@ -60,7 +60,7 @@ class Application extends React.Component {
 
         elements:
         [
-            
+
         ]
     }
 

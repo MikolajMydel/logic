@@ -9,19 +9,7 @@ body {
     
 }
 
-.ControlPanel {
-    border: 1px solid #000;
-    background-color: #fff;
-
-    height: 100vh;
-    width: 150px;
-
-    float: left;
-
-}
-
 .Canvas {
-    border: 1px solid pink;
     float: left;
     width: calc( 100vw - 150px );
     height: 100%;

@@ -5,7 +5,8 @@ import styles from './Application.module.scss';
 
 import LogicGate from "../LogicGate/LogicGate.js";
 import StartingNode from "../StartingNode/StartingNode.js";
-import { act } from "react-dom/cjs/react-dom-test-utils.production.min";
+
+import ControlPanel from "../ControlPanel/ControlPanel";
 
 const LogicGatesTypes = {
     "AND": "AND",
@@ -16,12 +17,18 @@ const ApplicationContext = React.createContext (undefined);
 
 class Application extends React.Component {
 
+
+    // funkcja zmieniajaca aktualnie wybrane wyjscie - pozwala na uzycie kliknietego wyjscia na wejscie bramki logicznej
     getFocus = ( element ) => {
         this.setState ({'focusedElement': element});
     }
 
+
+    // funkcja zwracajaca aktualnie wybrane wyjscie - umozliwia kliknietej bramce logicznej zmiane wejscia na wczesniej klikniete wyjscie
     readFocus = () => this.state.focusedElement;
 
+
+    // dodawanie nowych elementow na plansze
     addElement = ( args ) => {
         const actualElements = this.state.elements;
 
@@ -30,7 +37,7 @@ class Application extends React.Component {
         switch ( args.type ) {
 
             case 'logicGate':
-                newElement = <LogicGate gateType={args.gateLogic} inputs={[undefined, undefined]} readFocus = { this.readFocus } />;
+                newElement = <LogicGate gateType={args.gateLogic} getFocus={ this.getFocus } inputs={[undefined, undefined]} readFocus = { this.readFocus } />;
                 break;
 
             case 'startingNode':
@@ -42,38 +49,25 @@ class Application extends React.Component {
 
         actualElements.push ( newElement );
 
-        console.log ( newElement );
-
         this.setState ({elements: actualElements});
     }
 
+
+    // przechowywanie aktualnie wybranego wyjscia i wszystkich elementow na planszy
     state = {
 
         focusedElement: undefined,
 
         elements:
         [
-            <StartingNode value={true} getFocus={ this.getFocus } />,
-            <StartingNode value={false} getFocus={ this.getFocus } />,
-
-            <LogicGate gateType="AND" inputs={[undefined, undefined]} readFocus = { this.readFocus } />,
+            
         ]
     }
 
     render() {
         return (
             <>
-                <nav className={ styles.ControlPanel }>
-
-                    <button onClick={ () => this.addElement ( { type: "startingNode", value: true } ) } > Węzeł prawda </button>
-                    <button onClick={ () => this.addElement ( { type: "startingNode", value: false } ) } > Węzeł fałsz </button>
-
-
-                    <button onClick={ () => this.addElement ( { type: "logicGate", gateLogic: "AND" } ) } > Bramka AND </button>
-                    <button onClick={ () => this.addElement ( { type: "logicGate", gateLogic: "OR" } ) } > Bramka OR </button>
-
-
-                </nav>
+                <ControlPanel addElement={this.addElement} />
 
                 <div className={ styles.Canvas } >
                     { this.state.elements }

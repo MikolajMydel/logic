@@ -14,7 +14,7 @@
         background-color: chocolate;
     }
 
-    &Input {
+    button {
         height: 5px;
         width: 5px;
 
@@ -24,9 +24,21 @@
 
         position: absolute;
         bottom: 15%;
+    }
 
+    &Input {
+        
         &:first-of-type {
             top: 15%;
         }
+    }
+
+    &Output {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+
+        margin: auto;
     }
 }

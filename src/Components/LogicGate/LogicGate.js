@@ -27,19 +27,20 @@ class LogicGate extends React.Component {
         const gateType = this.gateType;
         const inputs = this.state.inputs;
 
-        if ( !inputs [0] || !inputs [1] ) return false;
+        // jezeli brakuje ktoregos inputa, nie da sie okreslic wyjscia (chyba ze OR)
+        if ( !inputs [0] || !inputs [1] ) return undefined;
 
         switch ( gateType ) {
     
             case "AND":
-                return inputs [0] && inputs [1];
-
-                return inputs[0].value && inputs [1].value;
+                return inputs [0].getValue() && inputs [1].getValue();
                 
-            default:
-                return inputs [0] && inputs [1];
-
+            case "OR":
                 return inputs [0].getValue() || inputs [1].getValue();
+
+            default:
+                return inputs [0].getValue() || inputs [1].getValue();
+
         }
     
         
@@ -52,11 +53,14 @@ class LogicGate extends React.Component {
         inputs [index] = this.props.readFocus();
 
         this.setState({'inputs': inputs});
+
     }
 
-    render = () => {
+    render () {
         
-        const value = this.getValue();
+        let value = this.getValue();
+
+        if ( value == undefined ) value = "undefined";
 
         const style = gateClass [ this.props.gateType ];
 
@@ -70,6 +74,8 @@ class LogicGate extends React.Component {
                 </button>
 
                 <h2> { value.toString() } </h2>
+
+                <button className={styles.LogicGateOutput} onClick={ () => this.props.getFocus (this) }> </button>
             </div>
         )
     }

@@ -10,9 +10,12 @@ class StartingNode extends React.Component {
     constructor( props ) {
         super();
 
-        this.setState({'value': props.value}, function() {
+        this.state.value = props.value;
+
+        /* this.setState({'value': props.value}, function() {
             console.log ( this.state.value );
         });
+        */
     };
 
     getValue = () => this.state.value;
@@ -33,6 +36,7 @@ class StartingNode extends React.Component {
         }
 
         return (
+            
             <div className={`${styles.StartingNode} ${style}`} onClick={ () => this.props.getFocus (this) } >
             </div>
         )

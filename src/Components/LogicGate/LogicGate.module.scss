@@ -17,28 +17,24 @@
     button {
         height: 5px;
         width: 5px;
-
         border: 1px solid #000;
 
         cursor: pointer;
-
         position: absolute;
         bottom: 15%;
     }
 
     &Input {
-
         &:first-of-type {
             top: 15%;
         }
     }
 
     &Output {
+        margin: auto;
         position: absolute;
         right: 0;
         top: 0;
         bottom: 0;
-
-        margin: auto;
     }
 }

@@ -18,7 +18,6 @@ class LogicGate extends React.Component {
         this.state = {
             inputs: new Array(props.inputs).fill(undefined), // pusta tabela (undefined) o podanej długości
         }
-        console.log(this.state.inputs.length);
     }
 
     getValue = function () {
@@ -36,7 +35,7 @@ class LogicGate extends React.Component {
 
     changeInput = ( index ) => {
         const inputs = this.state.inputs;
-        inputs[index] = this.props.readFocus();
+        inputs[index] = this.props.getFocusedElement();
 
         this.setState({'inputs': inputs});
     }
@@ -53,7 +52,7 @@ class LogicGate extends React.Component {
                 <button className={ styles.LogicGateInput } onClick={ () => this.changeInput(0) } ></button>
                 <button className={ styles.LogicGateInput } onClick={ () => this.changeInput(1) }></button>
                 <h5> { value.toString() } </h5>
-                <button className={ styles.LogicGateOutput } onClick={ () => this.props.getFocus (this) }> </button>
+                <button className={ styles.LogicGateOutput } onClick={ () => this.props.setFocusedElement (this) }> </button>
             </div>
         )
     }

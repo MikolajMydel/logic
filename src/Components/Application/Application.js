@@ -8,12 +8,12 @@ const ApplicationContext = React.createContext (undefined);
 
 class Application extends React.Component {
     // funkcja zmieniajaca aktualnie wybrane wyjscie - pozwala na uzycie kliknietego wyjscia na wejscie bramki logicznej
-    getFocus = ( element ) => {
+    setFocusedElement = ( element ) => {
         this.setState ({'focusedElement': element});
     }
 
     // funkcja zwracajaca aktualnie wybrane wyjscie - umozliwia kliknietej bramce logicznej zmiane wejscia na wczesniej klikniete wyjscie
-    readFocus = () => this.state.focusedElement;
+    getFocusedElement = () => this.state.focusedElement;
 
     // dodawanie nowych elementow na plansze
     addElement = ( args ) => {
@@ -23,13 +23,13 @@ class Application extends React.Component {
         switch ( args.type ) {
             case 'logicGate':
                 // domyślnie 2 inputy
-                newElement = <LogicGate gateType={ args.gateLogic } getFocus={ this.getFocus } inputs={ 2 } readFocus = { this.readFocus } />;
+                newElement = <LogicGate gateType={ args.gateLogic } setFocusedElement={ this.setFocusedElement } inputs={ 2 } getFocusedElement = { this.getFocusedElement } />;
                 break;
             case 'startingNode':
-                newElement = <StartingNode value={ args.value } getFocus={ this.getFocus } />;
+                newElement = <StartingNode value={ args.value } setFocusedElement={ this.setFocusedElement } />;
                 break;
             default:
-                newElement = <StartingNode value={ args.value } getFocus={ this.getFocus } />;
+                newElement = <StartingNode value={ args.value } setFocusedElement={ this.setFocusedElement } />;
         }
 
         actualElements.push ( newElement );

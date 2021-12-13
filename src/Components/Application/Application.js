@@ -23,7 +23,7 @@ class Application extends React.Component {
         switch ( args.type ) {
             case 'logicGate':
                 // domyślnie 2 inputy
-                newElement = <LogicGate gateType={ args.gateLogic } setFocusedElement={ this.setFocusedElement } inputs={ 2 } getFocusedElement = { this.getFocusedElement } />;
+                newElement = <LogicGate gateType={ args.gateLogic } setFocusedElement={ this.setFocusedElement } inputs={ args.inputCount } getFocusedElement = { this.getFocusedElement } />;
                 break;
             case 'startingNode':
                 newElement = <StartingNode value={ args.value } setFocusedElement={ this.setFocusedElement } />;
@@ -48,7 +48,7 @@ class Application extends React.Component {
     render() {
         return (
             <>
-                <ControlPanel addElement={this.addElement} />
+                <ControlPanel addElement={ this.addElement } />
                 <div className={ styles.Canvas } >
                     { this.state.elements }
                 </div>

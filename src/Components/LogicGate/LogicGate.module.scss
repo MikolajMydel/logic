@@ -1,10 +1,18 @@
 .LogicGate {
-    width: 50px;
-    height: 50px;
+
+    $input-size: 20px;
+
+    width: 200px;
+    height: 125px;
 
     position: absolute;
 
-    border: 1px solid #000;
+    border: 3px solid #000;
+    border-radius: 15px;
+
+    cursor: pointer;
+
+    box-shadow: 0px 0px 20px 1px rgba(255, 255, 255, 1);
 
     &AND {
         background-color: cornflowerblue;
@@ -15,25 +23,37 @@
     }
 
     button {
-        height: 5px;
-        width: 5px;
-        border: 1px solid #000;
+        height: $input-size;
+        width: $input-size;
+
+
+        border: 2px solid #000;
+
+        border-radius: 100%;
 
         cursor: pointer;
-        position: absolute;
-        bottom: 15%;
     }
 
-    &Input {
-        &:first-of-type {
-            top: 15%;
-        }
+    &Inputs {
+        
+        width: $input-size;
+
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+
+        position: relative;
+        left: calc($input-size / -2);
+        
     }
 
     &Output {
         margin: auto;
         position: absolute;
-        right: 0;
+        right: calc($input-size / -2);
         top: 0;
         bottom: 0;
     }

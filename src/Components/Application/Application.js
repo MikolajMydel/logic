@@ -8,6 +8,7 @@ class Application extends React.Component {
     state = {
         focusedElement: undefined,    // aktualnie wybrane wyjście
         heldElement: undefined,       // aktualnie trzymana bramka
+        heldElementOffset: [0, 0],    // różnica koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
         elements: []                  // wszystkie elementy planszy
     }
 
@@ -44,15 +45,19 @@ class Application extends React.Component {
         const element = e.target;
         if (element.classList.contains("LogicGate")) {
             this.setState({heldElement: element});
+            // obliczenie różnicy koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
+            const xo = e.clientX - element.offsetLeft;
+            const yo = e.clientY - element.offsetTop;
+            this.setState({heldElementOffset: [xo, yo]})
         }
     }
 
     move(e){
         // przenieś bramkę (jeżeli jakaś jest trzymana)
         if(this.state.heldElement){
-            const x = e.clientX;
-            const y = e.clientY;
             const element = this.state.heldElement;
+            const x = e.clientX - this.state.heldElementOffset[0]; // różnica x
+            const y = e.clientY - this.state.heldElementOffset[1]; // różnica y
             element.style.left = x + 'px';
             element.style.top = y + 'px';
         }

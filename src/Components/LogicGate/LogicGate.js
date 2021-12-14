@@ -4,11 +4,12 @@ import styles from "./LogicGate.module.scss";
 const gateClass = {
     'AND': styles.LogicGateAND,
     'OR': styles.LogicGateOR,
+    'NOT': styles.LogicGateNOT,
 }
 const basicFunctions = {
-    "AND": (i) => (i[0] && i[1]),
-    "OR":  (i) => (i[0] || i[1]),
-    "NOT": (i) => !(i[0]),
+    'AND': (i) => (i[0] && i[1]),
+    'OR':  (i) => (i[0] || i[1]),
+    'NOT': (i) => !(i[0]),
 }
 
 class LogicGate extends React.Component {

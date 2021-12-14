@@ -6,6 +6,7 @@ const ControlPanel = (props) => (
         <button onClick={ () => props.addElement ( { type: "startingNode", value: false } ) } > Węzeł fałsz </button>
         <button onClick={ () => props.addElement ( { type: "logicGate", gateLogic: "AND", inputCount: 2 } ) } > Bramka AND </button>
         <button onClick={ () => props.addElement ( { type: "logicGate", gateLogic: "OR", inputCount: 2 } ) } > Bramka OR </button>
+        <button onClick={ () => props.addElement ( { type: "logicGate", gateLogic: "NOT", inputCount: 1 } ) } > Bramka NOT </button>
     </nav>
 )
 

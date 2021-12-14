@@ -33,7 +33,7 @@ class StartingNode extends React.Component {
         }
 
         return (
-            <div className={ `${styles.StartingNode} ${style}` } onClick={ () => this.props.getFocus (this) } >
+            <div className={ `${styles.StartingNode} ${style}` } onClick={ () => this.props.setFocusedElement (this) } >
             </div>
         )
     }

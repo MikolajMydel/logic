@@ -76,10 +76,10 @@ class Application extends React.Component {
                 onMouseMove={ (e) => this.move(e) }
                 onMouseUp={ () => this.drop() }
             >
-                <ControlPanel addElement={ this.addElement } />
                 <div className={ styles.Canvas } >
                     { this.state.elements }
                 </div>
+                <ControlPanel addElement={ this.addElement } />
             </div>
         )
     }

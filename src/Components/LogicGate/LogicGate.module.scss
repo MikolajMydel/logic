@@ -24,6 +24,9 @@
     &OR {
         background-color: chocolate;
     }
+    &NOT {
+        background-color: red;
+    }
 
     button {
         height: $input-size;

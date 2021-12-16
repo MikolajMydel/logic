@@ -1,9 +1,12 @@
 .LogicGate {
 
     $input-size: 20px;
+    $min-gate-height: 125px;
 
     width: 200px;
-    height: 125px;
+
+    height: max-content;
+    min-height: $min-gate-height;
 
     position: absolute;
 
@@ -35,10 +38,8 @@
     }
 
     &Inputs {
-        
+        min-height: $min-gate-height;
         width: $input-size;
-
-        height: 100%;
 
         display: flex;
         flex-direction: column;
@@ -47,6 +48,10 @@
 
         position: relative;
         left: calc($input-size / -2);
+
+        button {
+            margin: 2px 0;
+        }
         
     }
 
@@ -56,5 +61,22 @@
         right: calc($input-size / -2);
         top: 0;
         bottom: 0;
+    }
+
+    &Value {
+
+        font-size: 150%;
+
+        pointer-events: none;
+
+        position: absolute;
+        text-align: center;
+        top: 50%;
+        right: 0;
+        left: 0;
+
+        transform: translateY(-50%);
+
+        
     }
 }

@@ -53,11 +53,11 @@ class LogicGate extends React.Component {
 
         return (
             <div className={`LogicGate ${styles.LogicGate} ${style}`} >
-                <div class={styles.LogicGateInputs}>
+                <div className={styles.LogicGateInputs}>
                     { inputFields }
                 </div>
 
-                <h5> { value.toString() } </h5>
+                <h5 className={styles.LogicGateValue}> { value.toString() } </h5>
                 <button className={ styles.LogicGateOutput } onClick={ () => this.props.setFocusedElement(this) }> </button>
             </div>
         )

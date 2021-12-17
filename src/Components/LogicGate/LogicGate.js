@@ -26,14 +26,8 @@ class LogicGate extends React.Component {
     // dzięki tej funkcji piny dodają się do tablicy pinów output lub input
     mountPin = (type, pin, index) => {
         if(type === "input"){
-            //let inputs = this.inputs;
-            //inputs[index] = pin;
-            //this.setState({'inputs': inputs})
             this.inputs[index] = pin;
         } else {
-            //let outputs = this.outputs;
-            //outputs[index] = pin;
-            //this.setState({'outputs': outputs})
             this.outputs[index] = pin;
         }
     }
@@ -54,10 +48,7 @@ class LogicGate extends React.Component {
         // na razie używamy tylko bramek z jednym outputem więc whatever
         this.outputs[0].receiveSignal(output);
 
-        this.setState({value: output}) //tymczasowo
-        // niby powinno być
-        // this.setState({value: this.outputs[0].state.value});
-        // ale setState w receiveSignal nie zmienia state od razu ...
+        this.setState({value: output});
     }
     render () {
         // na razie używamy wartości logicznej bramki, żeby ułatwić sprawdzanie czy działają ( i tak korzystamy tylko z bramek 1-outputowych ), później powinny mieć po prostu nazwy danej bramki

@@ -12,6 +12,8 @@ class Pin extends React.Component {
                 parentPin: undefined, // w sumie to tylko dla input pinów
                 childPins: [], // w sumie to tylko dla output pinów
                 // mogłaby to być jedna zmienna
+
+                value: undefined,
             }
         }
         props.mount(this.pinType, this, this.index); // dodaj siebie do tablicy pinów swojej bramki
@@ -29,7 +31,6 @@ class Pin extends React.Component {
         this.setState({'value': signal}, function() { // setState() nie zmienia state
             // od razu więc resztę kodu dodaję do funkcji callback, inaczej state
             // pozostałby taki jak wcześniej
-            // może state to nie jest najlepsze miejsce to trzymania tych danych
             if (this.pinType === 'input') {
                 this.gate.processOutput();
             } else { // output

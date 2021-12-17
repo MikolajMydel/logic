@@ -18,46 +18,46 @@ class LogicGate extends React.Component {
         super();
         this.func = basicFunctions[props.gateType];
         this.state = {
-            inputs: [],
-            outputs: [],
-
             value: undefined, // tymczasowo
         }
+        this.inputs = [];
+        this.outputs = [];
     }
     // dzięki tej funkcji piny dodają się do tablicy pinów output lub input
     mountPin = (type, pin, index) => {
         if(type === "input"){
-            let inputs = this.state.inputs;
-            inputs[index] = pin;
-            this.setState({'inputs': inputs})
+            //let inputs = this.inputs;
+            //inputs[index] = pin;
+            //this.setState({'inputs': inputs})
+            this.inputs[index] = pin;
         } else {
-            let outputs = this.state.outputs;
-            outputs[index] = pin;
-            this.setState({'outputs': outputs})
+            //let outputs = this.outputs;
+            //outputs[index] = pin;
+            //this.setState({'outputs': outputs})
+            this.outputs[index] = pin;
         }
     }
     processOutput = () => {
         let inputs = [];
-        for (let i = 0; i < this.state.inputs.length; i++){
-            let inp = this.state.inputs[i].state.value; // true or false
+        for (let i = 0; i < this.inputs.length; i++){
+            let inp = this.inputs[i].state.value; // true or false
 
             // jezeli brakuje ktoregos inputa, nie da sie okreslic wyjscia, zwracamy undefined na każdy output
             inputs.push(inp);
             if (inputs[i] === undefined){
-                for (let j = 0; j < this.state.outputs.length; j++)
-                    this.state.outputs[j].receiveSignal(undefined);
+                for (let j = 0; j < this.outputs.length; j++)
+                    this.outputs[j].receiveSignal(undefined);
                 return;
             }
         }
         let output = this.func(inputs);
         // na razie używamy tylko bramek z jednym outputem więc whatever
-        this.state.outputs[0].receiveSignal(output);
+        this.outputs[0].receiveSignal(output);
 
-        this.setState({value: output}); //tymczasowo
-    }
-    update = () => {
-        let a = this.state;
-        this.setState(a);
+        this.setState({value: output}) //tymczasowo
+        // niby powinno być
+        // this.setState({value: this.outputs[0].state.value});
+        // ale setState w receiveSignal nie zmienia state od razu ...
     }
     render () {
         // na razie używamy wartości logicznej bramki, żeby ułatwić sprawdzanie czy działają ( i tak korzystamy tylko z bramek 1-outputowych ), później powinny mieć po prostu nazwy danej bramki
@@ -67,11 +67,11 @@ class LogicGate extends React.Component {
 
         let inputFields = [];
         for (let i = 0; i < this.props.inputs; i++){
-            inputFields.push((<Pin pinType="input" index={ i } gate={ this } getFocusedElement={ this.props.getFocusedElement } mount={ this.mountPin } renderGate={ this.update }/>));
+            inputFields.push((<Pin pinType="input" index={ i } gate={ this } getFocusedElement={ this.props.getFocusedElement } mount={ this.mountPin } />));
         }
         let outputFields = [];
         for (let i = 0; i < this.props.outputs; i++){
-            outputFields.push((<Pin pinType="output" index={ i } gate={ this } getFocusedElement={ this.props.getFocusedElement } setFocusedElement={ this.props.setFocusedElement } mount={ this.mountPin } renderGate={ this.update }/>));
+            outputFields.push((<Pin pinType="output" index={ i } gate={ this } getFocusedElement={ this.props.getFocusedElement } setFocusedElement={ this.props.setFocusedElement } mount={ this.mountPin } />));
         }
         return (
             <div className={`LogicGate ${styles.LogicGate} ${style}`} >

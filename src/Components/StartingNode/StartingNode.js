@@ -4,7 +4,7 @@ import styles from './StartingNode.module.scss';
 class StartingNode extends React.Component {
     state = {
         value: undefined,
-        outputs: [],
+        childPins: [],
     }
 
     constructor(props) {
@@ -14,8 +14,11 @@ class StartingNode extends React.Component {
 
     getValue = () => this.state.value;
 
-    connect = (towhat) => {
-        this.state.outputs.push(towhat);
+    // przylaczanie innego pina jako dziecko
+    connect = (target) => {
+        let cps = this.state.childPins;
+        cps.push(target);
+        this.setState({'childPins': cps});
     }
 
     render() {

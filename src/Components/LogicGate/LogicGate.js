@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import Pin from "./Pin";
 import styles from "./LogicGate.module.scss";
 
 const gateClass = {
@@ -15,53 +16,74 @@ const basicFunctions = {
 class LogicGate extends React.Component {
     constructor( {...props} ) {
         super();
-        this.gateType = basicFunctions[props.gateType];
+        this.func = basicFunctions[props.gateType];
         this.state = {
-            inputs: new Array(props.inputs).fill(undefined), // pusta tabela (undefined) o podanej długości
+            inputs: [],
+            outputs: [],
+
+            value: undefined, // tymczasowo
         }
     }
-
-    getValue = function () {
+    // dzięki tej funkcji piny dodają się do tablicy pinów output lub input
+    mountPin = (type, pin, index) => {
+        if(type === "input"){
+            let inputs = this.state.inputs;
+            inputs[index] = pin;
+            this.setState({'inputs': inputs})
+        } else {
+            let outputs = this.state.outputs;
+            outputs[index] = pin;
+            this.setState({'outputs': outputs})
+        }
+    }
+    processOutput = () => {
         let inputs = [];
         for (let i = 0; i < this.state.inputs.length; i++){
-            let inp = this.state.inputs[i];
+            let inp = this.state.inputs[i].state.value; // true or false
 
-            // jezeli brakuje ktoregos inputa, nie da sie okreslic wyjscia (chyba ze OR)
-            if (!inp) return undefined;
-            inputs.push(inp.getValue());
+            // jezeli brakuje ktoregos inputa, nie da sie okreslic wyjscia, zwracamy undefined na każdy output
+            inputs.push(inp);
+            if (inputs[i] === undefined){
+                for (let j = 0; j < this.state.outputs.length; j++)
+                    this.state.outputs[j].receiveSignal(undefined);
+                return;
+            }
         }
-        let output = this.gateType(inputs);
-        return output;
-    }
+        let output = this.func(inputs);
+        // na razie używamy tylko bramek z jednym outputem więc whatever
+        this.state.outputs[0].receiveSignal(output);
 
-    changeInput = ( index ) => {
-        let inputs = this.state.inputs;
-        inputs[index] = this.props.getFocusedElement();
-        this.setState({'inputs': inputs});
+        this.setState({value: output}); //tymczasowo
     }
-
+    update = () => {
+        let a = this.state;
+        this.setState(a);
+    }
     render () {
-        let value = this.getValue();
-        if ( value === undefined ) value = "undefined";
+        // na razie używamy wartości logicznej bramki, żeby ułatwić sprawdzanie czy działają ( i tak korzystamy tylko z bramek 1-outputowych ), później powinny mieć po prostu nazwy danej bramki
+        let value = this.state.value;
+        if(value === undefined) value = "undefined"
         const style = gateClass[ this.props.gateType ];
 
         let inputFields = [];
         for (let i = 0; i < this.props.inputs; i++){
-            inputFields.push((<button className={ styles.LogicGateInput } onClick={ () => this.changeInput(i) } ></button>));
+            inputFields.push((<Pin pinType="input" index={ i } gate={ this } getFocusedElement={ this.props.getFocusedElement } mount={ this.mountPin } renderGate={ this.update }/>));
         }
-        // nie widać ale są
-        // TODO trzeba coś ze stylami zmienić, żeby widać było wszystkie przyciski
-
+        let outputFields = [];
+        for (let i = 0; i < this.props.outputs; i++){
+            outputFields.push((<Pin pinType="output" index={ i } gate={ this } getFocusedElement={ this.props.getFocusedElement } setFocusedElement={ this.props.setFocusedElement } mount={ this.mountPin } renderGate={ this.update }/>));
+        }
         return (
             <div className={`LogicGate ${styles.LogicGate} ${style}`} >
                 <div className={styles.LogicGateInputs}>
                     { inputFields }
                 </div>
-
                 <h5 className={styles.LogicGateValue}> { value.toString() } </h5>
-                <button className={ styles.LogicGateOutput } onClick={ () => this.props.setFocusedElement(this) }> </button>
+                <div className={styles.LogicGateOutputs}>
+                    { outputFields }
+                </div>
             </div>
-        )
+        ) // styl LogicGateOutputs jeszcze nie istnieje
     }
 }
 

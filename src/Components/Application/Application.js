@@ -27,7 +27,7 @@ class Application extends React.Component {
 
         switch ( args.type ) {
             case 'logicGate':
-                newElement = <LogicGate gateType={ args.gateLogic } setFocusedElement={ this.setFocusedElement } inputs={ args.inputCount } getFocusedElement = { this.getFocusedElement } />;
+                newElement = <LogicGate gateType={ args.gateLogic } inputs={ args.inputCount } outputs={ args.outputCount }getFocusedElement = { this.getFocusedElement } setFocusedElement={ this.setFocusedElement }/>;
                 break;
             case 'startingNode':
                 newElement = <StartingNode value={ args.value } setFocusedElement={ this.setFocusedElement } />;

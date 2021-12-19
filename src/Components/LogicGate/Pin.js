@@ -27,7 +27,9 @@ class Pin extends React.Component {
         this.receiveSignal(newParent.state.value);
     }
 
+
     receiveSignal = (signal) => {
+
         this.setState({'value': signal}, function() { // setState() nie zmienia state
             // od razu więc resztę kodu dodaję do funkcji callback, inaczej state
             // pozostałby taki jak wcześniej
@@ -35,6 +37,15 @@ class Pin extends React.Component {
                 this.gate.processOutput();
             } else { // output
                 for (let i = 0; i < this.state.childPins.length; i++) {
+
+                    const childPin = this.state.childPins[i];
+
+                    // wyjscie bramki logicznej stanowi jej wejscie
+                    if ( this.gate === childPin.gate ) {
+                        // zapobiegniecie rekurencji
+                        continue;
+                    }
+
                     this.state.childPins[i].receiveSignal(signal);
                 }
             }

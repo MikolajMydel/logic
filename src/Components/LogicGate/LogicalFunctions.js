@@ -1,16 +1,21 @@
+// sprawdzam czy byl undefined dopiero na koncu funkcji
+// aby miec pewnosc, ze nie ma na nastepnych miejscach
+// znaczacych wartosci
 export function OR ( inputs ){
+
+    let isUndefined = false;
+
     for (let i = 0; i < inputs.length; i++){
         if ( inputs[i] === true) return true;
+        if (inputs[i] === undefined) isUndefined = true;
     }
-    return false;
+
+    if ( isUndefined ) return undefined;
+    else return false;
 }
 
 // jezeli jest chociaz jeden false - zwroc false
 // jezeli jest chociaz jeden undefined - zwroc undefined
-// sprawdzam czy byl undefined dopiero na koncu funkcji
-// aby miec pewnosc, ze nie ma na nastepnych miejscach
-// false (poniewaz wowczas mamy pewnosc, ze wartoscia bramki
-// jest falsz)
 export function AND ( inputs ){
 
     let isUndefined = false;
@@ -22,5 +27,4 @@ export function AND ( inputs ){
 
     if ( isUndefined ) return undefined;
     else return true;
-
 }

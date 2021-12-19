@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import Pin from "./Pin";
 import styles from "./LogicGate.module.scss";
 
 const gateClass = {
@@ -15,53 +16,65 @@ const basicFunctions = {
 class LogicGate extends React.Component {
     constructor( {...props} ) {
         super();
-        this.gateType = basicFunctions[props.gateType];
+        this.func = basicFunctions[props.gateType];
         this.state = {
-            inputs: new Array(props.inputs).fill(undefined), // pusta tabela (undefined) o podanej długości
+            value: undefined, // tymczasowo
+        }
+        this.inputs = [];
+        this.outputs = [];
+    }
+    // dzięki tej funkcji piny dodają się do tablicy pinów output lub input
+    mountPin = (type, pin, index) => {
+        if(type === "input"){
+            this.inputs[index] = pin;
+        } else {
+            this.outputs[index] = pin;
         }
     }
-
-    getValue = function () {
+    processOutput = () => {
         let inputs = [];
-        for (let i = 0; i < this.state.inputs.length; i++){
-            let inp = this.state.inputs[i];
+        for (let i = 0; i < this.inputs.length; i++){
+            let inp = this.inputs[i].state.value; // true or false
 
-            // jezeli brakuje ktoregos inputa, nie da sie okreslic wyjscia (chyba ze OR)
-            if (!inp) return undefined;
-            inputs.push(inp.getValue());
+            // jezeli brakuje ktoregos inputa, nie da sie okreslic wyjscia, zwracamy undefined na każdy output
+            inputs.push(inp);
+            if (inputs[i] === undefined){
+                for (let j = 0; j < this.outputs.length; j++)
+                    this.outputs[j].receiveSignal(undefined);
+                return;
+            }
         }
-        let output = this.gateType(inputs);
-        return output;
-    }
+        let output = this.func(inputs);
+        // na razie używamy tylko bramek z jednym outputem więc whatever
+        this.outputs[0].receiveSignal(output);
 
-    changeInput = ( index ) => {
-        let inputs = this.state.inputs;
-        inputs[index] = this.props.getFocusedElement();
-        this.setState({'inputs': inputs});
+        this.setState({value: output});
     }
-
     render () {
-        let value = this.getValue();
-        if ( value === undefined ) value = "undefined";
+        // na razie używamy wartości logicznej bramki, żeby ułatwić sprawdzanie czy działają ( i tak korzystamy tylko z bramek 1-outputowych ), później powinny mieć po prostu nazwy danej bramki
+        let value = this.state.value;
+        if(value === undefined) value = "undefined"
         const style = gateClass[ this.props.gateType ];
 
         let inputFields = [];
         for (let i = 0; i < this.props.inputs; i++){
-            inputFields.push((<button className={ styles.LogicGateInput } onClick={ () => this.changeInput(i) } ></button>));
+            inputFields.push((<Pin pinType="input" index={ i } gate={ this } getFocusedElement={ this.props.getFocusedElement } mount={ this.mountPin } />));
         }
-        // nie widać ale są
-        // TODO trzeba coś ze stylami zmienić, żeby widać było wszystkie przyciski
-
+        let outputFields = [];
+        for (let i = 0; i < this.props.outputs; i++){
+            outputFields.push((<Pin pinType="output" index={ i } gate={ this } getFocusedElement={ this.props.getFocusedElement } setFocusedElement={ this.props.setFocusedElement } mount={ this.mountPin } />));
+        }
         return (
             <div className={`LogicGate ${styles.LogicGate} ${style}`} >
                 <div className={styles.LogicGateInputs}>
                     { inputFields }
                 </div>
-
                 <h5 className={styles.LogicGateValue}> { value.toString() } </h5>
-                <button className={ styles.LogicGateOutput } onClick={ () => this.props.setFocusedElement(this) }> </button>
+                <div className={styles.LogicGateOutputs}>
+                    { outputFields }
+                </div>
             </div>
-        )
+        ) // styl LogicGateOutputs jeszcze nie istnieje
     }
 }
 

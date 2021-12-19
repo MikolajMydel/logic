@@ -3,25 +3,27 @@ import styles from './StartingNode.module.scss';
 
 class StartingNode extends React.Component {
     state = {
-        'value': undefined,
+        value: undefined,
+        childPins: [],
     }
 
     constructor(props) {
         super();
-
         this.state.value = props.value;
-
-        /* this.setState({'value': props.value}, function() {
-            console.log ( this.state.value );
-        });
-        */
     };
 
     getValue = () => this.state.value;
 
+    // przylaczanie innego pina jako dziecko
+    connect = (target) => {
+        let cps = this.state.childPins;
+        cps.push(target);
+        this.setState({'childPins': cps});
+    }
+
     render() {
-        const value = this.props.value;
-        let style = null;
+        const value = this.state.value;
+        let style;
 
         // styl na podstawie wartosci
         if ( value === undefined ) {
@@ -33,7 +35,7 @@ class StartingNode extends React.Component {
         }
 
         return (
-            <div className={ `${styles.StartingNode} ${style}` } onClick={ () => this.props.setFocusedElement (this) } >
+            <div className={ `${styles.StartingNode} ${style}` } onClick={ () => this.props.setFocusedElement(this) } >
             </div>
         )
     }

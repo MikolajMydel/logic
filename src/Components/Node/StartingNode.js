@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './StartingNode.module.scss';
+import styles from './Node.module.scss';
 
 class StartingNode extends React.Component {
     state = {
@@ -27,15 +27,15 @@ class StartingNode extends React.Component {
 
         // styl na podstawie wartosci
         if ( value === undefined ) {
-            style = styles.StartingNodeUndefined;
+            style = styles.NodeUndefined;
         }
         else {
-            if ( value ) style = styles.StartingNodeTrue;
-            else style = styles.StartingNodeFalse;
+            if ( value ) style = styles.NodeTrue;
+            else style = styles.NodeFalse;
         }
 
         return (
-            <div className={ `${styles.StartingNode} ${style}` } onClick={ () => this.props.setFocusedElement(this) } >
+            <div className={ `${styles.Node} ${style}` } onClick={ () => this.props.setFocusedElement(this) } >
             </div>
         )
     }

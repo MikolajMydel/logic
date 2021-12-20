@@ -1,7 +1,7 @@
 import React from "react";
 import styles from './Application.module.scss';
 import LogicGate from "../LogicGate/LogicGate";
-import StartingNode from "../StartingNode/StartingNode";
+import StartingNode from "../Node/StartingNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
 
 class Application extends React.Component {

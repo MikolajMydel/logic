@@ -13,4 +13,21 @@
 .Canvas {
     width: 100%;
     flex-grow: 1;
+    display: flex;
+    flex-flow: row;
 }
+
+.Board {
+    height: 100%;
+    flex-grow: 1;
+}
+.InputArea {
+    height: 100%;
+    width: 50px;
+    background-color: lightslategray;
+}
+ .OutputArea {
+    height: 100%;
+    width: 50px;
+    background-color: lightslategray;
+ }

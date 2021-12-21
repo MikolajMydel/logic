@@ -74,14 +74,17 @@ class Application extends React.Component {
 
     render() {
         return (
-            <div
-                className={`${styles.Application}`}
-                onMouseDown={ (e) => this.grab(e) }
-                onMouseMove={ (e) => this.move(e) }
-                onMouseUp={ () => this.drop() }
-            >
-                <div className={ styles.Canvas } >
-                    { this.state.elements }
+            <div className={ styles.Application } >
+                <div className={ styles.Canvas }>
+                    <div className={ styles.InputArea }></div>
+                    <div className={ styles.Board }
+                        onMouseDown={ (e) => this.grab(e) }
+                        onMouseMove={ (e) => this.move(e) }
+                        onMouseUp={ () => this.drop() }
+                    >
+                        { this.state.elements }
+                    </div>
+                    <div className={ styles.OutputArea }></div>
                 </div>
                 <ControlPanel addElement={ this.addElement } />
             </div>

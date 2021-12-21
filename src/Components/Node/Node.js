@@ -15,8 +15,10 @@ class Node extends React.Component {
         else if ( value ) style = styles.NodeTrue;
         else style = styles.NodeFalse;
 
+        const position = this.props.position + 'px';
+
         return (
-            <div className={ `${styles.Node} ${style}` } onClick={ () => onClick() } >
+            <div className={ `${styles.Node} ${style}` } onClick={ () => onClick() } style={{ top: position }} >
             </div>
         )
     }

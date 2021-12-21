@@ -43,18 +43,29 @@ class Application extends React.Component {
                 break;
             case 'startNode':
                 elements.inputs.push(
-                    <StartNode setFocusedElement={ this.setFocusedElement }/>
+                    <StartNode setFocusedElement={ this.setFocusedElement } position={ args.position }/>
                 );
                 break;
             case 'endNode':
                 elements.outputs.push(
-                    <EndNode getFocusedElement={ this.getFocusedElement }/>
+                    <EndNode getFocusedElement={ this.getFocusedElement } position={ args.position }/>
                 );
                 break;
             default:
                 break;
         }
         this.setState ({'elements': elements});
+    }
+
+    addNode = (e, type) => {
+        // dodaj tylko jeżeli kliknięto na czysty obszar (nie np istniejący node)
+        if ( !e.target.classList.contains('Area') )
+            return;
+        const args = {
+            type: type,
+            position: e.clientY,
+        }
+        this.addElement(args);
     }
 
     grab(e){
@@ -65,7 +76,7 @@ class Application extends React.Component {
             // obliczenie różnicy koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
             const xo = e.clientX - element.offsetLeft;
             const yo = e.clientY - element.offsetTop;
-            this.setState({heldElementOffset: [xo, yo]})
+            this.setState({heldElementOffset: [xo, yo]});
         }
     }
 
@@ -89,7 +100,8 @@ class Application extends React.Component {
         return (
             <div className={ styles.Application } >
                 <div className={ styles.Canvas }>
-                    <div className={ styles.InputArea }>
+                    <div className={ `Area ${styles.InputArea}` }
+                        onMouseDown={ (e) => this.addNode(e, 'startNode')}>
                         { this.state.elements.inputs }
                     </div>
                     <div className={ styles.Board }
@@ -99,7 +111,8 @@ class Application extends React.Component {
                     >
                         { this.state.elements.board }
                     </div>
-                    <div className={ styles.OutputArea }>
+                    <div className={ `Area ${styles.OutputArea}` }
+                        onMouseDown={ (e) => this.addNode(e, 'endNode')}>
                         { this.state.elements.outputs }
                     </div>
                 </div>

@@ -1,18 +1,15 @@
-import React from 'react';
-import styles from './Node.module.scss';
+import Node from './Node';
 
-class StartingNode extends React.Component {
+class StartingNode extends Node {
     state = {
-        value: undefined,
+        value: false,
         childPins: [],
     }
 
     constructor(props) {
         super();
         this.state.value = props.value;
-    };
-
-    getValue = () => this.state.value;
+    }
 
     // przylaczanie innego pina jako dziecko
     connect = (target) => {
@@ -22,22 +19,7 @@ class StartingNode extends React.Component {
     }
 
     render() {
-        const value = this.state.value;
-        let style;
-
-        // styl na podstawie wartosci
-        if ( value === undefined ) {
-            style = styles.NodeUndefined;
-        }
-        else {
-            if ( value ) style = styles.NodeTrue;
-            else style = styles.NodeFalse;
-        }
-
-        return (
-            <div className={ `${styles.Node} ${style}` } onClick={ () => this.props.setFocusedElement(this) } >
-            </div>
-        )
+        return super.renderBase(() => this.props.setFocusedElement(this))
     }
 }
 

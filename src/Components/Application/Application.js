@@ -10,7 +10,11 @@ class Application extends React.Component {
         focusedElement: undefined,    // aktualnie wybrane wyjście
         heldElement: undefined,       // aktualnie trzymana bramka
         heldElementOffset: [0, 0],    // różnica koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
-        elements: []                  // wszystkie elementy planszy
+        elements: {
+            inputs: [],
+            board: [],
+            outputs: [],
+        }
     }
 
     // funkcja zmieniajaca aktualnie wybrane wyjscie - pozwala na uzycie kliknietego wyjscia na wejscie bramki logicznej
@@ -23,25 +27,34 @@ class Application extends React.Component {
 
     // dodawanie nowych elementow na plansze
     addElement = ( args ) => {
-        let actualElements = this.state.elements;
-        let newElement;
+        let elements = this.state.elements;
 
         switch ( args.type ) {
             case 'logicGate':
-                newElement = <LogicGate gateType={ args.gateLogic } inputs={ args.inputCount } outputs={ args.outputCount } getFocusedElement={ this.getFocusedElement } setFocusedElement={ this.setFocusedElement }/>;
+                elements.board.push(
+                    <LogicGate
+                        gateType={ args.gateLogic }
+                        inputs={ args.inputCount }
+                        outputs={ args.outputCount }
+                        getFocusedElement={ this.getFocusedElement }
+                        setFocusedElement={ this.setFocusedElement }
+                    />
+                );
                 break;
             case 'startNode':
-                newElement = <StartNode value={ args.value } setFocusedElement={ this.setFocusedElement }/>;
+                elements.inputs.push(
+                    <StartNode setFocusedElement={ this.setFocusedElement }/>
+                );
                 break;
             case 'endNode':
-                newElement = <EndNode getFocusedElement={ this.getFocusedElement }/>
+                elements.outputs.push(
+                    <EndNode getFocusedElement={ this.getFocusedElement }/>
+                );
                 break;
             default:
-                newElement = undefined;
+                break;
         }
-
-        actualElements.push ( newElement );
-        this.setState ({elements: actualElements});
+        this.setState ({'elements': elements});
     }
 
     grab(e){
@@ -76,15 +89,19 @@ class Application extends React.Component {
         return (
             <div className={ styles.Application } >
                 <div className={ styles.Canvas }>
-                    <div className={ styles.InputArea }></div>
+                    <div className={ styles.InputArea }>
+                        { this.state.elements.inputs }
+                    </div>
                     <div className={ styles.Board }
                         onMouseDown={ (e) => this.grab(e) }
                         onMouseMove={ (e) => this.move(e) }
                         onMouseUp={ () => this.drop() }
                     >
-                        { this.state.elements }
+                        { this.state.elements.board }
                     </div>
-                    <div className={ styles.OutputArea }></div>
+                    <div className={ styles.OutputArea }>
+                        { this.state.elements.outputs }
+                    </div>
                 </div>
                 <ControlPanel addElement={ this.addElement } />
             </div>

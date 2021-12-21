@@ -1,7 +1,7 @@
 import React from "react";
 import styles from './Application.module.scss';
 import LogicGate from "../LogicGate/LogicGate";
-import StartingNode from "../Node/StartingNode";
+import StartNode from "../Node/StartNode";
 import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
 
@@ -30,8 +30,8 @@ class Application extends React.Component {
             case 'logicGate':
                 newElement = <LogicGate gateType={ args.gateLogic } inputs={ args.inputCount } outputs={ args.outputCount } getFocusedElement={ this.getFocusedElement } setFocusedElement={ this.setFocusedElement }/>;
                 break;
-            case 'startingNode':
-                newElement = <StartingNode value={ args.value } setFocusedElement={ this.setFocusedElement }/>;
+            case 'startNode':
+                newElement = <StartNode value={ args.value } setFocusedElement={ this.setFocusedElement }/>;
                 break;
             case 'endNode':
                 newElement = <EndNode getFocusedElement={ this.getFocusedElement }/>

@@ -1,6 +1,6 @@
 import Node from './Node';
 
-class StartingNode extends Node {
+class StartNode extends Node {
     state = {
         value: false,
         childPins: [],
@@ -23,4 +23,4 @@ class StartingNode extends Node {
     }
 }
 
-export default StartingNode;
+export default StartNode;

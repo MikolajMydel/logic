@@ -5,6 +5,7 @@ class Node extends React.Component {
 
     get value() { return this.state.value }
 
+    // wspólny render ale z innymi onClick, funkcje jako parametr wykorzystując super() w podklasie
     renderBase(onClick) {
         let style;
         const value = this.state.value;
@@ -13,6 +14,7 @@ class Node extends React.Component {
             style = styles.NodeUndefined;
         else if ( value ) style = styles.NodeTrue;
         else style = styles.NodeFalse;
+
         return (
             <div className={ `${styles.Node} ${style}` } onClick={ () => onClick() } >
             </div>

@@ -101,7 +101,7 @@ class Application extends React.Component {
             <div className={ styles.Application } >
                 <div className={ styles.Canvas }>
                     <div className={ `Area ${styles.InputArea}` }
-                        onMouseDown={ (e) => this.addNode(e, 'startNode')}>
+                        onClick={ (e) => this.addNode(e, 'startNode')}>
                         { this.state.elements.inputs }
                     </div>
                     <div className={ styles.Board }
@@ -112,7 +112,7 @@ class Application extends React.Component {
                         { this.state.elements.board }
                     </div>
                     <div className={ `Area ${styles.OutputArea}` }
-                        onMouseDown={ (e) => this.addNode(e, 'endNode')}>
+                        onClick={ (e) => this.addNode(e, 'endNode')}>
                         { this.state.elements.outputs }
                     </div>
                 </div>

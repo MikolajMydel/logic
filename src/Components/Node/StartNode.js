@@ -7,7 +7,7 @@ class StartNode extends Node {
     }
 
     // przylaczanie innego pina jako dziecko
-    connect = (target) => {
+    connect(target) {
         let cps = this.state.childPins;
         cps.push(target);
         this.setState({'childPins': cps});

@@ -12,9 +12,11 @@ class EndNode extends Node {
         this.setState({'parentPin': newParent})
         this.receiveSignal(newParent.state.value);
     }
-    receiveSignal = (signal) => {
+
+    receiveSignal(signal) {
         this.setState({'value': signal});
 	}
+
     render() {
         return super.renderBase(this.changeParentPin);
     }

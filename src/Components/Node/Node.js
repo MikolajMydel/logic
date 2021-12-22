@@ -18,7 +18,7 @@ class Node extends React.Component {
         const position = this.props.position + 'px';
 
         return (
-            <div className={ `${styles.Node} ${style}` } onClick={ () => onClick() } style={{ top: position }} >
+            <div className={ `${styles.Node} ${style}` } onClick={ onClick } style={{ top: position }} >
             </div>
         )
     }

@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./LogicGate.module.scss";
 
 class Pin extends React.Component {
-    constructor( {...props} ) {
+    constructor(props) {
         super();
         if(props.pinType === 'output' || props.pinType === 'input') {
             this.index = props.index;
@@ -27,7 +27,7 @@ class Pin extends React.Component {
         this.receiveSignal(newParent.state.value);
     }
 
-    receiveSignal = (signal) => {
+    receiveSignal(signal) {
         this.setState({'value': signal}, function() { // setState() nie zmienia state
             // od razu więc resztę kodu dodaję do funkcji callback, inaczej state
             // pozostałby taki jak wcześniej
@@ -42,7 +42,7 @@ class Pin extends React.Component {
 	}
 
     // przylaczanie innego pina jako dziecko
-    connect = (target) => {
+    connect(target) {
         let cps = this.state.childPins;
         cps.push(target);
         this.setState({'childPins': cps});
@@ -50,7 +50,7 @@ class Pin extends React.Component {
 
     render(){
         if (this.pinType === 'input')
-            return <button className={ styles.LogicGateInput } onClick={ () => this.changeParentPin() } ></button>;
+            return <button className={ styles.LogicGateInput } onClick={ this.changeParentPin } ></button>;
         // output
         return <button className={ styles.LogicGateOutput } onClick={ () => this.props.setFocusedElement(this) }> </button>;
     }

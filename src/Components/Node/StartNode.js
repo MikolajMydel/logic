@@ -13,20 +13,24 @@ class StartNode extends Node {
         this.setState({'childPins': cps});
     }
 
-    toggleValue = () => {
+    onClick = (e) => {
+        if(e.button === 0) // Lewy PM
+            this.props.setFocusedElement(this);
+        else if (e.button === 1) // Środkowy PM
+            this.toggleValue();
+    }
+
+    toggleValue() {
         const val = !(this.state.value);
         this.setState({value: val}, function() {
             for (let i = 0; i < this.state.childPins.length; i++) {
                 this.state.childPins[i].receiveSignal(val);
             }
         });
-        // testowo dałem tą funkcję tutaj bo nie mam na ten moment jak inaczej sprawdzić działanie toggleValue()
-        // wykonuja sie obie jednoczesnie przy kliknieciu
-        this.props.setFocusedElement(this)
     }
 
     render() {
-        return super.renderBase(this.toggleValue)
+        return super.renderBase(this.onClick)
     }
 }
 

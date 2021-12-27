@@ -84,8 +84,24 @@ class Application extends React.Component {
         // przenieś bramkę (jeżeli jakaś jest trzymana)
         if(this.state.heldElement){
             const element = this.state.heldElement;
-            const x = e.clientX - this.state.heldElementOffset[0]; // różnica x
-            const y = e.clientY - this.state.heldElementOffset[1]; // różnica y
+            const board = e.currentTarget;
+
+            let x = e.clientX - this.state.heldElementOffset[0]; // różnica x
+            let y = e.clientY - this.state.heldElementOffset[1]; // różnica y
+
+            if (x < board.offsetLeft)
+                // za daleko w lewo
+                x = board.offsetLeft;
+            else if (x + element.offsetWidth > board.offsetWidth + board.offsetLeft)
+                // za daleko w prawo
+                x = board.offsetWidth + board.offsetLeft - element.offsetWidth;
+            if (y < board.offsetTop)
+                // za daleko w górę
+                y = board.offsetTop;
+            else if (y + element.offsetHeight > board.offsetHeight + board.offsetTop)
+                // za daleko w dół
+                y = board.offsetHeight + board.offsetTop - element.offsetHeight;
+
             element.style.left = x + 'px';
             element.style.top = y + 'px';
         }

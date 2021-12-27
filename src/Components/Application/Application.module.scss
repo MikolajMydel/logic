@@ -13,4 +13,24 @@
 .Canvas {
     width: 100%;
     flex-grow: 1;
+    display: flex;
+    flex-flow: row;
+}
+
+.Board {
+    height: 100%;
+    flex-grow: 1;
+}
+.InputArea, .OutputArea {
+    position: relative;
+    height: 100%;
+    width: 50px;
+    padding: 4px 0;
+    background-color: lightslategray;
+}
+.InputArea > div{ // dla Node-ów
+    right: 2px;
+}
+.OutputArea > div{ // dla Node-ów
+    left: 2px;
 }

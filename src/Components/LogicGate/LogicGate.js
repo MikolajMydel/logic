@@ -31,7 +31,7 @@ class LogicGate extends React.Component {
             this.outputs[index] = pin;
         }
     }
-    processOutput = () => {
+    processOutput() {
         let inputs = [];
         for (let i = 0; i < this.inputs.length; i++){
             let inp = this.inputs[i].state.value; // true or false

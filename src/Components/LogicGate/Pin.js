@@ -31,27 +31,39 @@ class Pin extends React.Component {
 
     searchForRecursion = () => {
 
+
+        // w tablicy trzymamy tylko piny input
+        // zwracamy falsz, gdy ktorys z pinow input wskaze aktualna bramke
         // BFS
-        const childPins = [].concat (this.state.childPins);
+        const inputPins = [].concat( this.state.childPins );
 
-        while (childPins.length !== 0){
+        while (inputPins.length !== 0){
+            let newInputPins = [];
 
-            let newChildPins = [];
-            let i = childPins.length - 1;
+            let i = inputPins.length - 1;
 
-            while (i >= 0){
+            while (i > -1){
+                if ( inputPins[i].gate === this.gate ){
+                    console.log ("rec");
+                    return true;
+                }
 
-                if ( childPins[i].state.gate === this.state.gate ) return true;
+                console.log ( inputPins[i].gate, this.gate );
 
-                newChildPins.concat ( childPins.pop().childPins );
+                const outputPins = inputPins.pop().gate.outputs;
+
+                // dodaj wszystkie input piny nalezace do nastepnych bramek
+                for (let x = 0; x < outputPins.length; x++){
+                    newInputPins.concat ( outputPins[x].childPins );
+                }
+
                 i--;
             }
 
-            childPins.concat ( newChildPins );
+            inputPins.concat( newInputPins );
         }
 
         return false;
-
     }
 
     receiveSignal = (signal) => {
@@ -69,6 +81,7 @@ class Pin extends React.Component {
                     // wyjscie bramki logicznej stanowi jej wejscie
                     if ( this.gate === childPin.gate || this.searchForRecursion() ) {
                         // zapobiegniecie rekurencji
+                        console.log ("rec");
                         continue;
                     }
 

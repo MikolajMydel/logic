@@ -21,6 +21,7 @@ class LogicGate extends React.Component {
         this.func = basicFunctions[props.gateType];
         this.state = {
             value: undefined, // tymczasowo
+            
         }
         this.inputs = [];
         this.outputs = [];
@@ -36,11 +37,11 @@ class LogicGate extends React.Component {
     processOutput = () => {
 
         /* 
-                nawet jezeli brakuje ktoregos inputa, to w przypadku bramek AND i OR mozna okreslic wyjscie na podstawie
-                jednej wartosci (np. AND na pewno bedzie falszywe jezeli jedno wejscie jest falszywe lub OR na pewno jest
-                prawdziwe jezeli chociaz jedna wartosc jest prawdziwa )
+            nawet jezeli brakuje ktoregos inputa, to w przypadku bramek AND i OR mozna okreslic wyjscie na podstawie
+            jednej wartosci (np. AND na pewno bedzie falszywe jezeli jedno wejscie jest falszywe lub OR na pewno jest
+            prawdziwe jezeli chociaz jedna wartosc jest prawdziwa )
 
-                Dzieki temu bedzie mozna robic uklady zapamietujace stan
+            Dzieki temu bedzie mozna robic uklady zapamietujace stan
         */
 
         let inputs = Array.from(

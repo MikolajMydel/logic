@@ -21,12 +21,38 @@ class Pin extends React.Component {
 
     // zmień do jakiego outputa podłączony jest ten input
     changeParentPin = () => {
+
         const newParent = this.props.getFocusedElement();
         newParent.connect(this);
         this.setState({'parentPin': newParent})
         this.receiveSignal(newParent.state.value);
+        
     }
 
+    searchForRecursion = () => {
+
+        // BFS
+        const childPins = [].concat (this.state.childPins);
+
+        while (childPins.length !== 0){
+
+            let newChildPins = [];
+            let i = childPins.length - 1;
+
+            while (i >= 0){
+
+                if ( childPins[i].state.gate === this.state.gate ) return true;
+
+                newChildPins.concat ( childPins.pop().childPins );
+                i--;
+            }
+
+            childPins.concat ( newChildPins );
+        }
+
+        return false;
+
+    }
 
     receiveSignal = (signal) => {
 
@@ -41,12 +67,14 @@ class Pin extends React.Component {
                     const childPin = this.state.childPins[i];
 
                     // wyjscie bramki logicznej stanowi jej wejscie
-                    if ( this.gate === childPin.gate ) {
+                    if ( this.gate === childPin.gate || this.searchForRecursion() ) {
                         // zapobiegniecie rekurencji
                         continue;
                     }
 
-                    this.state.childPins[i].receiveSignal(signal);
+                    // tylko jezeli nie ma rekurencji
+                    childPin.receiveSignal(signal);
+
                 }
             }
         });

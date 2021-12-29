@@ -29,41 +29,34 @@ class Pin extends React.Component {
         
     }
 
-    searchForRecursion = () => {
+    searchForRecursion = (childPin) => {
 
+        const gates = [];
+        gates.push( childPin.gate );
 
-        // w tablicy trzymamy tylko piny input
-        // zwracamy falsz, gdy ktorys z pinow input wskaze aktualna bramke
-        // BFS
-        const inputPins = [].concat( this.state.childPins );
+        while ( gates.length !== 0 ){
+            const gate = gates.pop();
 
-        while (inputPins.length !== 0){
-            let newInputPins = [];
+            // bramka bedaca inicjatorem funkcji powtarza sie - jest rekurencja
+            if ( this.gate === gate ) return true;
 
-            let i = inputPins.length - 1;
+            const gateOutputs = gate.outputs;
 
-            while (i > -1){
-                if ( inputPins[i].gate === this.gate ){
-                    console.log ("rec");
-                    return true;
+            // dodajemy do tablicy wszystkie kolejne bramki
+            // (te, ktore maja na wejsciu podane nasze wyjscia)
+            for (let i = 0; i < gateOutputs.length; i++){
+                // kazdy output moze miec kilka child pinow
+                // w tablicy child pins trzymamy piny typu input
+                const childPins = gateOutputs[i];
+                for (let j = 0; j < childPins.length; j++){
+                    gates.push( childPins[j].gate );
                 }
-
-                console.log ( inputPins[i].gate, this.gate );
-
-                const outputPins = inputPins.pop().gate.outputs;
-
-                // dodaj wszystkie input piny nalezace do nastepnych bramek
-                for (let x = 0; x < outputPins.length; x++){
-                    newInputPins.concat ( outputPins[x].childPins );
-                }
-
-                i--;
             }
 
-            inputPins.concat( newInputPins );
         }
-
+        
         return false;
+
     }
 
     receiveSignal = (signal) => {
@@ -78,8 +71,7 @@ class Pin extends React.Component {
 
                     const childPin = this.state.childPins[i];
 
-                    // wyjscie bramki logicznej stanowi jej wejscie
-                    if ( this.gate === childPin.gate || this.searchForRecursion() ) {
+                    if ( this.searchForRecursion( childPin ) ) {
                         // zapobiegniecie rekurencji
                         console.log ("rec");
                         continue;

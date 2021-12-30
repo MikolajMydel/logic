@@ -1,5 +1,6 @@
 import React from "react";
-import Pin from "./Pin";
+import OutputPin from "./OutputPin";
+import InputPin from "./InputPin";
 import styles from "./LogicGate.module.scss";
 
 const gateClass = {
@@ -23,14 +24,16 @@ class LogicGate extends React.Component {
         this.inputs = [];
         this.outputs = [];
     }
+
     // dzięki tej funkcji piny dodają się do tablicy pinów output lub input
-    mountPin = (type, pin, index) => {
-        if(type === "input"){
-            this.inputs[index] = pin;
-        } else {
-            this.outputs[index] = pin;
+    mountPin = (pin) => {
+        if(pin instanceof InputPin){
+            this.inputs[pin.index] = pin;
+        } else if(pin instanceof OutputPin){
+            this.outputs[pin.index] = pin;
         }
     }
+
     processOutput() {
         let inputs = [];
         for (let i = 0; i < this.inputs.length; i++){
@@ -50,6 +53,7 @@ class LogicGate extends React.Component {
 
         this.setState({value: output});
     }
+
     render () {
         // na razie używamy wartości logicznej bramki, żeby ułatwić sprawdzanie czy działają ( i tak korzystamy tylko z bramek 1-outputowych ), później powinny mieć po prostu nazwy danej bramki
         let value = this.state.value;
@@ -58,11 +62,11 @@ class LogicGate extends React.Component {
 
         let inputFields = [];
         for (let i = 0; i < this.props.inputs; i++){
-            inputFields.push((<Pin pinType="input" index={ i } gate={ this } getFocusedElement={ this.props.getFocusedElement } mount={ this.mountPin } />));
+            inputFields.push((<InputPin index={ i } gate={ this } getFocusedElement={ this.props.getFocusedElement } mount={ this.mountPin } />));
         }
         let outputFields = [];
         for (let i = 0; i < this.props.outputs; i++){
-            outputFields.push((<Pin pinType="output" index={ i } gate={ this } getFocusedElement={ this.props.getFocusedElement } setFocusedElement={ this.props.setFocusedElement } mount={ this.mountPin } />));
+            outputFields.push((<OutputPin index={ i } gate={ this } getFocusedElement={ this.props.getFocusedElement } setFocusedElement={ this.props.setFocusedElement } mount={ this.mountPin } />));
         }
         return (
             <div className={`LogicGate ${styles.LogicGate} ${style}`} >

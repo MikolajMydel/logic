@@ -31,8 +31,7 @@ class Pin extends React.Component {
 
     searchForRecursion = (childPin) => {
 
-        const gates = [];
-        gates.push( childPin.gate );
+        const gates = [childPin.gate];
 
         while ( gates.length !== 0 ){
             const gate = gates.pop();
@@ -42,12 +41,14 @@ class Pin extends React.Component {
 
             const gateOutputs = gate.outputs;
 
-            // dodajemy do tablicy wszystkie kolejne bramki
-            // (te, ktore maja na wejsciu podane nasze wyjscia)
+            // przechodzimy przez wszystkie wyjscia aktualnej bramki
             for (let i = 0; i < gateOutputs.length; i++){
                 // kazdy output moze miec kilka child pinow
-                // w tablicy child pins trzymamy piny typu input
-                const childPins = gateOutputs[i];
+                // w tablicy child pins trzymamy piny typu input, nalezace do kolejnych bramek
+
+                const childPins = gateOutputs[i].state.childPins;                
+
+                // dodaje bramke kazdego child pinu do tablicy
                 for (let j = 0; j < childPins.length; j++){
                     gates.push( childPins[j].gate );
                 }
@@ -71,11 +72,7 @@ class Pin extends React.Component {
 
                     const childPin = this.state.childPins[i];
 
-                    if ( this.searchForRecursion( childPin ) ) {
-                        // zapobiegniecie rekurencji
-                        console.log ("rec");
-                        continue;
-                    }
+                    if ( this.searchForRecursion( childPin ) ) continue;
 
                     // tylko jezeli nie ma rekurencji
                     childPin.receiveSignal(signal);

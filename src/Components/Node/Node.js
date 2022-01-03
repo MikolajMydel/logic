@@ -5,8 +5,7 @@ class Node extends React.Component {
 
     get value() { return this.state.value }
 
-    // wspólny render ale z innymi onClick, funkcje jako parametr wykorzystując super() w podklasie
-    renderBase(onClick) {
+    render() {
         let style;
         const value = this.state.value;
         // zwróć styl na podstawie wartosci
@@ -18,7 +17,7 @@ class Node extends React.Component {
         const position = this.props.position + 'px';
 
         return (
-            <div className={ `${styles.Node} ${style}` } onMouseDown={ onClick } style={{ top: position }} >
+            <div className={ `${styles.Node} ${style}` } onMouseDown={ this.handleOnClick } style={{ top: position }} >
             </div>
         )
     }

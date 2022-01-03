@@ -14,6 +14,7 @@ class Pin extends React.Component {
                 // mogłaby to być jedna zmienna
 
                 value: undefined,
+                recursion: undefined,
             }
         }
         props.mount(this.pinType, this, this.index); // dodaj siebie do tablicy pinów swojej bramki
@@ -24,7 +25,7 @@ class Pin extends React.Component {
 
         const newParent = this.props.getFocusedElement();
         newParent.connect(this);
-        this.setState({'parentPin': newParent})
+        this.setState({'parentPin': newParent});
         this.receiveSignal(newParent.state.value);
         
     }
@@ -72,10 +73,14 @@ class Pin extends React.Component {
 
                     const childPin = this.state.childPins[i];
 
-                    if ( this.searchForRecursion( childPin ) ) continue;
-
-                    // tylko jezeli nie ma rekurencji
-                    childPin.receiveSignal(signal);
+                    // sygnal przechodzi tylko raz
+                    if ( !this.state.recursion ) childPin.receiveSignal(signal);
+                    
+                    if ( this.searchForRecursion( childPin ) ) this.setState({"recursion": true});
+                    
+                    setTimeout( () => {
+                        this.setState({"recursion": undefined});
+                    }, 500 );
 
                 }
             }

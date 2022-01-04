@@ -21,6 +21,24 @@ class Pin extends React.Component {
 
     // zmień do jakiego outputa podłączony jest ten input
     changeParentPin = () => {
+
+        // musimy usunac pin z listy dzieci starego rodzica...
+        const oldParent = this.state.parentPin;
+        // ... o ile ten istnial (nie jest undefined)
+        if (oldParent){
+            const oldParentChildren = oldParent.state.childPins;
+            const pinIndex = oldParentChildren.indexOf (this);
+            
+            // tworzymy kopie tablicy dzieci (aby uniknac bezposredniej zmiany stanu)
+            const updatedOldParentChildren = [...oldParentChildren]; 
+            // usuwamy z niej aktualny pin
+            updatedOldParentChildren.splice (pinIndex, 1);
+
+            // ustawiamy nowa tablice dzieci jako stan starego rodzica
+            oldParent.setState({"childPins": updatedOldParentChildren });
+                
+        }
+
         const newParent = this.props.getFocusedElement();
         newParent.connect(this);
         this.setState({'parentPin': newParent})

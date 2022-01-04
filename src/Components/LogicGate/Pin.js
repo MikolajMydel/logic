@@ -74,10 +74,13 @@ class Pin extends React.Component {
                     const childPin = this.state.childPins[i];
 
                     // sygnal przechodzi tylko raz
+                    // rekurencja jest blokowana tylko, gdy zostala wykryta wczesniej
                     if ( !this.state.recursion ) childPin.receiveSignal(signal);
                     
                     if ( this.searchForRecursion( childPin ) ) this.setState({"recursion": true});
                     
+                    // ponownie ustawiamy rekurencje na undefined, na wypadek, jakby zaszla jakas zmiana w ukladzie
+                    // (w przeciwnym wypadku caly uklad od tego momentu by byl "zamrozony")
                     setTimeout( () => {
                         this.setState({"recursion": undefined});
                     }, 500 );

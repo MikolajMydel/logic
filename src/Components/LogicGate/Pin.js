@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./LogicGate.module.scss";
 
 class Pin extends React.Component {
-    constructor( {...props} ) {
+    constructor(props) {
         super();
         if(props.pinType === 'output' || props.pinType === 'input') {
             this.index = props.index;
@@ -19,9 +19,14 @@ class Pin extends React.Component {
         props.mount(this.pinType, this, this.index); // dodaj siebie do tablicy pinów swojej bramki
     }
 
-    // zmień do jakiego outputa podłączony jest ten input
-    changeParentPin = () => {
+    handleOnClickInput = () => {
+        const newParent = this.props.getFocusedElement();
+        if(newParent)
+            this.changeParentPin(newParent);
+    }
 
+    // zmień do jakiego outputa podłączony jest ten input
+    changeParentPin(newParent) {
         // musimy usunac pin z listy dzieci starego rodzica...
         const oldParent = this.state.parentPin;
         // ... o ile ten istnial (nie jest undefined)
@@ -38,14 +43,12 @@ class Pin extends React.Component {
             oldParent.setState({"childPins": updatedOldParentChildren });
                 
         }
-
-        const newParent = this.props.getFocusedElement();
         newParent.connect(this);
         this.setState({'parentPin': newParent})
         this.receiveSignal(newParent.state.value);
     }
 
-    receiveSignal = (signal) => {
+    receiveSignal(signal) {
         this.setState({'value': signal}, function() { // setState() nie zmienia state
             // od razu więc resztę kodu dodaję do funkcji callback, inaczej state
             // pozostałby taki jak wcześniej
@@ -60,7 +63,7 @@ class Pin extends React.Component {
 	}
 
     // przylaczanie innego pina jako dziecko
-    connect = (target) => {
+    connect(target) {
         let cps = this.state.childPins;
         cps.push(target);
         this.setState({'childPins': cps});
@@ -68,7 +71,7 @@ class Pin extends React.Component {
 
     render(){
         if (this.pinType === 'input')
-            return <button className={ styles.LogicGateInput } onClick={ () => this.changeParentPin() } ></button>;
+            return <button className={ styles.LogicGateInput } onClick={ this.handleOnClickInput } ></button>;
         // output
         return <button className={ styles.LogicGateOutput } onClick={ () => this.props.setFocusedElement(this) }> </button>;
     }

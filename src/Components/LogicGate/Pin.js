@@ -19,9 +19,14 @@ class Pin extends React.Component {
         props.mount(this.pinType, this, this.index); // dodaj siebie do tablicy pinów swojej bramki
     }
 
-    // zmień do jakiego outputa podłączony jest ten input
-    changeParentPin = () => {
+    handleOnClickInput = () => {
         const newParent = this.props.getFocusedElement();
+        if(newParent)
+            this.changeParentPin(newParent);
+    }
+
+    // zmień do jakiego outputa podłączony jest ten input
+    changeParentPin(newParent) {
         newParent.connect(this);
         this.setState({'parentPin': newParent})
         this.receiveSignal(newParent.state.value);
@@ -50,7 +55,7 @@ class Pin extends React.Component {
 
     render(){
         if (this.pinType === 'input')
-            return <button className={ styles.LogicGateInput } onClick={ this.changeParentPin } ></button>;
+            return <button className={ styles.LogicGateInput } onClick={ this.handleOnClickInput } ></button>;
         // output
         return <button className={ styles.LogicGateOutput } onClick={ () => this.props.setFocusedElement(this) }> </button>;
     }

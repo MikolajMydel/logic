@@ -13,7 +13,7 @@ class StartNode extends Node {
         this.setState({'childPins': cps});
     }
 
-    onClick = (e) => {
+    handleOnClick = (e) => {
         if(e.button === 0) // Lewy PM
             this.props.setFocusedElement(this);
         else if (e.button === 1) // Środkowy PM
@@ -27,10 +27,6 @@ class StartNode extends Node {
                 this.state.childPins[i].receiveSignal(val);
             }
         });
-    }
-
-    render() {
-        return super.renderBase(this.onClick)
     }
 }
 

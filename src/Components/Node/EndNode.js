@@ -6,20 +6,21 @@ class EndNode extends Node {
         parentPin: undefined,
     }
 
-    changeParentPin = () => {
-        const newParent = this.props.getFocusedElement();
+    changeParentPin(newParent) {
         newParent.connect(this);
         this.setState({'parentPin': newParent})
         this.receiveSignal(newParent.state.value);
     }
 
+    handleOnClick = () => {
+        const newParent = this.props.getFocusedElement();
+        if(newParent)
+            this.changeParentPin(newParent);
+    }
+
     receiveSignal(signal) {
         this.setState({'value': signal});
 	}
-
-    render() {
-        return super.renderBase(this.changeParentPin);
-    }
 }
 
 export default EndNode;

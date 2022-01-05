@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./LogicGate.module.scss";
+import StartingNode from "../StartingNode/StartingNode"
 
 class Pin extends React.Component {
     constructor( {...props} ) {
@@ -24,10 +25,16 @@ class Pin extends React.Component {
     changeParentPin = () => {
 
         const newParent = this.props.getFocusedElement();
+
+        // StartingNode nigdy nie bedzie mialo rekurencji, ale nie ma
+        // funkcji searchForRecursion
+        if ( !(newParent instanceof StartingNode) &&
+            newParent.searchForRecursion(this)) return;
+
         newParent.connect(this);
         this.setState({'parentPin': newParent});
         this.receiveSignal(newParent.state.value);
-        
+
     }
 
     searchForRecursion = (childPin) => {
@@ -47,7 +54,7 @@ class Pin extends React.Component {
                 // kazdy output moze miec kilka child pinow
                 // w tablicy child pins trzymamy piny typu input, nalezace do kolejnych bramek
 
-                const childPins = gateOutputs[i].state.childPins;                
+                const childPins = gateOutputs[i].state.childPins;
 
                 // dodaje bramke kazdego child pinu do tablicy
                 for (let j = 0; j < childPins.length; j++){
@@ -56,7 +63,7 @@ class Pin extends React.Component {
             }
 
         }
-        
+
         return false;
 
     }
@@ -70,21 +77,7 @@ class Pin extends React.Component {
                 this.gate.processOutput();
             } else { // output
                 for (let i = 0; i < this.state.childPins.length; i++) {
-
-                    const childPin = this.state.childPins[i];
-
-                    // sygnal przechodzi tylko raz
-                    // rekurencja jest blokowana tylko, gdy zostala wykryta wczesniej
-                    if ( !this.state.recursion ) childPin.receiveSignal(signal);
-                    
-                    if ( this.searchForRecursion( childPin ) ) this.setState({"recursion": true});
-                    
-                    // ponownie ustawiamy rekurencje na undefined, na wypadek, jakby zaszla jakas zmiana w ukladzie
-                    // (w przeciwnym wypadku caly uklad od tego momentu by byl "zamrozony")
-                    setTimeout( () => {
-                        this.setState({"recursion": undefined});
-                    }, 500 );
-
+                    this.state.childPins[i].receiveSignal(signal);
                 }
             }
         });

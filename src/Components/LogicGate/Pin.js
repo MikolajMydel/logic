@@ -1,6 +1,19 @@
 import React from "react";
 import styles from "./LogicGate.module.scss";
 
+// funkcja, ktora dodaje do tablicy wszystkie bramki pobierajace sygnal z bramki podanej jako argument
+function collectChildGates ( childGates, gate ) {
+
+    for (let i = 0; i < gate.outputs.length; i++){
+
+        // dodaje wszystkie piny, ktore pobieraja sygnal z aktualnej bramki
+        const childPins = gate.outputs[i].state.childPins;
+
+        for (let j = 0; j < childPins.length; j++){
+            childGates.push( childPins[j].gate );
+        }
+    }
+}
 class Pin extends React.Component {
     constructor(props) {
         super();
@@ -33,19 +46,41 @@ class Pin extends React.Component {
         if (oldParent){
             const oldParentChildren = oldParent.state.childPins;
             const pinIndex = oldParentChildren.indexOf (this);
-            
+
             // tworzymy kopie tablicy dzieci (aby uniknac bezposredniej zmiany stanu)
-            const updatedOldParentChildren = [...oldParentChildren]; 
+            const updatedOldParentChildren = [...oldParentChildren];
             // usuwamy z niej aktualny pin
             updatedOldParentChildren.splice (pinIndex, 1);
 
             // ustawiamy nowa tablice dzieci jako stan starego rodzica
             oldParent.setState({"childPins": updatedOldParentChildren });
-                
+
         }
         newParent.connect(this);
-        this.setState({'parentPin': newParent})
+        this.setState({'parentPin': newParent});
         this.receiveSignal(newParent.state.value);
+    }
+
+    searchForRecursion = () => {
+        // this = pin typu input
+        // bramka ktorej szukamy (sprawdzamy, czy sie powtarza)
+        const searchedGate = this.gate;
+        const gates = []; // tablica, w ktorej przechowujemy wszystkie bramki do sprawdzenia
+
+        collectChildGates (gates, searchedGate);
+
+        // dopoki sa jakies bramki do sprawdzenia
+        while ( gates.length !== 0 ){
+            const currentGate = gates.pop();
+
+            // znalezlismy bramke ktorej poszukiwalismy - jest rekurencja
+            if ( currentGate === searchedGate ) return true;
+
+            // dodaje wszystkie bramki, ktore pobieraja sygnal z aktualnej bramki
+            collectChildGates ( gates, currentGate );
+        }
+
+        return false;
     }
 
     receiveSignal(signal) {
@@ -53,10 +88,22 @@ class Pin extends React.Component {
             // od razu więc resztę kodu dodaję do funkcji callback, inaczej state
             // pozostałby taki jak wcześniej
             if (this.pinType === 'input') {
+                if (this.gate.state.recursion) return;
+
+                // zmieniamy parent pin, wiec sprawdzamy czy wystepuje rekurencja
+                if (this.searchForRecursion()){
+                    this.gate.setState({"recursion": true},
+                        () => setTimeout(
+                            () => { this.gate.setState({"recursion": false})}, 200)
+                    );
+                }
+
                 this.gate.processOutput();
             } else { // output
                 for (let i = 0; i < this.state.childPins.length; i++) {
-                    this.state.childPins[i].receiveSignal(signal);
+
+                    const childPin = this.state.childPins[i];
+                    if (!childPin.gate.state.recursion) childPin.receiveSignal(signal);
                 }
             }
         });

@@ -2,14 +2,16 @@ import React from "react";
 import Pin from "./Pin";
 import styles from "./LogicGate.module.scss";
 
+import {AND, OR} from './LogicalFunctions.js';
+
 const gateClass = {
     'AND': styles.LogicGateAND,
     'OR': styles.LogicGateOR,
     'NOT': styles.LogicGateNOT,
 }
 const basicFunctions = {
-    'AND': (i) => (i[0] && i[1]),
-    'OR':  (i) => (i[0] || i[1]),
+    'AND': (i) => AND(i),
+    'OR':  (i) => OR(i),
     'NOT': (i) => !(i[0]),
 }
 
@@ -19,6 +21,8 @@ class LogicGate extends React.Component {
         this.func = basicFunctions[props.gateType];
         this.state = {
             value: undefined, // tymczasowo
+            recursion: false,
+
         }
         this.inputs = [];
         this.outputs = [];
@@ -32,22 +36,21 @@ class LogicGate extends React.Component {
         }
     }
     processOutput() {
-        let inputs = [];
-        for (let i = 0; i < this.inputs.length; i++){
-            let inp = this.inputs[i].state.value; // true or false
+        /*
+            nawet jezeli brakuje ktoregos inputa, to w przypadku bramek AND i OR mozna okreslic wyjscie na podstawie
+            jednej wartosci (np. AND na pewno bedzie falszywe jezeli jedno wejscie jest falszywe lub OR na pewno jest
+            prawdziwe jezeli chociaz jedna wartosc jest prawdziwa )
 
-            // jezeli brakuje ktoregos inputa, nie da sie okreslic wyjscia, zwracamy undefined na każdy output
-            inputs.push(inp);
-            if (inputs[i] === undefined){
-                for (let j = 0; j < this.outputs.length; j++)
-                    this.outputs[j].receiveSignal(undefined);
-                return;
-            }
-        }
+            Dzieki temu bedzie mozna robic uklady zapamietujace stan
+        */
+
+        let inputs = Array.from(
+            this.inputs.map ( (input) => input.state.value )
+        );
+
         let output = this.func(inputs);
         // na razie używamy tylko bramek z jednym outputem więc whatever
         this.outputs[0].receiveSignal(output);
-
         this.setState({value: output});
     }
     render () {

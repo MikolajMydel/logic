@@ -58,17 +58,6 @@ class Pin extends React.Component {
         }
         newParent.connect(this);
         this.setState({'parentPin': newParent});
-
-        if (this.gate.state.recursion) return;
-
-        // zmieniamy parent pin, wiec sprawdzamy czy wystepuje rekurencja
-        if (this.searchForRecursion()){
-            this.gate.setState({"recursion": true},
-                () => setTimeout(
-                    () => { this.gate.setState({"recursion": false})}, 500)
-            );
-        }
-
         this.receiveSignal(newParent.state.value);
     }
 
@@ -99,6 +88,16 @@ class Pin extends React.Component {
             // od razu więc resztę kodu dodaję do funkcji callback, inaczej state
             // pozostałby taki jak wcześniej
             if (this.pinType === 'input') {
+                if (this.gate.state.recursion) return;
+
+                // zmieniamy parent pin, wiec sprawdzamy czy wystepuje rekurencja
+                if (this.searchForRecursion()){
+                    this.gate.setState({"recursion": true},
+                        () => setTimeout(
+                            () => { this.gate.setState({"recursion": false})}, 200)
+                    );
+                }
+
                 this.gate.processOutput();
             } else { // output
                 for (let i = 0; i < this.state.childPins.length; i++) {

@@ -1,4 +1,5 @@
 import React from "react";
+import EndNode from "../Node/EndNode";
 import styles from "./LogicGate.module.scss";
 
 // funkcja, ktora dodaje do tablicy wszystkie bramki pobierajace sygnal z bramki podanej jako argument
@@ -10,6 +11,8 @@ function collectChildGates ( childGates, gate ) {
         const childPins = gate.outputs[i].state.childPins;
 
         for (let j = 0; j < childPins.length; j++){
+            // pomijamy EndNody
+            if (childPins[j] instanceof EndNode) continue;
             childGates.push( childPins[j].gate );
         }
     }
@@ -92,6 +95,7 @@ class Pin extends React.Component {
 
                 // zmieniamy parent pin, wiec sprawdzamy czy wystepuje rekurencja
                 if (this.searchForRecursion()){
+                    console.log("rekursja");
                     this.gate.setState({"recursion": true},
                         () => setTimeout(
                             () => { this.gate.setState({"recursion": false})}, 200)
@@ -103,7 +107,8 @@ class Pin extends React.Component {
                 for (let i = 0; i < this.state.childPins.length; i++) {
 
                     const childPin = this.state.childPins[i];
-                    if (!childPin.gate.state.recursion) childPin.receiveSignal(signal);
+                    // EndNode nie ma bramki
+                    if (!childPin.gate || !childPin.gate.state.recursion) childPin.receiveSignal(signal);
                 }
             }
         });

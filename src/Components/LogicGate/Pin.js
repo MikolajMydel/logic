@@ -39,39 +39,29 @@ class Pin extends React.Component {
         newParent.connect(this);
         this.setState({'parentPin': newParent});
 
+        if (this.gate.state.recursion) return;
+
         // zmieniamy parent pin, wiec sprawdzamy czy wystepuje rekurencja
-        
         if (this.searchForRecursion()){
-            if (this.gate.state.recursion) return;
-
-            this.receiveSignal(newParent.state.value);
-
             this.gate.setState({"recursion": true}, 
-                () => setTimeout( () => {
-                    this.gate.setState({"recursion": false})
-                } )
+                () => setTimeout( 
+                    () => { this.gate.setState({"recursion": false})}, 500)
             );
-
-
-        } else this.receiveSignal(newParent.state.value);
-
-
-
+        } 
+        
+        this.receiveSignal(newParent.state.value);
     }
 
     searchForRecursion = () => {
-
         // this = pin typu input
         // bramka ktorej szukamy (sprawdzamy, czy sie powtarza)
         const searchedGate = this.gate;
-
         const gates = []; // tablica, w ktorej przechowujemy wszystkie bramki do sprawdzenia
 
         collectChildGates (gates, searchedGate);
 
         // dopoki sa jakies bramki do sprawdzenia
         while ( gates.length !== 0 ){
-
             const currentGate = gates.pop();
 
             // znalezlismy bramke ktorej poszukiwalismy - jest rekurencja
@@ -79,14 +69,12 @@ class Pin extends React.Component {
 
             // dodaje wszystkie bramki, ktore pobieraja sygnal z aktualnej bramki 
             collectChildGates ( gates, currentGate );
-            
         }
 
         return false;
     }
 
     receiveSignal = (signal, recursion = false) => {
-
         this.setState({'value': signal}, function() { // setState() nie zmienia state
             // od razu więc resztę kodu dodaję do funkcji callback, inaczej state
             // pozostałby taki jak wcześniej
@@ -97,7 +85,6 @@ class Pin extends React.Component {
 
                     const childPin = this.state.childPins[i];
                     if (!childPin.gate.state.recursion) childPin.receiveSignal(signal);
-
                 }
             }
         });

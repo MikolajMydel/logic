@@ -35,9 +35,8 @@ class LogicGate extends React.Component {
             this.outputs[index] = pin;
         }
     }
-    processOutput = () => {
-
-        /* 
+    processOutput() {
+        /*
             nawet jezeli brakuje ktoregos inputa, to w przypadku bramek AND i OR mozna okreslic wyjscie na podstawie
             jednej wartosci (np. AND na pewno bedzie falszywe jezeli jedno wejscie jest falszywe lub OR na pewno jest
             prawdziwe jezeli chociaz jedna wartosc jest prawdziwa )
@@ -48,7 +47,7 @@ class LogicGate extends React.Component {
         let inputs = Array.from(
             this.inputs.map ( (input) => input.state.value )
         );
-        
+
         let output = this.func(inputs);
         // na razie używamy tylko bramek z jednym outputem więc whatever
         this.outputs[0].receiveSignal(output);

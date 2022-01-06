@@ -22,6 +22,8 @@ class LogicGate extends React.Component {
         this.state = {
             value: undefined, // tymczasowo
             
+            recursion: false,
+
         }
         this.inputs = [];
         this.outputs = [];

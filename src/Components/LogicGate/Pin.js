@@ -27,7 +27,6 @@ class Pin extends React.Component {
                 // mogłaby to być jedna zmienna
 
                 value: undefined,
-                recursion: undefined,
             }
         }
         props.mount(this.pinType, this, this.index); // dodaj siebie do tablicy pinów swojej bramki
@@ -41,8 +40,23 @@ class Pin extends React.Component {
         this.setState({'parentPin': newParent});
 
         // zmieniamy parent pin, wiec sprawdzamy czy wystepuje rekurencja
-        if ( !this.searchForRecursion ) this.receiveSignal(newParent.state.value);
- 
+        
+        if (this.searchForRecursion()){
+            if (this.gate.state.recursion) return;
+
+            this.receiveSignal(newParent.state.value);
+
+            this.gate.setState({"recursion": true}, 
+                () => setTimeout( () => {
+                    this.gate.setState({"recursion": false})
+                } )
+            );
+
+
+        } else this.receiveSignal(newParent.state.value);
+
+
+
     }
 
     searchForRecursion = () => {
@@ -58,20 +72,20 @@ class Pin extends React.Component {
         // dopoki sa jakies bramki do sprawdzenia
         while ( gates.length !== 0 ){
 
-            const actualGate = gates.pop();
+            const currentGate = gates.pop();
 
             // znalezlismy bramke ktorej poszukiwalismy - jest rekurencja
-            if ( actualGate === searchedGate ) return true;
+            if ( currentGate === searchedGate ) return true;
 
             // dodaje wszystkie bramki, ktore pobieraja sygnal z aktualnej bramki 
-            collectChildGates ( gates, actualGate );
+            collectChildGates ( gates, currentGate );
             
         }
 
         return false;
     }
 
-    receiveSignal = (signal) => {
+    receiveSignal = (signal, recursion = false) => {
 
         this.setState({'value': signal}, function() { // setState() nie zmienia state
             // od razu więc resztę kodu dodaję do funkcji callback, inaczej state
@@ -82,9 +96,8 @@ class Pin extends React.Component {
                 for (let i = 0; i < this.state.childPins.length; i++) {
 
                     const childPin = this.state.childPins[i];
+                    if (!childPin.gate.state.recursion) childPin.receiveSignal(signal);
 
-                    childPin.receiveSignal(signal);
-                    
                 }
             }
         });

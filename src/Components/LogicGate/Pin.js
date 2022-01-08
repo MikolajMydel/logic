@@ -41,7 +41,7 @@ class Pin extends React.Component {
             this.changeParentPin(newParent);
     }
 
-    disconnect() {
+    removeFromOldParent() {
         // musimy usunac pin z listy dzieci starego rodzica...
         const oldParent = this.state.parentPin;
         if (oldParent){
@@ -55,15 +55,19 @@ class Pin extends React.Component {
             // ustawiamy nowa tablice dzieci jako stan starego rodzica
             oldParent.setState({"childPins": updatedOldParentChildren });
         }
+    }
 
+    disconnect() {
+        this.removeFromOldParent();
         this.setState({'parentPin': undefined});
         this.receiveSignal(undefined);
     }
+
     // zmień do jakiego outputa podłączony jest ten input
     changeParentPin(newParent) {
         if (newParent){
-            this.disconnect();
             newParent.connect(this);
+            this.removeFromOldParent();
             this.setState({'parentPin': newParent});
             this.receiveSignal(newParent.state.value);
         }

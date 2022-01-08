@@ -15,36 +15,19 @@ class InputPin extends Pin {
             this.changeParentPin(newParent);
     }
 
-    removeFromOldParent() {
-        // musimy usunac pin z listy dzieci starego rodzica...
-        const oldParent = this.state.parentPin;
-        if (oldParent){
-            const oldParentChildren = oldParent.state.childPins;
-            const pinIndex = oldParentChildren.indexOf (this);
-
-            // tworzymy kopie tablicy dzieci (aby uniknac bezposredniej zmiany stanu)
-            let updatedOldParentChildren = [...oldParentChildren];
-            updatedOldParentChildren.splice (pinIndex, 1);
-
-            // ustawiamy nowa tablice dzieci jako stan starego rodzica
-            oldParent.setState({"childPins": updatedOldParentChildren });
-        }
-    }
-
     disconnect() {
-        this.removeFromOldParent();
+        this.state.parentPin.disconnect(this);
         this.setState({'parentPin': undefined});
         this.receiveSignal(undefined);
     }
 
     // zmień do jakiego outputa podłączony jest ten input
     changeParentPin(newParent) {
-        if (newParent){
-            newParent.connect(this);
-            this.removeFromOldParent();
-            this.setState({'parentPin': newParent});
-            this.receiveSignal(newParent.state.value);
-        }
+        if (this.state.parentPin)
+            this.state.parentPin.disconnect(this);
+        newParent.connect(this);
+        this.setState({'parentPin': newParent});
+        this.receiveSignal(newParent.state.value);
     }
 
     receiveSignal(signal) {

@@ -13,6 +13,18 @@ class StartNode extends Node {
         this.setState({'childPins': cps});
     }
 
+    disconnect(target) {
+        const oldChildren = this.state.childPins;
+        const pinIndex = oldChildren.indexOf(target);
+
+        // tworzymy kopie tablicy dzieci (aby uniknac bezposredniej zmiany stanu)
+        let updatedChildren = [...oldChildren];
+        updatedChildren.splice (pinIndex, 1);
+
+        // ustawiamy nowa tablice dzieci jako stan
+        this.setState({"childPins": updatedChildren });
+    }
+
     handleOnClick = (e) => {
         if(e.button === 0) // Lewy PM
             this.props.setFocusedElement(this);

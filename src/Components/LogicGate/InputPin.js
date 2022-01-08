@@ -15,34 +15,42 @@ class InputPin extends Pin {
             this.changeParentPin(newParent);
     }
 
-    // zmień do jakiego outputa podłączony jest ten input
-    changeParentPin(newParent) {
+    removeFromOldParent() {
         // musimy usunac pin z listy dzieci starego rodzica...
         const oldParent = this.state.parentPin;
-        // ... o ile ten istnial (nie jest undefined)
         if (oldParent){
             const oldParentChildren = oldParent.state.childPins;
             const pinIndex = oldParentChildren.indexOf (this);
 
             // tworzymy kopie tablicy dzieci (aby uniknac bezposredniej zmiany stanu)
-            const updatedOldParentChildren = [...oldParentChildren];
-            // usuwamy z niej aktualny pin
+            let updatedOldParentChildren = [...oldParentChildren];
             updatedOldParentChildren.splice (pinIndex, 1);
 
             // ustawiamy nowa tablice dzieci jako stan starego rodzica
             oldParent.setState({"childPins": updatedOldParentChildren });
-
         }
-        newParent.connect(this);
-        this.setState({'parentPin': newParent});
-        this.receiveSignal(newParent.state.value);
+    }
+
+    disconnect() {
+        this.removeFromOldParent();
+        this.setState({'parentPin': undefined});
+        this.receiveSignal(undefined);
+    }
+
+    // zmień do jakiego outputa podłączony jest ten input
+    changeParentPin(newParent) {
+        if (newParent){
+            newParent.connect(this);
+            this.removeFromOldParent();
+            this.setState({'parentPin': newParent});
+            this.receiveSignal(newParent.state.value);
+        }
     }
 
     receiveSignal(signal) {
         this.setState({'value': signal}, function() {
-            if (this.gate.state.recursion) return;
-
             // zmieniamy parent pin, wiec sprawdzamy czy wystepuje rekurencja
+            if (this.gate.state.recursion) return;
             if (this.searchForRecursion()){
                 this.gate.setState({"recursion": true},
                     () => setTimeout(

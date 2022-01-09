@@ -4,6 +4,7 @@ import LogicGate from "../LogicGate/LogicGate";
 import StartNode from "../Node/StartNode";
 import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
+import Wire from "../Wire/Wire";
 
 class Application extends React.Component {
     state = {
@@ -14,6 +15,8 @@ class Application extends React.Component {
             inputs: [],
             board: [],
             outputs: [],
+
+            wires: [<Wire />],
         }
     }
 
@@ -120,12 +123,19 @@ class Application extends React.Component {
                         onClick={ (e) => this.addNode(e, 'startNode')}>
                         { this.state.elements.inputs }
                     </div>
+
+                    <svg className={ styles.WiresBoard }>
+                        { this.state.elements.wires }
+                    </svg>
+
                     <div className={ styles.Board }
                         onMouseDown={ (e) => this.grab(e) }
                         onMouseMove={ (e) => this.move(e) }
                         onMouseUp={ () => this.drop() }
                     >
+
                         { this.state.elements.board }
+
                     </div>
                     <div className={ `Area ${styles.OutputArea}` }
                         onClick={ (e) => this.addNode(e, 'endNode')}>

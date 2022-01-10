@@ -18,59 +18,13 @@ function collectChildGates ( childGates, gate ) {
     }
 }
 class Pin extends React.Component {
+    style = styles;
+
     constructor(props) {
         super();
-        if(props.pinType === 'output' || props.pinType === 'input') {
-            this.index = props.index;
-            this.pinType = props.pinType;
-            this.gate = props.gate
-            this.state = {
-                parentPin: undefined, // w sumie to tylko dla input pinów
-                childPins: [], // w sumie to tylko dla output pinów
-                // mogłaby to być jedna zmienna
-
-                value: undefined,
-            }
-        }
-        props.mount(this.pinType, this, this.index); // dodaj siebie do tablicy pinów swojej bramki
-    }
-
-    handleOnClickInput = () => {
-        const newParent = this.props.getFocusedElement();
-        if(newParent)
-            this.changeParentPin(newParent);
-    }
-
-    removeFromOldParent() {
-        // musimy usunac pin z listy dzieci starego rodzica...
-        const oldParent = this.state.parentPin;
-        if (oldParent){
-            const oldParentChildren = oldParent.state.childPins;
-            const pinIndex = oldParentChildren.indexOf (this);
-
-            // tworzymy kopie tablicy dzieci (aby uniknac bezposredniej zmiany stanu)
-            let updatedOldParentChildren = [...oldParentChildren];
-            updatedOldParentChildren.splice (pinIndex, 1);
-
-            // ustawiamy nowa tablice dzieci jako stan starego rodzica
-            oldParent.setState({"childPins": updatedOldParentChildren });
-        }
-    }
-
-    disconnect() {
-        this.removeFromOldParent();
-        this.setState({'parentPin': undefined});
-        this.receiveSignal(undefined);
-    }
-
-    // zmień do jakiego outputa podłączony jest ten input
-    changeParentPin(newParent) {
-        if (newParent){
-            newParent.connect(this);
-            this.removeFromOldParent();
-            this.setState({'parentPin': newParent});
-            this.receiveSignal(newParent.state.value);
-        }
+        this.index = props.index;
+        this.gate = props.gate
+        props.mount(this); // dodaj siebie do tablicy pinów swojej bramki
     }
 
     searchForRecursion = () => {
@@ -95,46 +49,26 @@ class Pin extends React.Component {
         return false;
     }
 
-    receiveSignal(signal) {
-        this.setState({'value': signal}, function() { // setState() nie zmienia state
-            // od razu więc resztę kodu dodaję do funkcji callback, inaczej state
-            // pozostałby taki jak wcześniej
-            if (this.pinType === 'input') {
-                if (this.gate.state.recursion) return;
+    searchForRecursion = () => {
+        // this = pin typu input
+        // bramka ktorej szukamy (sprawdzamy, czy sie powtarza)
+        const searchedGate = this.gate;
+        const gates = []; // tablica, w ktorej przechowujemy wszystkie bramki do sprawdzenia
 
-                // zmieniamy parent pin, wiec sprawdzamy czy wystepuje rekurencja
-                if (this.searchForRecursion()){
-                    console.log("rekursja");
-                    this.gate.setState({"recursion": true},
-                        () => setTimeout(
-                            () => { this.gate.setState({"recursion": false})}, 200)
-                    );
-                }
+        collectChildGates (gates, searchedGate);
 
-                this.gate.processOutput();
-            } else { // output
-                for (let i = 0; i < this.state.childPins.length; i++) {
+        // dopoki sa jakies bramki do sprawdzenia
+        while ( gates.length !== 0 ){
+            const currentGate = gates.pop();
 
-                    const childPin = this.state.childPins[i];
-                    // EndNode nie ma bramki
-                    if (!childPin.gate || !childPin.gate.state.recursion) childPin.receiveSignal(signal);
-                }
-            }
-        });
-	}
+            // znalezlismy bramke ktorej poszukiwalismy - jest rekurencja
+            if ( currentGate === searchedGate ) return true;
 
-    // przylaczanie innego pina jako dziecko
-    connect(target) {
-        let cps = this.state.childPins;
-        cps.push(target);
-        this.setState({'childPins': cps});
-    }
+            // dodaje wszystkie bramki, ktore pobieraja sygnal z aktualnej bramki
+            collectChildGates ( gates, currentGate );
+        }
 
-    render(){
-        if (this.pinType === 'input')
-            return <button className={ styles.LogicGateInput } onClick={ this.handleOnClickInput } ></button>;
-        // output
-        return <button className={ styles.LogicGateOutput } onClick={ () => this.props.setFocusedElement(this) }> </button>;
+        return false;
     }
 }
 

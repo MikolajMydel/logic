@@ -4,7 +4,7 @@ import LogicGate from "../LogicGate/LogicGate";
 import StartNode from "../Node/StartNode";
 import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
-import Wire from "../Wire/Wire";
+import Wire from '../Wire/Wire.js';
 
 class Application extends React.Component {
     state = {
@@ -15,9 +15,10 @@ class Application extends React.Component {
             inputs: [],
             board: [],
             outputs: [],
+        },
 
-            wires: [<Wire />],
-        }
+        wires: [],
+
     }
 
     // funkcja zmieniajaca aktualnie wybrane wyjscie - pozwala na uzycie kliknietego wyjscia na wejscie bramki logicznej
@@ -41,6 +42,8 @@ class Application extends React.Component {
                         outputs={ args.outputCount }
                         getFocusedElement={ this.getFocusedElement }
                         setFocusedElement={ this.setFocusedElement }
+
+                        drawWire={ this.drawWire }
                     />
                 );
                 break;
@@ -115,6 +118,12 @@ class Application extends React.Component {
         this.setState({heldElement: undefined});
     }
 
+    drawWire = (firstPin, secondPin) => {
+        const newWiresList = this.state.wires.concat([ <Wire firstPin={firstPin} secondPin={secondPin} /> ]);
+
+        this.setState({"wires": newWiresList});
+    }
+
     render() {
         return (
             <div className={ styles.Application } >
@@ -125,7 +134,7 @@ class Application extends React.Component {
                     </div>
 
                     <svg className={ styles.WiresBoard }>
-                        { this.state.elements.wires }
+                        { this.state.wires }
                     </svg>
 
                     <div className={ styles.Board }

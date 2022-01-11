@@ -31,6 +31,9 @@ class Pin extends React.Component {
 
                 value: undefined,
             }
+
+            this.ref = React.createRef();
+
         }
         props.mount(this.pinType, this, this.index); // dodaj siebie do tablicy pinów swojej bramki
     }
@@ -60,7 +63,14 @@ class Pin extends React.Component {
 
         }
         newParent.connect(this);
-        this.setState({'parentPin': newParent});
+
+        this.setState({'parentPin': newParent}, () => {
+            // podlaczamy do innego rodzica - tworzymy nowe polaczenie
+            this.props.drawWire(this.state.parentPin.ref, this.ref);
+        });
+
+        
+
         this.receiveSignal(newParent.state.value);
     }
 
@@ -121,11 +131,12 @@ class Pin extends React.Component {
         this.setState({'childPins': cps});
     }
 
-    render(){
+    render = () => {
         if (this.pinType === 'input')
-            return <button className={ styles.LogicGateInput } onClick={ this.handleOnClickInput } ></button>;
+            return <button ref={this.ref} className={ styles.LogicGateInput } onClick={ this.handleOnClickInput }></button>;
+        
         // output
-        return <button className={ styles.LogicGateOutput } onClick={ () => this.props.setFocusedElement(this) }> </button>;
+        return <button ref={this.ref} className={ styles.LogicGateOutput } onClick={ () => this.props.setFocusedElement(this) }> </button>;
     }
 }
 

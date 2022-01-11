@@ -9,9 +9,21 @@ function calculatePath (firstPin, secondPin){
     const secondPinBoundingClient = secondPin.getBoundingClientRect();
     const secondPinCoordinates = [ secondPinBoundingClient.left, secondPinBoundingClient.top ];
 
+    // pozycje rowno w srodku pinu
+    firstPinCoordinates[1] += firstPinBoundingClient.height / 2;
+    firstPinCoordinates[0] += firstPinBoundingClient.width / 2;
+    secondPinCoordinates[1] += secondPinBoundingClient.height / 2;
+    secondPinCoordinates[0] += secondPinBoundingClient.width / 2;
+
+
     // M - MOVE TO (WEDLUG POZYCJI BEWZGLEDNEJ)
     // L - LINE TO (WEDLUG POZYCJI BEZWZGLEDNEJ)
-    return `M ${firstPinCoordinates} L ${secondPinCoordinates}`
+    // przewod idzie od wyjscia do wejscia
+    return `M ${firstPinCoordinates} 
+    l 25, 0 
+    L ${[secondPinCoordinates[0] - 25, secondPinCoordinates[1]]}
+    L ${secondPinCoordinates}
+    `
 
 }
 

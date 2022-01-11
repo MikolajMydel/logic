@@ -116,6 +116,9 @@ class Application extends React.Component {
     drop(){
         // upuść trzymaną bramkę
         this.setState({heldElement: undefined});
+        for (let i = 0; i < this.state.wires; i++){
+            this.state.wires[i].forceUpdate();
+        }
     }
 
     drawWire = (firstPin, secondPin) => {

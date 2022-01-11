@@ -32,6 +32,7 @@ class Pin extends React.Component {
                 value: undefined,
             }
 
+            // referencja do elementu html (<button>)
             this.ref = React.createRef();
 
         }

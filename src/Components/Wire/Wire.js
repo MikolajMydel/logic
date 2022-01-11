@@ -3,13 +3,16 @@ import styles from './Wire.scss';
 
 function calculatePath (firstPin, secondPin){
 
-    const firstPinBoundingClient = firstPin.current.getBoundingClientRect();
-    const firstPinCoordinates = [ firstPinBoundingClient.top, firstPinBoundingClient.left ];
+    const firstPinBoundingClient = firstPin.getBoundingClientRect();
+    const firstPinCoordinates = [ firstPinBoundingClient.left, firstPinBoundingClient.top ];
 
-    const secondPinBoundingClient = secondPin.current.getBoundingClientRect();
-    const secondPinCoordinates = [ secondPinBoundingClient.top, secondPinBoundingClient.left ];
+    const secondPinBoundingClient = secondPin.getBoundingClientRect();
+    const secondPinCoordinates = [ secondPinBoundingClient.left, secondPinBoundingClient.top ];
 
-    return "m135,202l453,0";
+    // M - MOVE TO (WEDLUG POZYCJI BEWZGLEDNEJ)
+    // L - LINE TO (WEDLUG POZYCJI BEZWZGLEDNEJ)
+    return `M ${firstPinCoordinates} L ${secondPinCoordinates}`
+
 }
 
 class Wire extends React.Component {
@@ -18,8 +21,8 @@ class Wire extends React.Component {
 
         super(props);
         this.state = {
-            "firstPin": props.firstPin,
-            "secondPin": props.secondPin,
+            "firstPin": props.firstPin.current,
+            "secondPin": props.secondPin.current,
 
         };
 

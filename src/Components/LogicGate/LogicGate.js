@@ -1,5 +1,6 @@
 import React from "react";
-import Pin from "./Pin";
+import OutputPin from "./OutputPin";
+import InputPin from "./InputPin";
 import styles from "./LogicGate.module.scss";
 
 import {AND, OR} from './LogicalFunctions.js';
@@ -27,12 +28,13 @@ class LogicGate extends React.Component {
         this.inputs = [];
         this.outputs = [];
     }
+
     // dzięki tej funkcji piny dodają się do tablicy pinów output lub input
-    mountPin = (type, pin, index) => {
-        if(type === "input"){
-            this.inputs[index] = pin;
-        } else {
-            this.outputs[index] = pin;
+    mountPin = (pin) => {
+        if(pin instanceof InputPin){
+            this.inputs[pin.index] = pin;
+        } else if(pin instanceof OutputPin){
+            this.outputs[pin.index] = pin;
         }
     }
     processOutput() {
@@ -41,18 +43,19 @@ class LogicGate extends React.Component {
             jednej wartosci (np. AND na pewno bedzie falszywe jezeli jedno wejscie jest falszywe lub OR na pewno jest
             prawdziwe jezeli chociaz jedna wartosc jest prawdziwa )
 
-            Dzieki temu bedzie mozna robic uklady zapamietujace stan
+            Dzieki temu mozna robic uklady zapamietujace stan
         */
 
         let inputs = Array.from(
             this.inputs.map ( (input) => input.state.value )
         );
 
-        let output = this.func(inputs);
         // na razie używamy tylko bramek z jednym outputem więc whatever
+        let output = this.func(inputs);
         this.outputs[0].receiveSignal(output);
         this.setState({value: output});
     }
+
     render () {
         // na razie używamy wartości logicznej bramki, żeby ułatwić sprawdzanie czy działają ( i tak korzystamy tylko z bramek 1-outputowych ), później powinny mieć po prostu nazwy danej bramki
         let value = this.state.value;
@@ -60,18 +63,14 @@ class LogicGate extends React.Component {
         const style = gateClass[ this.props.gateType ];
 
         let inputFields = [];
-        for (let i = 0; i < this.props.inputs; i++){
-            inputFields.push((
-            
-                    <Pin pinType="input" index={ i } gate={ this } getFocusedElement={ this.props.getFocusedElement }
-                    drawWire={ this.props.drawWire } mount={ this.mountPin } />));
+        for (let i = 0; i < this.props.inputs; i++) { 
+        inputFields.push((<InputPin drawWire={ this.props.drawWire } index={ i } gate={ this }
+            getFocusedElement={ this.props.getFocusedElement } mount={ this.mountPin } />));
         }
+        
         let outputFields = [];
         for (let i = 0; i < this.props.outputs; i++){
-            outputFields.push((
-
-                    <Pin pinType="output" index={ i } gate={ this } getFocusedElement={ this.props.getFocusedElement }
-                    setFocusedElement={ this.props.setFocusedElement } mount={ this.mountPin } />));
+            outputFields.push((<OutputPin index={ i } gate={ this } getFocusedElement={ this.props.getFocusedElement } setFocusedElement={ this.props.setFocusedElement } mount={ this.mountPin } />));
         }
         return (
             <div className={`LogicGate ${styles.LogicGate} ${style}`} >

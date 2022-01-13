@@ -18,61 +18,17 @@ function collectChildGates ( childGates, gate ) {
     }
 }
 class Pin extends React.Component {
+    style = styles;
+
     constructor(props) {
         super();
-        if(props.pinType === 'output' || props.pinType === 'input') {
-            this.index = props.index;
-            this.pinType = props.pinType;
-            this.gate = props.gate
-            this.state = {
-                parentPin: undefined, // w sumie to tylko dla input pinów
-                childPins: [], // w sumie to tylko dla output pinów
-                // mogłaby to być jedna zmienna
 
-                value: undefined,
-            }
-
-            // referencja do elementu html (<button>)
-            this.ref = React.createRef();
-
-        }
-        props.mount(this.pinType, this, this.index); // dodaj siebie do tablicy pinów swojej bramki
-    }
-
-    handleOnClickInput = () => {
-        const newParent = this.props.getFocusedElement();
-        if(newParent)
-            this.changeParentPin(newParent);
-    }
-
-    // zmień do jakiego outputa podłączony jest ten input
-    changeParentPin(newParent) {
-        // musimy usunac pin z listy dzieci starego rodzica...
-        const oldParent = this.state.parentPin;
-        // ... o ile ten istnial (nie jest undefined)
-        if (oldParent){
-            const oldParentChildren = oldParent.state.childPins;
-            const pinIndex = oldParentChildren.indexOf (this);
-
-            // tworzymy kopie tablicy dzieci (aby uniknac bezposredniej zmiany stanu)
-            const updatedOldParentChildren = [...oldParentChildren];
-            // usuwamy z niej aktualny pin
-            updatedOldParentChildren.splice (pinIndex, 1);
-
-            // ustawiamy nowa tablice dzieci jako stan starego rodzica
-            oldParent.setState({"childPins": updatedOldParentChildren });
-
-        }
-        newParent.connect(this);
-
-        this.setState({'parentPin': newParent}, () => {
-            // podlaczamy do innego rodzica - tworzymy nowe polaczenie
-            this.props.drawWire(this.state.parentPin.ref, this.ref);
-        });
-
+        this.index = props.index;
+        this.gate = props.gate
+        props.mount(this); // dodaj siebie do tablicy pinów swojej bramki
         
-
-        this.receiveSignal(newParent.state.value);
+        // referencja do elementu HTML (button)
+        this.ref = React.createRef();
     }
 
     searchForRecursion = () => {
@@ -95,49 +51,6 @@ class Pin extends React.Component {
         }
 
         return false;
-    }
-
-    receiveSignal(signal) {
-        this.setState({'value': signal}, function() { // setState() nie zmienia state
-            // od razu więc resztę kodu dodaję do funkcji callback, inaczej state
-            // pozostałby taki jak wcześniej
-            if (this.pinType === 'input') {
-                if (this.gate.state.recursion) return;
-
-                // zmieniamy parent pin, wiec sprawdzamy czy wystepuje rekurencja
-                if (this.searchForRecursion()){
-                    console.log("rekursja");
-                    this.gate.setState({"recursion": true},
-                        () => setTimeout(
-                            () => { this.gate.setState({"recursion": false})}, 200)
-                    );
-                }
-
-                this.gate.processOutput();
-            } else { // output
-                for (let i = 0; i < this.state.childPins.length; i++) {
-
-                    const childPin = this.state.childPins[i];
-                    // EndNode nie ma bramki
-                    if (!childPin.gate || !childPin.gate.state.recursion) childPin.receiveSignal(signal);
-                }
-            }
-        });
-	}
-
-    // przylaczanie innego pina jako dziecko
-    connect(target) {
-        let cps = this.state.childPins;
-        cps.push(target);
-        this.setState({'childPins': cps});
-    }
-
-    render = () => {
-        if (this.pinType === 'input')
-            return <button ref={this.ref} className={ styles.LogicGateInput } onClick={ this.handleOnClickInput }></button>;
-        
-        // output
-        return <button ref={this.ref} className={ styles.LogicGateOutput } onClick={ () => this.props.setFocusedElement(this) }> </button>;
     }
 }
 

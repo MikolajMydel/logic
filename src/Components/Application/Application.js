@@ -123,7 +123,7 @@ class Application extends React.Component {
 
     drawWire = (firstPin, secondPin) => {
         const newWiresList = this.state.wires.concat([ <Wire firstPin={firstPin} secondPin={secondPin} /> ]);
-
+        
         this.setState({"wires": newWiresList});
     }
 

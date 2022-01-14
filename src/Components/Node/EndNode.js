@@ -7,21 +7,17 @@ class EndNode extends Node {
     }
 
     changeParentPin(newParent) {
-        const oldParent = this.state.parentPin;
-        if (oldParent){
-            const oldParentChildren = oldParent.state.childPins;
-            const pinIndex = oldParentChildren.indexOf (this);
-
-            // tworzymy kopie tablicy dzieci (aby uniknac bezposredniej zmiany stanu)
-            const updatedOldParentChildren = [...oldParentChildren];
-            updatedOldParentChildren.splice (pinIndex, 1);
-
-            // ustawiamy nowa tablice dzieci jako stan starego rodzica
-            oldParent.setState({"childPins": updatedOldParentChildren });
-        }
+        if (this.state.parentPin)
+            this.state.parentPin.disconnect(this);
         newParent.connect(this);
-        this.setState({'parentPin': newParent})
+        this.setState({'parentPin': newParent});
         this.receiveSignal(newParent.state.value);
+    }
+
+    disconnect() {
+        this.state.parentPin.disconnect(this);
+        this.setState({'parentPin': undefined});
+        this.receiveSignal(undefined);
     }
 
     handleOnClick = () => {

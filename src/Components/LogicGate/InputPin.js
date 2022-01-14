@@ -100,7 +100,8 @@ class InputPin extends Pin {
 
     receiveSignal(signal) {
         this.setState({'value': signal}, function() {
-            // zmieniamy parent pin, wiec sprawdzamy czy wystepuje rekurencja
+            // sprawdzanie pętli wykonuje się dla każdej bramki, raczej
+            // niepotrzebnie, ale jak próbuję to naprawić to się psuje :/
             if (this.gate.state.recursion) return;
             if (checkForCycle(this.gate)){
                 this.gate.setState({"recursion": true},

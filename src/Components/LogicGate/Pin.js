@@ -1,5 +1,4 @@
 import React from "react";
-import EndNode from "../Node/EndNode";
 import styles from "./LogicGate.module.scss";
 
 class Pin extends React.Component {

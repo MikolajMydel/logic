@@ -28,7 +28,7 @@ function DFSutil(i, visited, recStack, children) {
     recStack[i] = true;
 
     for (let c=0;c< children.length;c++)
-        if (DFSutil(children, visited, recStack, children)){
+        if (DFSutil(c, visited, recStack, children)){
             return true;
         }
 

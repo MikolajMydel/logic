@@ -7,6 +7,7 @@ class InputPin extends Pin {
         this.state = {
             parentPin: undefined,
             value: undefined,
+            recursion: false,
         }
     }
 
@@ -35,11 +36,11 @@ class InputPin extends Pin {
         this.setState({'value': signal}, function() {
             // sprawdzanie pętli wykonuje się dla każdej bramki, raczej
             // niepotrzebnie, ale jak próbuję to naprawić to się psuje :/
-            if (this.gate.state.recursion) return;
+            if (this.state.recursion) return;
             if (checkForCycle(this.gate)){
-                this.gate.setState({"recursion": true},
+                this.setState({"recursion": true},
                     () => setTimeout(
-                        () => { this.gate.setState({"recursion": false})}, 500)
+                        () => { this.setState({"recursion": false})}, 500)
                 );
             }
             this.gate.processOutput();

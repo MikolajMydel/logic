@@ -37,7 +37,6 @@ class Wire extends React.Component {
             "secondPin": props.secondPin.current,
 
         };
-
     }
 
     render() {

@@ -64,7 +64,8 @@ class LogicGate extends React.Component {
 
         let inputFields = [];
         for (let i = 0; i < this.props.inputs; i++) { 
-        inputFields.push((<InputPin drawWire={ this.props.drawWire } index={ i } gate={ this }
+        inputFields.push((<InputPin removeWire={ this.props.removeWire }  drawWire={ this.props.drawWire } 
+            index={ i } gate={ this }
             getFocusedElement={ this.props.getFocusedElement } mount={ this.mountPin } />));
         }
         

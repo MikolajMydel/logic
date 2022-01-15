@@ -27,8 +27,6 @@ class Pin extends React.Component {
         this.gate = props.gate
         props.mount(this); // dodaj siebie do tablicy pinów swojej bramki
         
-        // referencja do elementu HTML (button)
-        this.ref = React.createRef();
     }
 
     searchForRecursion = () => {

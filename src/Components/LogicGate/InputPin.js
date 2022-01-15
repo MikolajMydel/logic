@@ -1,3 +1,4 @@
+import React from "react";
 import Pin from "./Pin";
 
 class InputPin extends Pin {
@@ -6,6 +7,8 @@ class InputPin extends Pin {
         this.state = {
             parentPin: undefined,
             value: undefined,
+
+            ref: React.createRef(),
 
         }
     }
@@ -24,11 +27,25 @@ class InputPin extends Pin {
 
     // zmień do jakiego outputa podłączony jest ten input
     changeParentPin(newParent) {
-        if (this.state.parentPin) this.state.parentPin.disconnect(this);
+
+        if (this.state.parentPin){ 
+
+        // usun polaczenie ze starym rodzicem
+        this.props.removeWire(this.state.parentPin.state.ref, this.state.ref,
+
+            // przekazuje rysowanie polaczenia jako callback, poniewaz w przeciwnym wypadku
+            // zostalby powielony dawny stan (ze starym polaczeniem)
+            () => this.props.drawWire ( newParent.state.ref, this.state.ref )
+        );
+
+        this.state.parentPin.disconnect(this);
+
+        } else this.props.drawWire ( newParent.state.ref, this.state.ref );
+
         newParent.connect(this);
         this.setState({'parentPin': newParent});
 
-        this.props.drawWire ( newParent.ref, this.ref );
+        
 
         this.receiveSignal(newParent.state.value);
     }
@@ -48,7 +65,7 @@ class InputPin extends Pin {
 	}
 
     render(){
-        return <button ref={this.ref} className={ this.style.LogicGateInput } 
+        return <button ref={this.state.ref} className={ this.style.LogicGateInput } 
             onClick={ this.handleOnClick } ></button>;
     }
 }

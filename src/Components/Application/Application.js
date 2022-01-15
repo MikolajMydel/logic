@@ -44,6 +44,7 @@ class Application extends React.Component {
                         setFocusedElement={ this.setFocusedElement }
 
                         drawWire={ this.drawWire }
+                        removeWire={ this.removeWire }
                     />
                 );
                 break;
@@ -115,16 +116,31 @@ class Application extends React.Component {
 
     drop(){
         // upuść trzymaną bramkę
-        this.setState({heldElement: undefined});
-        for (let i = 0; i < this.state.wires; i++){
-            this.state.wires[i].forceUpdate();
+
+        for (let i = 0; i < this.state.wires.length; i++){
+            const pinRect = this.state.wires[i].props.firstPin.current.getBoundingClientRect();
         }
+
+
+        this.setState({heldElement: undefined});    
     }
 
     drawWire = (firstPin, secondPin) => {
         const newWiresList = this.state.wires.concat([ <Wire firstPin={firstPin} secondPin={secondPin} /> ]);
-        
+
         this.setState({"wires": newWiresList});
+    }
+
+    removeWire = (firstPin, secondPin, callback ) => {
+        
+        // usuniecie ze stanu starego polaczenia
+        this.setState({wires: this.state.wires.filter( function (wire) {
+            return !( wire.props.firstPin === firstPin && wire.props.secondPin === secondPin );
+        })}, 
+            () => {
+                if (callback) callback();
+            }
+        );        
     }
 
     render() {

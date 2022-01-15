@@ -1,3 +1,4 @@
+import React from "react";
 import Pin from "./Pin";
 
 class OutputPin extends Pin {
@@ -6,6 +7,9 @@ class OutputPin extends Pin {
         this.state = {
             childPins: [],
             value: undefined,
+
+            ref: React.createRef(),
+
         }
     }
 
@@ -37,7 +41,7 @@ class OutputPin extends Pin {
 	}
 
     render(){
-        return <button ref={this.ref} className={ this.style.LogicGateOutput } 
+        return <button ref={ this.state.ref } className={ this.style.LogicGateOutput } 
             onClick={ () => this.props.setFocusedElement(this) }> </button>;
     }
 }

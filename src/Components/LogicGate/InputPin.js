@@ -33,16 +33,16 @@ class InputPin extends Pin {
     }
 
     receiveSignal(signal) {
+        // najwyraźniej najlepszy sposób na zapobiegniecie zapętlania
+        // omg
+        if (signal === this.state.value) return;
+
         this.setState({'value': signal}, function() {
-            // sprawdzanie pętli wykonuje się dla każdej bramki, raczej
-            // niepotrzebnie, ale jak próbuję to naprawić to się psuje :/
-            if (this.state.recursion) return;
-            if (checkForCycle(this.gate)){
-                this.setState({"recursion": true},
-                    () => setTimeout(
-                        () => { this.setState({"recursion": false})}, 500)
-                );
-            }
+            //if (this.recursion) return;
+            //if (checkForCycle(this.gate)){
+                //this.recursion = true;
+                //setTimeout(() => { this.recursion = false }, 500);
+            //}
             this.gate.processOutput();
         });
 	}

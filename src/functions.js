@@ -17,10 +17,7 @@ export function checkForCycle(gate) {
         }
     return false;
 }
-
 function DFSutil(i, visited, recStack, children) {
-// Mark the current node as visited and
-    // part of recursion stack
     if (recStack[i])
         return true;
 
@@ -39,11 +36,12 @@ function DFSutil(i, visited, recStack, children) {
 
     return false;
 }
+// zbierz wszystkie bramki poniżej podanej
 function collectGates(gate) {
     let gates = [gate];
     const loop = (g) => {
         getChildGates(g).forEach((child) => {
-            // bramka nie ma jeszcze na liście
+            // bramki nie ma jeszcze na liście
             if(!gates.includes(child)) {
                 gates.push(child);
                 loop(child);
@@ -54,6 +52,7 @@ function collectGates(gate) {
 
     return gates;
 }
+// zbierz bramki bezpośrednio podłączone do podanej jako dzieci
 function getChildGates(gate) {
     let childGates = [];
     for (let i = 0; i < gate.outputs.length; i++) {

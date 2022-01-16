@@ -35,6 +35,7 @@ class LogicGate extends React.Component {
             this.outputs[pin.index] = pin;
         }
     }
+
     processOutput() {
         /*
             nawet jezeli brakuje ktoregos inputa, to w przypadku bramek AND i OR mozna okreslic wyjscie na podstawie

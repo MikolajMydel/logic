@@ -1,5 +1,4 @@
 import Pin from "./Pin";
-import {checkForCycle} from "../../functions";
 
 class InputPin extends Pin {
     constructor(props) {
@@ -38,11 +37,6 @@ class InputPin extends Pin {
         if (signal === this.state.value) return;
 
         this.setState({'value': signal}, function() {
-            //if (this.recursion) return;
-            //if (checkForCycle(this.gate)){
-                //this.recursion = true;
-                //setTimeout(() => { this.recursion = false }, 500);
-            //}
             this.gate.processOutput();
         });
 	}

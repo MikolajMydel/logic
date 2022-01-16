@@ -10,13 +10,18 @@ class InputPin extends Pin {
         }
     }
 
-    handleOnClick = () => {
-        const newParent = this.props.getFocusedElement();
-        if(newParent)
-            this.changeParentPin(newParent);
+    handleOnClick = (e) => {
+        if(e.button === 0) { // lewy
+            const newParent = this.props.getFocusedElement();
+            if(newParent)
+                this.changeParentPin(newParent);
+        } else if(e.button === 1) { // srodkowy
+            this.disconnect();
+        }
     }
 
     disconnect() {
+        if(!this.state.parentPin) return;
         this.state.parentPin.disconnect(this);
         this.setState({'parentPin': undefined});
         this.receiveSignal(undefined);
@@ -42,7 +47,7 @@ class InputPin extends Pin {
 	}
 
     render(){
-        return <button className={ this.style.LogicGateInput } onClick={ this.handleOnClick } ></button>;
+        return <button className={ this.style.LogicGateInput } onMouseDown={ this.handleOnClick } ></button>;
     }
 }
 

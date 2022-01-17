@@ -116,13 +116,7 @@ class Application extends React.Component {
 
     drop(){
         // upuść trzymaną bramkę
-
-        for (let i = 0; i < this.state.wires.length; i++){
-            const pinRect = this.state.wires[i].props.firstPin.current.getBoundingClientRect();
-        }
-
-
-        this.setState({heldElement: undefined});    
+        this.setState({heldElement: undefined});  
     }
 
     drawWire = (firstPin, secondPin) => {

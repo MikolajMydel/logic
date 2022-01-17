@@ -1,12 +1,12 @@
 import React from 'react';
 import styles from './Wire.scss';
 
-function calculatePath (firstPin, secondPin){
+function calculatePath (firstPinBoundingClient, secondPinBoundingClient){
 
-    const firstPinBoundingClient = firstPin.getBoundingClientRect();
+    //const firstPinBoundingClient = firstPin.getBoundingClientRect();
     const firstPinCoordinates = [ firstPinBoundingClient.left, firstPinBoundingClient.top ];
 
-    const secondPinBoundingClient = secondPin.getBoundingClientRect();
+    //const secondPinBoundingClient = secondPin.getBoundingClientRect();
     const secondPinCoordinates = [ secondPinBoundingClient.left, secondPinBoundingClient.top ];
 
     // pozycje rowno w srodku pinu
@@ -32,15 +32,29 @@ class Wire extends React.Component {
     constructor(props){
 
         super(props);
-        this.state = {
-            "firstPin": props.firstPin.current,
-            "secondPin": props.secondPin.current,
 
+        // ta wartosc nie zmienia sie przez zycie polaczenia
+        this.firstPin = props.firstPin.current;
+        this.secondPin = props.secondPin.current;
+
+        this.state = {
+            "firstPinPosition": props.firstPin.current.getBoundingClientRect(),
+            "secondPinPosition": props.secondPin.current.getBoundingClientRect(),
         };
+
+        setInterval( this.updatePosition, 16 );
+    }
+
+    // funkcja powodujaca aktualizacje pozycji pinow w stanie
+    updatePosition = () => {
+        this.setState({
+            "firstPinPosition": this.firstPin.getBoundingClientRect(),
+            "secondPinPosition": this.secondPin.getBoundingClientRect(),
+        });
     }
 
     render() {
-        return <path d={calculatePath(this.state.firstPin, this.state.secondPin )} className={styles.Wire} stroke-width="3" stroke="#000" fill="#fff"/>
+        return <path onMouseMove={ this.updatePosition } d={calculatePath(this.state.firstPinPosition, this.state.secondPinPosition )} className={styles.Wire} strokeWidth="4" stroke="#000" fill="#fff"/>
     }
 }
 

@@ -4,6 +4,7 @@ import LogicGate from "../LogicGate/LogicGate";
 import StartNode from "../Node/StartNode";
 import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
+import Menu from "../Menu/Menu"
 
 class Application extends React.Component {
     state = {
@@ -115,6 +116,7 @@ class Application extends React.Component {
     render() {
         return (
             <div className={ styles.Application } >
+                <Menu />
                 <div className={ styles.Canvas }>
                     <div className={ `Area ${styles.InputArea}` }
                         onClick={ (e) => this.addNode(e, 'startNode')}>

@@ -5,7 +5,7 @@ class OutputPin extends Pin {
         super(props);
         this.state = {
             childPins: [],
-            value: false,
+            value: undefined,
         }
     }
 

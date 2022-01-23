@@ -6,8 +6,14 @@ class Node extends React.Component {
     get value() { return this.state.value }
 
     render() {
+        let style;
+        const value = this.state.value;
         // zwróć styl na podstawie wartosci
-        let style = (this.value) ? styles.NodeTrue : styles.NodeFalse;
+        if ( value === undefined )
+            style = styles.NodeUndefined;
+        else if ( value ) style = styles.NodeTrue;
+        else style = styles.NodeFalse;
+
         const position = this.props.position + 'px';
 
         return (

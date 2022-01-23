@@ -3,25 +3,17 @@ import OutputPin from "./OutputPin";
 import InputPin from "./InputPin";
 import styles from "./LogicGate.module.scss";
 
+import {AND, OR} from './LogicalFunctions.js';
+
 const gateClass = {
     'AND': styles.LogicGateAND,
     'OR': styles.LogicGateOR,
     'NOT': styles.LogicGateNOT,
 }
 const basicFunctions = {
-    // jezeli jest chociaz jeden true - zwroc true
-    'OR': (inputs) => {
-        for (let i = 0; i < inputs.length; i++)
-            if ( inputs[i] === true) return true;
-        return false;
-    },
-    // jezeli jest chociaz jeden false - zwroc false
-    'AND': (inputs) => {
-        for (let i = 0; i < inputs.length; i++)
-            if (inputs[i] === false) return false;
-        return true;
-    },
-    'NOT': (inputs) => !(inputs[0])
+    'AND': (i) => AND(i),
+    'OR':  (i) => OR(i),
+    'NOT': (i) => !(i[0]),
 }
 
 class LogicGate extends React.Component {
@@ -29,7 +21,9 @@ class LogicGate extends React.Component {
         super();
         this.func = basicFunctions[props.gateType];
         this.state = {
-            value: false,
+            value: undefined, // tymczasowo
+            recursion: false,
+
         }
         this.inputs = [];
         this.outputs = [];
@@ -52,8 +46,8 @@ class LogicGate extends React.Component {
             Dzieki temu mozna robic uklady zapamietujace stan
         */
 
-        const inputs = Array.from(
-            this.inputs.map ((input) => input.state.value)
+        let inputs = Array.from(
+            this.inputs.map ( (input) => input.state.value )
         );
 
         // na razie używamy tylko bramek z jednym outputem więc whatever
@@ -64,7 +58,8 @@ class LogicGate extends React.Component {
 
     render () {
         // na razie używamy wartości logicznej bramki, żeby ułatwić sprawdzanie czy działają ( i tak korzystamy tylko z bramek 1-outputowych ), później powinny mieć po prostu nazwy danej bramki
-        const value = this.state.value.toString();
+        let value = this.state.value;
+        if(value === undefined) value = "undefined"
         const style = gateClass[ this.props.gateType ];
 
         let inputFields = [];
@@ -80,7 +75,7 @@ class LogicGate extends React.Component {
                 <div className={styles.LogicGateInputs}>
                     { inputFields }
                 </div>
-                <h5 className={styles.LogicGateValue}> {value} </h5>
+                <h5 className={styles.LogicGateValue}> { value.toString() } </h5>
                 <div className={styles.LogicGateOutputs}>
                     { outputFields }
                 </div>

@@ -2,7 +2,7 @@ import Node from './Node';
 
 class EndNode extends Node {
     state = {
-        value: false,
+        value: undefined,
         parentPin: undefined,
     }
 
@@ -20,7 +20,7 @@ class EndNode extends Node {
         if(!this.state.parentPin) return;
         this.state.parentPin.disconnect(this);
         this.setState({'parentPin': undefined});
-        this.receiveSignal(false);
+        this.receiveSignal(undefined);
     }
 
     changeParentPin(newParent) {

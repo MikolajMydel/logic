@@ -3,7 +3,7 @@ import OutputPin from "./OutputPin";
 import InputPin from "./InputPin";
 import styles from "./LogicGate.module.scss";
 
-import {AND, OR} from './LogicalFunctions.js';
+import {AND, OR, NOT} from './LogicalFunctions.js';
 
 const gateClass = {
     'AND': styles.LogicGateAND,
@@ -13,7 +13,8 @@ const gateClass = {
 const basicFunctions = {
     'AND': (i) => AND(i),
     'OR':  (i) => OR(i),
-    'NOT': (i) => !(i[0]),
+    'NOT': (i) => NOT(i),
+    'TEST': (i) => [i[1], i[0]],
 }
 
 class LogicGate extends React.Component {
@@ -37,22 +38,14 @@ class LogicGate extends React.Component {
     }
 
     processOutput() {
-        /*
-            nawet jezeli brakuje ktoregos inputa, to w przypadku bramek AND i OR mozna okreslic wyjscie na podstawie
-            jednej wartosci (np. AND na pewno bedzie falszywe jezeli jedno wejscie jest falszywe lub OR na pewno jest
-            prawdziwe jezeli chociaz jedna wartosc jest prawdziwa )
-
-            Dzieki temu mozna robic uklady zapamietujace stan
-        */
-
         let inputs = Array.from(
             this.inputs.map ( (input) => input.state.value )
         );
 
-        // na razie używamy tylko bramek z jednym outputem więc whatever
         let output = this.func(inputs);
-        this.outputs[0].receiveSignal(output);
-        this.setState({value: output});
+        for(let i=0; i<output.length; i++)
+            this.outputs[i].receiveSignal(output[i]);
+        this.setState({value: output[0]});
     }
 
     render () {

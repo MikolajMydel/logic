@@ -14,6 +14,7 @@ const basicFunctions = {
     'AND': (i) => AND(i),
     'OR':  (i) => OR(i),
     'NOT': (i) => NOT(i),
+    'TEST': (i) => [i[1], i[0]],
 }
 
 class LogicGate extends React.Component {

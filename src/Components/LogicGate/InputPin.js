@@ -5,7 +5,7 @@ class InputPin extends Pin {
         super(props);
         this.state = {
             parentPin: undefined,
-            value: undefined,
+            value: false,
         }
     }
 
@@ -23,7 +23,7 @@ class InputPin extends Pin {
         if(!this.state.parentPin) return;
         this.state.parentPin.disconnect(this);
         this.setState({'parentPin': undefined});
-        this.receiveSignal(undefined);
+        this.receiveSignal(false);
     }
 
     // zmień do jakiego outputa podłączony jest ten input

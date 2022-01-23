@@ -3,7 +3,7 @@ import OutputPin from "./OutputPin";
 import InputPin from "./InputPin";
 import styles from "./LogicGate.module.scss";
 
-import {AND, OR} from './LogicalFunctions.js';
+import {AND, OR, NOT} from './LogicalFunctions.js';
 
 const gateClass = {
     'AND': styles.LogicGateAND,
@@ -13,7 +13,7 @@ const gateClass = {
 const basicFunctions = {
     'AND': (i) => AND(i),
     'OR':  (i) => OR(i),
-    'NOT': (i) => !(i[0]),
+    'NOT': (i) => NOT(i),
 }
 
 class LogicGate extends React.Component {

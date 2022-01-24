@@ -33,20 +33,25 @@ class Wire extends React.Component {
 
         super(props);
 
-        // ta wartosc nie zmienia sie przez zycie polaczenia
-        this.firstPin = props.firstPin.current;
-        this.secondPin = props.secondPin.current;
+
+        /*props.firstPin.gate.addEventListener('click', () => {
+            console.log ("witam");
+        }) */
+        props.firstPin.gate.onclick = this.updatePosition;
 
         this.state = {
-            "firstPinPosition": props.firstPin.current.getBoundingClientRect(),
-            "secondPinPosition": props.secondPin.current.getBoundingClientRect(),
+            "firstPinPosition": props.firstPin.state.ref.current.getBoundingClientRect(),
+            "secondPinPosition": props.secondPin.state.ref.current.getBoundingClientRect(),
         };
-
-        setInterval( this.updatePosition, 16 );
+    
     }
 
     // funkcja powodujaca aktualizacje pozycji pinow w stanie
     updatePosition = () => {
+
+        console.log ( this.props.firstPin.gate.ref );
+
+
         this.setState({
             "firstPinPosition": this.firstPin.getBoundingClientRect(),
             "secondPinPosition": this.secondPin.getBoundingClientRect(),
@@ -54,7 +59,7 @@ class Wire extends React.Component {
     }
 
     render() {
-        return <path onMouseMove={ this.updatePosition } d={calculatePath(this.state.firstPinPosition, this.state.secondPinPosition )} className={styles.Wire} strokeWidth="4" stroke="#000" fill="#fff"/>
+        return <path d={calculatePath(this.state.firstPinPosition, this.state.secondPinPosition )} className={styles.Wire} strokeWidth="4" stroke="#000" fill="#fff"/>
     }
 }
 

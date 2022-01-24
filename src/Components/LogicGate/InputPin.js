@@ -40,7 +40,7 @@ class InputPin extends Pin {
 
         this.state.parentPin.disconnect(this);
 
-        } else this.props.drawWire ( newParent.state.ref, this.state.ref );
+        } else this.props.drawWire ( newParent, this );
 
         newParent.connect(this);
         this.setState({'parentPin': newParent});

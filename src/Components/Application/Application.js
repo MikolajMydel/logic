@@ -17,6 +17,8 @@ class Application extends React.Component {
         }
     }
 
+    boardRef = React.createRef()
+
     // funkcja zmieniajaca aktualnie wybrane wyjscie - pozwala na uzycie kliknietego wyjscia na wejscie bramki logicznej
     setFocusedElement = ( element ) => {
         this.setState ({'focusedElement': element});
@@ -68,7 +70,7 @@ class Application extends React.Component {
         this.addElement(args);
     }
 
-    grab(e){
+    grab(e) {
         // funkcja "podnosząca" bramkę
         const element = e.target;
         if (element.classList.contains("LogicGate")) {
@@ -80,11 +82,12 @@ class Application extends React.Component {
         }
     }
 
-    move(e){
+    move(e) {
         // przenieś bramkę (jeżeli jakaś jest trzymana)
         if(this.state.heldElement){
             const element = this.state.heldElement;
-            const board = e.currentTarget;
+            const canvas  = e.currentTarget;
+            const board   = this.boardRef.current;
 
             let x = e.clientX - this.state.heldElementOffset[0]; // różnica x
             let y = e.clientY - this.state.heldElementOffset[1]; // różnica y
@@ -95,40 +98,57 @@ class Application extends React.Component {
             else if (x + element.offsetWidth > board.offsetWidth + board.offsetLeft)
                 // za daleko w prawo
                 x = board.offsetWidth + board.offsetLeft - element.offsetWidth;
-            if (y < board.offsetTop)
+            if (y < canvas.offsetTop)
                 // za daleko w górę
-                y = board.offsetTop;
-            else if (y + element.offsetHeight > board.offsetHeight + board.offsetTop)
+                y = canvas.offsetTop;
+            else if (y + element.offsetHeight > canvas.offsetHeight + canvas.offsetTop)
                 // za daleko w dół
-                y = board.offsetHeight + board.offsetTop - element.offsetHeight;
+                y = canvas.offsetHeight + canvas.offsetTop - element.offsetHeight;
 
             element.style.left = x + 'px';
             element.style.top = y + 'px';
         }
     }
 
-    drop(){
+    drop() {
         // upuść trzymaną bramkę
-        this.setState({heldElement: undefined});
+        if(this.state.heldElement){
+            this.setState({heldElement: undefined});
+            const element = this.state.heldElement;
+            const board = this.boardRef.current;
+            const y = parseInt(element.style.top.split('px')[0])
+
+            // jeżeli przeniesiony poniżej poziomu 'board', usuń
+            if (y + (element.offsetHeight / 2) > board.offsetHeight + board.offsetTop)
+                this.deleteElement(element);
+        }
+    }
+
+    deleteElement(element) {
+        console.log("usuwanie")
     }
 
     render() {
         return (
-            <div className={ styles.Application } >
+            <div className={ styles.Application }
+                onMouseDown={ (e) => this.grab(e) }
+                onMouseMove={ (e) => this.move(e) }
+                onMouseUp={ () => this.drop() }
+            >
                 <div className={ styles.Canvas }>
                     <div className={ `Area ${styles.InputArea}` }
-                        onClick={ (e) => this.addNode(e, 'startNode')}>
+                        onClick={ (e) => this.addNode(e, 'startNode')}
+                    >
                         { this.state.elements.inputs }
                     </div>
                     <div className={ styles.Board }
-                        onMouseDown={ (e) => this.grab(e) }
-                        onMouseMove={ (e) => this.move(e) }
-                        onMouseUp={ () => this.drop() }
+                        ref={this.boardRef}
                     >
                         { this.state.elements.board }
                     </div>
                     <div className={ `Area ${styles.OutputArea}` }
-                        onClick={ (e) => this.addNode(e, 'endNode')}>
+                        onClick={ (e) => this.addNode(e, 'endNode')}
+                    >
                         { this.state.elements.outputs }
                     </div>
                 </div>

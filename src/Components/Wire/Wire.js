@@ -33,13 +33,22 @@ class Wire extends React.Component {
 
         super(props);
 
+        const gates = [
+            props.firstPin.gate.ref.current,
+            props.secondPin.gate.ref.current,
 
-        /*props.firstPin.gate.addEventListener('click', () => {
-            console.log ("witam");
-        }) */
-        props.firstPin.gate.onclick = this.updatePosition;
+        ]
+
+        // pozycje pinow zostaja zaktualizowane, gdy przejezdzamy mysza po bramce
+        for (let gate of gates){
+            gate.addEventListener('mousemove', this.updatePosition);
+        }
+
+        this.firstPin = props.firstPin;
+        this.secondPin = props.secondPin;
 
         this.state = {
+            // pozycje pinow w momencie stworzenia polaczenia
             "firstPinPosition": props.firstPin.state.ref.current.getBoundingClientRect(),
             "secondPinPosition": props.secondPin.state.ref.current.getBoundingClientRect(),
         };
@@ -48,13 +57,9 @@ class Wire extends React.Component {
 
     // funkcja powodujaca aktualizacje pozycji pinow w stanie
     updatePosition = () => {
-
-        console.log ( this.props.firstPin.gate.ref );
-
-
         this.setState({
-            "firstPinPosition": this.firstPin.getBoundingClientRect(),
-            "secondPinPosition": this.secondPin.getBoundingClientRect(),
+            "firstPinPosition": this.firstPin.state.ref.current.getBoundingClientRect(),
+            "secondPinPosition": this.secondPin.state.ref.current.getBoundingClientRect(),
         });
     }
 

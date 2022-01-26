@@ -24,7 +24,7 @@ class Pin extends React.Component {
         super();
 
         this.index = props.index;
-        this.gate = props.gate
+        this.gate = props.gate;
         props.mount(this); // dodaj siebie do tablicy pinów swojej bramki
         
     }

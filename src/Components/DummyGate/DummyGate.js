@@ -9,9 +9,8 @@ const gateClass = {
     'NOT': styles.LogicGateNOT,
 }
 class DummyGate extends React.Component {
+    style = gateClass[ this.props.gateType ];
     render () {
-        const style = gateClass[ this.props.gateType ];
-
         let inputFields = [];
         for (let i = 0; i < this.props.inputs; i++){
             inputFields.push((
@@ -25,7 +24,12 @@ class DummyGate extends React.Component {
             ));
         }
         return (
-            <div className={`${styles.LogicGate} ${style} ${styles.LogicGateDummy}`} >
+            <div className={`${styles.LogicGate} ${this.style} ${styles.LogicGateDummy}`}
+                onMouseDown={() => this.props.addGate({
+                    gateLogic: this.props.gateType,
+                    inputCount: this.props.inputs,
+                    outputCount: this.props.outputs,
+                })} >
                 <div className={styles.LogicGateInputs} style={{pointerEvents: 'none'}} >
                     { inputFields }
                 </div>

@@ -29,7 +29,7 @@ class Application extends React.Component {
     getFocusedElement = () => this.state.focusedElement;
 
     // dodawanie nowych elementow na plansze
-    addElement = ( args ) => {
+    addElement(args) {
         let elements = this.state.elements;
 
         switch ( args.type ) {
@@ -68,6 +68,11 @@ class Application extends React.Component {
             type: type,
             position: e.clientY,
         }
+        this.addElement(args);
+    }
+
+    addGate = (args) => {
+        args.type = 'logicGate';
         this.addElement(args);
     }
 
@@ -152,7 +157,7 @@ class Application extends React.Component {
                         { this.state.elements.outputs }
                     </div>
                 </div>
-                <ControlPanel addElement={ this.addElement } />
+                <ControlPanel addGate={this.addGate} />
             </div>
         )
     }

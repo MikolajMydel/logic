@@ -25,7 +25,7 @@ class DummyGate extends React.Component {
         }
         return (
             <div className={`${styles.LogicGate} ${this.style} ${styles.LogicGateDummy}`}
-                onMouseDown={() => this.props.addGate({
+                onMouseDown={(e) => this.props.addGate(e, {
                     gateLogic: this.props.gateType,
                     inputCount: this.props.inputs,
                     outputCount: this.props.outputs,

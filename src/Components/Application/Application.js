@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from 'react-dom';
 import styles from './Application.module.scss';
 import LogicGate from "../LogicGate/LogicGate";
 import StartNode from "../Node/StartNode";
@@ -33,17 +34,6 @@ class Application extends React.Component {
         let elements = this.state.elements;
 
         switch ( args.type ) {
-            case 'logicGate':
-                elements.board.push(
-                    <LogicGate
-                        gateType={ args.gateLogic }
-                        inputs={ args.inputCount }
-                        outputs={ args.outputCount }
-                        getFocusedElement={ this.getFocusedElement }
-                        setFocusedElement={ this.setFocusedElement }
-                    />
-                );
-                break;
             case 'startNode':
                 elements.inputs.push(
                     <StartNode setFocusedElement={ this.setFocusedElement } position={ args.position }/>
@@ -71,13 +61,38 @@ class Application extends React.Component {
         this.addElement(args);
     }
 
-    addGate = (args) => {
-        args.type = 'logicGate';
-        this.addElement(args);
+    addGate = (e, args) => {
+        let elements = this.state.elements;
+        elements.board.push(
+            <LogicGate
+                gateType={ args.gateLogic }
+                inputs={ args.inputCount }
+                outputs={ args.outputCount }
+                getFocusedElement={ this.getFocusedElement }
+                setFocusedElement={ this.setFocusedElement }
+                ref={el => this.lastGate = el}
+            />
+        );
+        this.setState ({'elements': elements}, function(){
+            // pobranie DOMu nowej bramki na podstawie referencji do obiektu Reacta
+            const element = ReactDOM.findDOMNode(this.lastGate);
+
+            // 'e.target' odnosi się teraz do komponentu DummyGate
+            const xo = e.clientX - e.target.offsetLeft;
+            const yo = e.clientY - e.target.offsetTop;
+
+            element.style.left = e.clientX - xo + 'px';
+            element.style.top  = e.clientY - yo + 'px';
+
+            this.setState({
+                heldElement: element,
+                heldElementOffset: [xo, yo],
+            });
+        });
     }
 
+    // funkcja podnosząca bramkę
     grab(e) {
-        // funkcja "podnosząca" bramkę
         const element = e.target;
         if (element.classList.contains("LogicGate")) {
             this.setState({heldElement: element});

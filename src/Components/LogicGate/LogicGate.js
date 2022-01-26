@@ -23,6 +23,7 @@ class LogicGate extends React.Component {
         this.func = basicFunctions[props.gateType];
         this.state = {
             value: undefined, // tymczasowo
+            render: true,
         }
         this.inputs = [];
         this.outputs = [];
@@ -37,6 +38,15 @@ class LogicGate extends React.Component {
         }
     }
 
+    selfDestruct() {
+        // usuń wszystkie połączenia
+        this.inputs.forEach((i) => i.disconnect());
+        this.outputs.forEach((o) => {
+            o.state.childPins.forEach((i) => i.disconnect());
+        });
+        this.setState({render: false});
+    }
+
     processOutput() {
         let inputs = Array.from(
             this.inputs.map ( (input) => input.state.value )
@@ -49,6 +59,7 @@ class LogicGate extends React.Component {
     }
 
     render () {
+        if(this.state.render === false) return null;
         // na razie używamy wartości logicznej bramki, żeby ułatwić sprawdzanie czy działają ( i tak korzystamy tylko z bramek 1-outputowych ), później powinny mieć po prostu nazwy danej bramki
         let value = this.state.value;
         if(value === undefined) value = "undefined"

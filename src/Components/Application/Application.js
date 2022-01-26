@@ -4,6 +4,7 @@ import LogicGate from "../LogicGate/LogicGate";
 import StartNode from "../Node/StartNode";
 import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
+import {findReact} from "../../functions";
 
 class Application extends React.Component {
     state = {
@@ -112,20 +113,19 @@ class Application extends React.Component {
 
     drop() {
         // upuść trzymaną bramkę
-        if(this.state.heldElement){
+        const element = this.state.heldElement;
+        if(element){
             this.setState({heldElement: undefined});
-            const element = this.state.heldElement;
             const board = this.boardRef.current;
             const y = parseInt(element.style.top.split('px')[0])
 
             // jeżeli przeniesiony poniżej poziomu 'board', usuń
-            if (y + (element.offsetHeight / 2) > board.offsetHeight + board.offsetTop)
-                this.deleteElement(element);
+            if (y + (element.offsetHeight) > board.offsetHeight + board.offsetTop){
+                const comp = findReact(element);
+                if(comp.selfDestruct)
+                    comp.selfDestruct();
+            }
         }
-    }
-
-    deleteElement(element) {
-        console.log("usuwanie")
     }
 
     render() {

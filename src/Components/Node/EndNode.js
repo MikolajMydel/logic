@@ -1,9 +1,13 @@
+import React from 'react';
 import Node from './Node';
+import styles from './Node.module.scss';
 
 class EndNode extends Node {
     state = {
         value: undefined,
         parentPin: undefined,
+
+        ref: React.createRef(),
     }
 
     changeParentPin(newParent) {
@@ -30,13 +34,34 @@ class EndNode extends Node {
 
     handleOnClick = () => {
         const newParent = this.props.getFocusedElement();
-        if(newParent)
+        if(newParent){
             this.changeParentPin(newParent);
+            this.props.drawWire( newParent, this );
+        }
     }
 
     receiveSignal(signal) {
         this.setState({'value': signal});
 	}
+
+    render() {
+        let style;
+        const value = this.state.value;
+        // zwróć styl na podstawie wartosci
+        if ( value === undefined )
+            style = styles.NodeUndefined;
+        else if ( value ) style = styles.NodeTrue;
+        else style = styles.NodeFalse;
+
+        const position = this.props.position + 'px';
+
+        return (
+            <div ref={this.state.ref}
+                className={ `${styles.Node} ${style}` } onMouseDown={ this.handleOnClick } style={{ top: position }} >
+            </div>
+        )
+    }
+
 }
 
 export default EndNode;

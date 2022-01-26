@@ -1,4 +1,5 @@
 import React from 'react';
+import Pin from '../LogicGate/Pin';
 import styles from './Wire.scss';
 
 function calculatePath (firstPinBoundingClient, secondPinBoundingClient){
@@ -33,15 +34,16 @@ class Wire extends React.Component {
 
         super(props);
 
-        const gates = [
-            props.firstPin.gate.ref.current,
-            props.secondPin.gate.ref.current,
-
-        ]
+        // przechowujemy te piny, ktore dotycza bramek (a nie wezly startowe i koncowe)
+        const gatePins = [
+            props.firstPin,
+            props.secondPin,
+            
+        ].filter( pin => pin instanceof Pin );
 
         // pozycje pinow zostaja zaktualizowane, gdy przejezdzamy mysza po bramce
-        for (let gate of gates){
-            gate.addEventListener('mousemove', this.updatePosition);
+        for (let pin of gatePins){
+            pin.gate.ref.current.addEventListener('mousemove', this.updatePosition);
         }
 
         this.firstPin = props.firstPin;

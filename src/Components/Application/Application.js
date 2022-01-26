@@ -55,7 +55,8 @@ class Application extends React.Component {
                 break;
             case 'endNode':
                 elements.outputs.push(
-                    <EndNode getFocusedElement={ this.getFocusedElement } position={ args.position }/>
+                    <EndNode drawWire={this.drawWire}
+                        getFocusedElement={ this.getFocusedElement } position={ args.position }/>
                 );
                 break;
             default:

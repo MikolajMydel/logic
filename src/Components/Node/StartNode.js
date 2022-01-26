@@ -1,9 +1,15 @@
+import React from 'react';
 import Node from './Node';
+import styles from './Node.module.scss';
+
 
 class StartNode extends Node {
     state = {
         value: false,
         childPins: [],
+
+        ref: React.createRef(),
+
     }
 
     // przylaczanie innego pina jako dziecko
@@ -39,6 +45,24 @@ class StartNode extends Node {
                 this.state.childPins[i].receiveSignal(val);
             }
         });
+    }
+
+    render() {
+        let style;
+        const value = this.state.value;
+        // zwróć styl na podstawie wartosci
+        if ( value === undefined )
+            style = styles.NodeUndefined;
+        else if ( value ) style = styles.NodeTrue;
+        else style = styles.NodeFalse;
+
+        const position = this.props.position + 'px';
+
+        return (
+            <div ref={this.state.ref}
+            className={ `${styles.Node} ${style}` } onMouseDown={ this.handleOnClick } style={{ top: position }} >
+            </div>
+        )
     }
 }
 

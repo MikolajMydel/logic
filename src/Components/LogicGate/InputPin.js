@@ -35,7 +35,7 @@ class InputPin extends Pin {
 
             // przekazuje rysowanie polaczenia jako callback, poniewaz w przeciwnym wypadku
             // zostalby powielony dawny stan (ze starym polaczeniem)
-            () => this.props.drawWire ( newParent.state.ref, this.state.ref )
+            () => this.props.drawWire ( newParent, this )
         );
 
         this.state.parentPin.disconnect(this);

@@ -29,36 +29,21 @@ class Application extends React.Component {
     // funkcja zwracajaca aktualnie wybrane wyjscie - umozliwia kliknietej bramce logicznej zmiane wejscia na wczesniej klikniete wyjscie
     getFocusedElement = () => this.state.focusedElement;
 
-    // dodawanie nowych elementow na plansze
-    addElement(args) {
-        let elements = this.state.elements;
-
-        switch ( args.type ) {
-            case 'startNode':
-                elements.inputs.push(
-                    <StartNode setFocusedElement={ this.setFocusedElement } position={ args.position }/>
-                );
-                break;
-            case 'endNode':
-                elements.outputs.push(
-                    <EndNode getFocusedElement={ this.getFocusedElement } position={ args.position }/>
-                );
-                break;
-            default:
-                break;
-        }
-        this.setState ({'elements': elements});
-    }
-
     addNode = (e, type) => {
         // dodaj tylko jeżeli kliknięto na czysty obszar (nie np istniejący node)
         if ( !e.target.classList.contains('Area') )
             return;
-        const args = {
-            type: type,
-            position: e.clientY,
-        }
-        this.addElement(args);
+
+        let elements = this.state.elements;
+        if (type === "startNode")
+            elements.inputs.push(
+                <StartNode setFocusedElement={ this.setFocusedElement } position={ e.clientY }/>
+            );
+        else // endNode
+            elements.outputs.push(
+                <EndNode getFocusedElement={ this.getFocusedElement } position={ e.clientY }/>
+            );
+        this.setState ({'elements': elements});
     }
 
     addGate = (e, args) => {

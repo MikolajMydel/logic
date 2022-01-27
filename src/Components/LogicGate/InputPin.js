@@ -6,6 +6,7 @@ class InputPin extends Pin {
         this.state = {
             parentPin: undefined,
             value: undefined,
+            recursion: false,
         }
     }
 
@@ -36,15 +37,11 @@ class InputPin extends Pin {
     }
 
     receiveSignal(signal) {
+        // najwyraźniej najlepszy sposób na zapobiegniecie zapętlania
+        // omg
+        if (signal === this.state.value) return;
+
         this.setState({'value': signal}, function() {
-            // zmieniamy parent pin, wiec sprawdzamy czy wystepuje rekurencja
-            if (this.gate.state.recursion) return;
-            if (this.searchForRecursion()){
-                this.gate.setState({"recursion": true},
-                    () => setTimeout(
-                        () => { this.gate.setState({"recursion": false})}, 500)
-                );
-            }
             this.gate.processOutput();
         });
 	}

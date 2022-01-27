@@ -127,11 +127,13 @@ class Application extends React.Component {
     }
 
     removeWire = (firstPin, secondPin, callback ) => {
+
+        const newWiresArray = this.state.wires.filter( function (wire) {
+            return wire.props.firstPin === firstPin && wire.props.secondPin === secondPin;
+        });
         
         // usuniecie ze stanu starego polaczenia
-        this.setState({wires: this.state.wires.filter( function (wire) {
-            return !( wire.props.firstPin === firstPin && wire.props.secondPin === secondPin );
-        })}, 
+        this.setState({wires: newWiresArray}, 
             () => {
                 if (callback) callback();
             }

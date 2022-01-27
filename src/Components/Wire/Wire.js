@@ -1,6 +1,6 @@
 import React from 'react';
 import Pin from '../LogicGate/Pin';
-import styles from './Wire.scss';
+import styles from './Wire.module.scss';
 
 function calculatePath (firstPinBoundingClient, secondPinBoundingClient){
 

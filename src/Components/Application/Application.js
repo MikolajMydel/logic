@@ -5,6 +5,7 @@ import StartNode from "../Node/StartNode";
 import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
 import {findReact} from "../../functions";
+import Menu from "../Menu/Menu"
 
 class Application extends React.Component {
     state = {
@@ -137,6 +138,7 @@ class Application extends React.Component {
                 onMouseMove={ (e) => this.move(e) }
                 onMouseUp={ () => this.drop() }
             >
+                <Menu />
                 <div className={ styles.Canvas }>
                     <div className={ `Area ${styles.InputArea}` }
                         onClick={ (e) => this.addNode(e, 'startNode')}

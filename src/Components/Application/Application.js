@@ -48,6 +48,7 @@ class Application extends React.Component {
 
     addGate = (e, args) => {
         let elements = this.state.elements;
+        let newGate;
         elements.board.push(
             <LogicGate
                 gateType={ args.gateLogic }
@@ -55,22 +56,19 @@ class Application extends React.Component {
                 outputs={ args.outputCount }
                 getFocusedElement={ this.getFocusedElement }
                 setFocusedElement={ this.setFocusedElement }
-                ref={el => this.lastGate = el}
+                reference={el => newGate = el}
             />
         );
         this.setState ({'elements': elements}, function(){
-            // pobranie DOMu nowej bramki na podstawie referencji do obiektu Reacta
-            const element = ReactDOM.findDOMNode(this.lastGate);
-
             // 'e.target' odnosi się teraz do komponentu DummyGate
             const xo = e.clientX - e.target.offsetLeft;
             const yo = e.clientY - e.target.offsetTop;
 
-            element.style.left = e.clientX - xo + 'px';
-            element.style.top  = e.clientY - yo + 'px';
+            newGate.style.left = e.clientX - xo + 'px';
+            newGate.style.top  = e.clientY - yo + 'px';
 
             this.setState({
-                heldElement: element,
+                heldElement: newGate,
                 heldElementOffset: [xo, yo],
             });
         });

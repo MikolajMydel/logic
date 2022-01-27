@@ -87,7 +87,8 @@ class LogicGate extends React.Component {
             ));
         }
         return (
-            <div className={`LogicGate ${styles.LogicGate} ${style}`} >
+            <div className={`LogicGate ${styles.LogicGate} ${style}`}
+                ref={this.props.reference} >
                 <div className={styles.LogicGateInputs}>
                     { inputFields }
                 </div>

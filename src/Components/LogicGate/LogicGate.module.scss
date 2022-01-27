@@ -17,6 +17,12 @@
 
     box-shadow: 0px 0px 20px 1px rgba(255, 255, 255, 1);
 
+    &Dummy {
+        position: relative;
+        float: left;
+        margin: 12px;
+    }
+
     &AND {
         background-color: cornflowerblue;
     }
@@ -62,19 +68,15 @@
     }
 
     &Value {
-
         font-size: 75%;
-
         pointer-events: none;
+        user-select: none;
 
         position: absolute;
         text-align: center;
         top: 50%;
         right: 0;
         left: 0;
-
         transform: translateY(-50%);
-
-
     }
 }

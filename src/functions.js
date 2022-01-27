@@ -1,5 +1,27 @@
 import EndNode from "./Components/Node/EndNode";
 
+// https://stackoverflow.com/questions/29321742/react-getting-a-component-from-a-dom-element-for-debugging/39165137#39165137
+// znajdź komponent React na podstawie elementu DOM
+export function findReact(dom, traverseUp=0) {
+    const key = Object.keys(dom).find(key => key.startsWith("__reactFiber$"));
+    const domFiber = dom[key];
+    if (domFiber == null) return null;
+
+    const GetCompFiber = fiber=>{
+        //return fiber._debugOwner; // this also works, but is __DEV__ only
+        let parentFiber = fiber.return;
+        while (typeof parentFiber.type == "string") {
+            parentFiber = parentFiber.return;
+        }
+        return parentFiber;
+    };
+    let compFiber = GetCompFiber(domFiber);
+    for (let i = 0; i < traverseUp; i++) {
+        compFiber = GetCompFiber(compFiber);
+    }
+    return compFiber.stateNode;
+}
+
 export function checkForCycle(gate) {
     // algorytm DFS
     // https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph

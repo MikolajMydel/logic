@@ -34,14 +34,15 @@ class Application extends React.Component {
         if ( !e.target.classList.contains('Area') )
             return;
 
+        const pos = e.clientY - e.target.offsetTop - 10; // 10 - połowa wysokości
         let elements = this.state.elements;
         if (type === "startNode")
             elements.inputs.push(
-                <StartNode setFocusedElement={ this.setFocusedElement } position={ e.clientY }/>
+                <StartNode setFocusedElement={ this.setFocusedElement } position={ pos }/>
             );
         else // endNode
             elements.outputs.push(
-                <EndNode getFocusedElement={ this.getFocusedElement } position={ e.clientY }/>
+                <EndNode getFocusedElement={ this.getFocusedElement } position={ pos }/>
             );
         this.setState ({'elements': elements});
     }

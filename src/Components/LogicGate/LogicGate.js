@@ -3,7 +3,7 @@ import OutputPin from "./OutputPin";
 import InputPin from "./InputPin";
 import styles from "./LogicGate.module.scss";
 
-import {AND, OR} from './LogicalFunctions.js';
+import {AND, OR, NOT} from './LogicalFunctions.js';
 
 const gateClass = {
     'AND': styles.LogicGateAND,
@@ -13,7 +13,8 @@ const gateClass = {
 const basicFunctions = {
     'AND': (i) => AND(i),
     'OR':  (i) => OR(i),
-    'NOT': (i) => !(i[0]),
+    'NOT': (i) => NOT(i),
+    'TEST': (i) => [i[1], i[0]],
 }
 
 class LogicGate extends React.Component {
@@ -22,8 +23,7 @@ class LogicGate extends React.Component {
         this.func = basicFunctions[props.gateType];
         this.state = {
             value: undefined, // tymczasowo
-            recursion: false,
-
+            render: true,
         }
         this.inputs = [];
         this.outputs = [];
@@ -39,46 +39,63 @@ class LogicGate extends React.Component {
             this.outputs[pin.index] = pin;
         }
     }
+
+    selfDestruct() {
+        // usuń wszystkie połączenia
+        this.inputs.forEach((i) => i.disconnect());
+        this.outputs.forEach((o) => {
+            o.state.childPins.forEach((i) => i.disconnect());
+        });
+        this.setState({render: false});
+    }
+
     processOutput() {
-        /*
-            nawet jezeli brakuje ktoregos inputa, to w przypadku bramek AND i OR mozna okreslic wyjscie na podstawie
-            jednej wartosci (np. AND na pewno bedzie falszywe jezeli jedno wejscie jest falszywe lub OR na pewno jest
-            prawdziwe jezeli chociaz jedna wartosc jest prawdziwa )
-
-            Dzieki temu mozna robic uklady zapamietujace stan
-        */
-
         let inputs = Array.from(
             this.inputs.map ( (input) => input.state.value )
         );
 
-        // na razie używamy tylko bramek z jednym outputem więc whatever
         let output = this.func(inputs);
-        this.outputs[0].receiveSignal(output);
-        this.setState({value: output});
+        for(let i=0; i<output.length; i++)
+            this.outputs[i].receiveSignal(output[i]);
+        this.setState({value: output[0]});
     }
 
     render () {
+        if(this.state.render === false) return null;
         // na razie używamy wartości logicznej bramki, żeby ułatwić sprawdzanie czy działają ( i tak korzystamy tylko z bramek 1-outputowych ), później powinny mieć po prostu nazwy danej bramki
         let value = this.state.value;
         if(value === undefined) value = "undefined"
         const style = gateClass[ this.props.gateType ];
 
         let inputFields = [];
-        for (let i = 0; i < this.props.inputs; i++) { 
-        inputFields.push((<InputPin removeWire={ this.props.removeWire }  drawWire={ this.props.drawWire } 
-            index={ i } gate={ this }
-            getFocusedElement={ this.props.getFocusedElement } mount={ this.mountPin } />));
+
+        for (let i = 0; i < this.props.inputs; i++){
+            inputFields.push((
+                <InputPin
+                    drawWire={ this.props.drawWire }
+                    removeWire={ this.props.removeWire }
+
+                    index={ i }
+                    gate={ this }
+                    getFocusedElement={ this.props.getFocusedElement }
+                    mount={ this.mountPin } />
+            ));
         }
         
         let outputFields = [];
         for (let i = 0; i < this.props.outputs; i++){
-            outputFields.push((<OutputPin index={ i } gate={ this } getFocusedElement={ this.props.getFocusedElement } setFocusedElement={ this.props.setFocusedElement } mount={ this.mountPin } />));
+            outputFields.push((
+                <OutputPin
+                    index={ i }
+                    gate={ this }
+                    getFocusedElement={ this.props.getFocusedElement }
+                    setFocusedElement={ this.props.setFocusedElement }
+                    mount={ this.mountPin } />
+            ));
         }
         return (
-            <div ref={this.ref}
-            className={`LogicGate ${styles.LogicGate} ${style}`} >
-
+            <div className={`LogicGate ${styles.LogicGate} ${style}`}
+                ref={this.props.reference} >
                 <div className={styles.LogicGateInputs}>
                     { inputFields }
                 </div>

@@ -13,13 +13,18 @@ class InputPin extends Pin {
         }
     }
 
-    handleOnClick = () => {
-        const newParent = this.props.getFocusedElement();
-        if(newParent)
-            this.changeParentPin(newParent);
+    handleOnClick = (e) => {
+        if(e.button === 0) { // lewy
+            const newParent = this.props.getFocusedElement();
+            if(newParent)
+                this.changeParentPin(newParent);
+        } else if(e.button === 1) { // srodkowy
+            this.disconnect();
+        }
     }
 
     disconnect() {
+        if(!this.state.parentPin) return;
         this.state.parentPin.disconnect(this);
         this.setState({'parentPin': undefined});
         this.receiveSignal(undefined);
@@ -51,22 +56,21 @@ class InputPin extends Pin {
     }
 
     receiveSignal(signal) {
+        // najwyraźniej najlepszy sposób na zapobiegniecie zapętlania
+        // omg
+        if (signal === this.state.value) return;
+
         this.setState({'value': signal}, function() {
-            // zmieniamy parent pin, wiec sprawdzamy czy wystepuje rekurencja
-            if (this.gate.state.recursion) return;
-            if (this.searchForRecursion()){
-                this.gate.setState({"recursion": true},
-                    () => setTimeout(
-                        () => { this.gate.setState({"recursion": false})}, 500)
-                );
-            }
             this.gate.processOutput();
         });
 	}
 
     render(){
-        return <button ref={this.state.ref} className={ this.style.LogicGateInput } 
-            onClick={ this.handleOnClick } ></button>;
+        return (
+            <button ref={this.state.ref} 
+                className={ this.style.LogicGateInput } onMouseDown={ this.handleOnClick }>
+            </button>
+        )
     }
 }
 

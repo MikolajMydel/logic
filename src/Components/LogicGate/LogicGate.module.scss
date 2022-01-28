@@ -1,7 +1,7 @@
 .LogicGate {
 
     $input-size: 20px;
-    $min-gate-height: 75px;
+    $min-gate-height: 60px;
 
     width: 100px;
 
@@ -16,6 +16,12 @@
     cursor: pointer;
 
     box-shadow: 0px 0px 20px 1px rgba(255, 255, 255, 1);
+
+    &Dummy {
+        position: relative;
+        float: left;
+        margin: 12px;
+    }
 
     &AND {
         background-color: cornflowerblue;
@@ -32,15 +38,12 @@
         height: $input-size;
         width: $input-size;
 
-
         border: 2px solid #000;
-
         border-radius: 100%;
-
         cursor: pointer;
     }
 
-    &Inputs {
+    &Inputs, &Outputs {
         min-height: $min-gate-height;
         width: $input-size;
 
@@ -50,36 +53,30 @@
         justify-content: space-evenly;
 
         position: relative;
-        left: calc($input-size / -2);
 
         button {
             margin: 2px 0;
         }
-        
     }
-
-    &Output {
-        margin: auto;
-        position: absolute;
+    &Inputs {
+        float: left;
+        left: calc($input-size / -2);
+    }
+    &Outputs {
+        float: right;
         right: calc($input-size / -2);
-        top: 0;
-        bottom: 0;
     }
 
     &Value {
-
         font-size: 75%;
-
         pointer-events: none;
+        user-select: none;
 
         position: absolute;
         text-align: center;
         top: 50%;
         right: 0;
         left: 0;
-
         transform: translateY(-50%);
-
-        
     }
 }

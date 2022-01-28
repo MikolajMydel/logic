@@ -1,4 +1,3 @@
-import Wire from './Wire/Wire';
 import styles from './WiresBoard.module.scss';
 
 const WiresBoard = (props) => {

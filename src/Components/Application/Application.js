@@ -150,17 +150,28 @@ class Application extends React.Component {
 
     removeWire = (firstPin, secondPin, callback ) => {
 
-        const newWiresArray = this.state.wires.filter( function (wire) {
-            return wire.props.firstPin === firstPin && wire.props.secondPin === secondPin;
-        });
+        let wireIndex;
+        const wiresArray = this.state.wires;
+    
+        for (let i = 0; i < wiresArray.length; i++){
+            if ( wiresArray[i].props.firstPin === firstPin && wiresArray[i].props.secondPin === secondPin ){
+                    wireIndex = i;
+                    break;
+                }
+        }
         
-        // usuniecie ze stanu starego polaczenia
-        this.setState({wires: newWiresArray}, 
-            () => {
+        const newWiresArray = [ ...this.state.wires ];
+        newWiresArray.splice ( wireIndex, 1 );
+    
+        this.setState({
+            "wires": newWiresArray,
+    
+        }, 
+            () => { 
                 if (callback) callback();
             }
-        );
-    }  
+        )
+    }
 
     render() {
         return (

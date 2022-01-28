@@ -36,7 +36,7 @@ class InputPin extends Pin {
         if (this.state.parentPin){ 
 
         // usun polaczenie ze starym rodzicem
-        this.props.removeWire(this.state.parentPin.state.ref, this.state.ref,
+        this.props.removeWire(this.state.parentPin, this,
 
             // przekazuje rysowanie polaczenia jako callback, poniewaz w przeciwnym wypadku
             // zostalby powielony dawny stan (ze starym polaczeniem)

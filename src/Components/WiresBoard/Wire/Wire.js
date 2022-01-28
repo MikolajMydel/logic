@@ -18,13 +18,20 @@ function calculatePath (firstPinBoundingClient, secondPinBoundingClient){
     secondPinCoordinates[1] += secondPinBoundingClient.height / 2;
     secondPinCoordinates[0] += secondPinBoundingClient.width / 2;
 
+    const verticalDistance = secondPinCoordinates[1] - firstPinCoordinates[1];
+    const horizontalDistance = secondPinCoordinates[0] - firstPinCoordinates[0];
+
 
     // M - MOVE TO (WEDLUG POZYCJI BEWZGLEDNEJ)
     // L - LINE TO (WEDLUG POZYCJI BEZWZGLEDNEJ)
+    // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/path
     // przewod idzie od wyjscia do wejscia
+
     return `M ${firstPinCoordinates} 
-    l 25, 0 
-    L ${[secondPinCoordinates[0] - 25, secondPinCoordinates[1]]}
+
+        l ${[ horizontalDistance / 2, 0 ]}
+        l ${[ 0, verticalDistance ]}
+
     L ${secondPinCoordinates}
     `
 

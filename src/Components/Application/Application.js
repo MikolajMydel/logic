@@ -20,6 +20,7 @@ class Application extends React.Component {
     }
 
     boardRef = React.createRef()
+    canvasRef = React.createRef()
 
     // funkcja zmieniajaca aktualnie wybrane wyjscie - pozwala na uzycie kliknietego wyjscia na wejscie bramki logicznej
     setFocusedElement = ( element ) => {
@@ -132,6 +133,50 @@ class Application extends React.Component {
         }
     }
 
+    saveGate = () => {
+        const o = this.getStringsFunction();
+        console.log(o)
+    }
+
+    // zapisuje customową funkcję w formie stringa dla nowej bramki na podstawie
+    // obecnego stanu canvas
+    getStringsFunction = () => {
+        const inputArea  = this.canvasRef.childNodes[0];
+        const outputArea = this.canvasRef.childNodes[2];
+
+        const solve = (output) => {
+            if(!output) return;
+            if(output instanceof StartNode){
+                for(const startNode of inputArea.childNodes){
+                    if(output === findReact(startNode))
+                        // TODO index startNode, nie 0
+                        return "i[0]";
+                }
+            } else {
+                const gate = output.gate;
+                let args = [];
+                for(const input of gate.inputs){
+                    const par = input.state.parentPin;
+                    if(par){
+                        args.push(solve(par));
+                    } else // input bramki nie jest do niczego podpięty
+                        args.push(undefined)
+                }
+                return (
+                    gate.func.name + "([" + args + "])[" + output.index + "]"
+                );
+            }
+        }
+
+        let output = [];
+        for(let endNode of outputArea.childNodes) {
+            endNode = findReact(endNode);
+            let func = "(i) => {" + solve(endNode.state.parentPin) + "}"
+            output.push(func);
+        }
+        return output;
+    }
+
     render() {
         return (
             <div className={ styles.Application }
@@ -139,8 +184,10 @@ class Application extends React.Component {
                 onMouseMove={ (e) => this.move(e) }
                 onMouseUp={ () => this.drop() }
             >
-                <Menu />
-                <div className={ styles.Canvas }>
+                <Menu functions={[() => this.saveGate()]}/>
+                <div className={ styles.Canvas }
+                    ref={el => this.canvasRef = el}
+                >
                     <div className={ `Area ${styles.InputArea}` }
                         onClick={ (e) => this.addNode(e, 'startNode')}
                     >

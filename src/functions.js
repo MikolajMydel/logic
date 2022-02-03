@@ -1,4 +1,38 @@
 import EndNode from "./Components/Node/EndNode";
+import StartNode from "./Components/Node/StartNode";
+
+// zapisuje customową funkcję w formie stringa dla nowej bramki na podstawie
+// podanych obiektów endNode
+export function getStringFunctions(endNodes) {
+    const solve = (output, alreadyVisited) => {
+        if (!output || alreadyVisited.indexOf(output) !== -1) // był już sprawdzany
+            return;
+        alreadyVisited.push(output);
+        if(output instanceof StartNode){
+            return "i[0]"; // TODO index tego startNoda, nie 0
+        } else {
+            const gate = output.gate;
+            let args = [];
+            for(const input of gate.inputs){
+                const par = input.state.parentPin;
+                if(par){
+                    args.push(solve(par, alreadyVisited));
+                } else // input bramki nie jest do niczego podpięty
+                    args.push(undefined)
+            }
+            return (
+                gate.func.name + "([" + args + "])[" + output.index + "]"
+            );
+        }
+    }
+
+    let output = [];
+    for(let endNode of endNodes) {
+        let func = "(i) => {" + solve(endNode.state.parentPin, []) + "}"
+        output.push(func);
+    }
+    return output;
+}
 
 // https://stackoverflow.com/questions/29321742/react-getting-a-component-from-a-dom-element-for-debugging/39165137#39165137
 // znajdź komponent React na podstawie elementu DOM

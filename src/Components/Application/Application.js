@@ -1,11 +1,10 @@
 import React from "react";
-import cloneDeep from 'lodash/cloneDeep';
 import styles from './Application.module.scss';
 import LogicGate from "../LogicGate/LogicGate";
 import StartNode from "../Node/StartNode";
 import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
-import {findReact} from "../../functions";
+import {findReact, getStringFunctions} from "../../functions";
 import Menu from "../Menu/Menu"
 
 class Application extends React.Component {
@@ -141,39 +140,12 @@ class Application extends React.Component {
             endNode = findReact(endNode);
             endNodes.push(endNode);
         }
-        const r = this.getStringsFunction(endNodes)
-        console.log(r)
+        const stringFunctions = getStringFunctions(endNodes);
+        console.log(stringFunctions)
     }
 
-    // zapisuje customową funkcję w formie stringa dla nowej bramki na podstawie
-    // obecnego stanu canvas
-    getStringsFunction = (endNodes) => {
-        const solve = (output) => {
-            if(!output) return;
-            if(output instanceof StartNode){
-                return "i[0]"; // TODO index tego startNoda, nie 0
-            } else {
-                const gate = output.gate;
-                let args = [];
-                for(const input of gate.inputs){
-                    const par = input.state.parentPin;
-                    if(par){
-                        args.push(solve(par));
-                    } else // input bramki nie jest do niczego podpięty
-                        args.push(undefined)
-                }
-                return (
-                    gate.func.name + "([" + args + "])[" + output.index + "]"
-                );
-            }
-        }
-
-        let output = [];
-        for(let endNode of endNodes) {
-            let func = "(i) => {" + solve(endNode.state.parentPin) + "}"
-            output.push(func);
-        }
-        return output;
+    clearCanvas = () => {
+        this.setState({elements: {inputs: [], board: [], outputs: []}})
     }
 
     render() {
@@ -183,7 +155,7 @@ class Application extends React.Component {
                 onMouseMove={ (e) => this.move(e) }
                 onMouseUp={ () => this.drop() }
             >
-                <Menu functions={[() => this.saveGate()]}/>
+                <Menu functions={[this.saveGate, this.clearCanvas]}/>
                 <div className={ styles.Canvas }
                     ref={el => this.canvasRef = el}
                 >

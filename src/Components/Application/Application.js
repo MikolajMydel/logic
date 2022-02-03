@@ -1,4 +1,5 @@
 import React from "react";
+import cloneDeep from 'lodash/cloneDeep';
 import styles from './Application.module.scss';
 import LogicGate from "../LogicGate/LogicGate";
 import StartNode from "../Node/StartNode";
@@ -134,24 +135,23 @@ class Application extends React.Component {
     }
 
     saveGate = () => {
-        const o = this.getStringsFunction();
-        console.log(o)
+        const endNodesDOM = this.canvasRef.childNodes[2].childNodes;
+        let endNodes = [];
+        for(let endNode of endNodesDOM){
+            endNode = findReact(endNode);
+            endNodes.push(endNode);
+        }
+        const r = this.getStringsFunction(endNodes)
+        console.log(r)
     }
 
     // zapisuje customową funkcję w formie stringa dla nowej bramki na podstawie
     // obecnego stanu canvas
-    getStringsFunction = () => {
-        const inputArea  = this.canvasRef.childNodes[0];
-        const outputArea = this.canvasRef.childNodes[2];
-
+    getStringsFunction = (endNodes) => {
         const solve = (output) => {
             if(!output) return;
             if(output instanceof StartNode){
-                for(const startNode of inputArea.childNodes){
-                    if(output === findReact(startNode))
-                        // TODO index startNode, nie 0
-                        return "i[0]";
-                }
+                return "i[0]"; // TODO index tego startNoda, nie 0
             } else {
                 const gate = output.gate;
                 let args = [];
@@ -169,8 +169,7 @@ class Application extends React.Component {
         }
 
         let output = [];
-        for(let endNode of outputArea.childNodes) {
-            endNode = findReact(endNode);
+        for(let endNode of endNodes) {
             let func = "(i) => {" + solve(endNode.state.parentPin) + "}"
             output.push(func);
         }

@@ -27,43 +27,39 @@ function calculatePath (firstPinBoundingClient, secondPinBoundingClient){
     // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/path
     // przewod idzie od wyjscia do wejscia
 
-
-
     // jezeli docelowy punkt jest nizej:
     // ostatnie 3 wartosci a1: 1 20,20
-
     // jezeli jest wyzej:
     // ostatnie 3 wartosci a1: 0 20,-20
-    let a1Sufix, a2Sufix;
-    if ( verticalDistance < 0 ){
-        a1Sufix = "0 12,-12";
-        a2Sufix = "1 12,-12";
-    } else if ( verticalDistance > 0 ){
-        a1Sufix = "1 12,12";
-        a2Sufix = "0 12,12"
-    } else a1Sufix = "0, 0,0";
+    let a1, a2, roundings;
+    if ( verticalDistance < -25 ){
+        a1 = "a20,20 0 0 0 12,-12"
+        a2 = "a20,20 0 0 1 12 -12"
+    } else if (verticalDistance > 25) {
+        a1 = "a20,20 0 0 1 12 12";
+        a2 = "a20,20 0 0 0 12 12"
+    }
 
-    const a1 = `20,20 0 0 ${a1Sufix}`;
-    const a2 = `20,20 0 0 ${a2Sufix}`;
+    if ( a1 ){
+        roundings = 
+            `
+            l ${[horizontalDistance / 2, 0]}
+            ${a1} 
+
+            l ${[ 0, verticalDistance < 0 ? verticalDistance + 25 : verticalDistance - 25 ]} 
+            ${a2}
+            `
+    } else {
+        roundings = "";
+    }
 
     return `M ${firstPinCoordinates} 
 
-        l ${[ horizontalDistance / 2, 0 ]}
-
-        a ${a1}
-
-        l ${[ 0, verticalDistance < 0 ? verticalDistance + 25 : verticalDistance - 25  ]}
-
-        a ${a2}
+        ${roundings}
 
     L ${secondPinCoordinates}
     `
-
 }
-
-// pd a20,20 0 0 1 20,20 
-// a20,20 0 0 0 20,20
-
 class Wire extends React.Component {
 
     constructor(props){

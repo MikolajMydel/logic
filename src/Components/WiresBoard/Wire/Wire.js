@@ -4,14 +4,20 @@ import styles from './Wire.module.scss';
 
 import reactDom from 'react-dom';
 
-function calculatePathRight(firstPinCoordinates, secondPinCoordinates) {
+function calculatePathRight(firstPinCoordinates, secondPinCoordinates, paddings) {
     const verticalDistance = secondPinCoordinates[1] - firstPinCoordinates[1];
     const horizontalDistance = secondPinCoordinates[0] - firstPinCoordinates[0];
+    const spaceSize = 75;
 
     // jezeli docelowy punkt jest nizej:
     // ostatnie 3 wartosci a1: 1 20,20
     // jezeli jest wyzej:
     // ostatnie 3 wartosci a1: 0 20,-20
+    let minVerticalDistance;
+    if ( verticalDistance > 0 ) minVerticalDistance = paddings[0][1] + paddings[1][0] + spaceSize;
+    else minVerticalDistance = paddings[0][0] + paddings[1][1] + spaceSize;
+    
+    /*
     let a1, a2, roundings;
     if (verticalDistance < -25) {
         a1 = "a20,20 0 0 0 12,-12"
@@ -19,27 +25,15 @@ function calculatePathRight(firstPinCoordinates, secondPinCoordinates) {
     } else if (verticalDistance > 25) {
         a1 = "a20,20 0 0 1 12 12";
         a2 = "a20,20 0 0 0 12 12"
-    }
+    } */
 
-    if (a1) {
-        roundings =
-            `
-                l ${[horizontalDistance / 2, 0]}
-                ${a1} 
+    // c0,0 25,25 ${[horizontalDistance, verticalDistance]}
 
-                l ${[ 0, verticalDistance < 0 ? verticalDistance + 25 : verticalDistance - 25 ]} 
-                ${a2}
-                `
-    } else {
-        roundings = "";
-    }
 
     return `M ${firstPinCoordinates} 
 
-            ${roundings}
-
-        L ${secondPinCoordinates}
-        `
+    L ${secondPinCoordinates}    
+    `
 }
 
 function calculatePathLeft(firstPinCoordinates, secondPinCoordinates, paddings) {
@@ -50,9 +44,8 @@ function calculatePathLeft(firstPinCoordinates, secondPinCoordinates, paddings) 
     const spaceSize = 75;
     let minVerticalDistance;
 
-    if (verticalDistance > 0) minVerticalDistance = paddings[0][1] + paddings[1][0] + spaceSize;
+    if ( verticalDistance > 0 ) minVerticalDistance = paddings[0][1] + paddings[1][0] + spaceSize;
     else minVerticalDistance = paddings[0][0] + paddings[1][1] + spaceSize;
-
 
     // zmiesci sie pomiedzy
     if (Math.abs(verticalDistance) > minVerticalDistance) {
@@ -104,7 +97,7 @@ function calculatePath(firstPinBoundingClient, secondPinBoundingClient, paddings
 
     // jezeli docelowy punkt jest na prawo
     if (secondPinCoordinates[0] > firstPinCoordinates[0])
-        return calculatePathRight(firstPinCoordinates, secondPinCoordinates)
+        return calculatePathRight(firstPinCoordinates, secondPinCoordinates, paddings)
     else
         // punkt docelowy jest na lewo / na rowni
         return calculatePathLeft(firstPinCoordinates, secondPinCoordinates, paddings)
@@ -151,8 +144,8 @@ class Wire extends React.Component {
 
         if (this.secondPin.gate) {
             this.secondPinPaddings = [
-                this.state.firstPinPosition.top - reactDom.findDOMNode(this.firstPin.gate).getBoundingClientRect().top,
-                reactDom.findDOMNode(this.firstPin.gate).getBoundingClientRect().bottom - this.state.firstPinPosition.bottom
+                reactDom.findDOMNode(this.secondPin.gate).getBoundingClientRect().top - this.state.secondPinPosition.top,
+                reactDom.findDOMNode(this.secondPin.gate).getBoundingClientRect().bottom - this.state.secondPinPosition.bottom
             ]
         } else this.secondPinPaddings = [0, 0];
 

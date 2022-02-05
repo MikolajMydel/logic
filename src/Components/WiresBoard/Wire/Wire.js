@@ -48,37 +48,33 @@ function calculatePathLeft(firstPinCoordinates, secondPinCoordinates, paddings) 
 
     let middleRoute = "";
     const spaceSize = 75;
-
-    // pierwszy pin jest wyzej
     let minVerticalDistance;
-    if (verticalDistance > 0) {
-        // odleglosc pierwszego (gornego pinu) od dolnej granicy + odleglosc
-        // dolnego pinu od gornej granicy
-        minVerticalDistance = paddings[0][1] + paddings[1][0] + spaceSize;
-    } else {
-        minVerticalDistance = paddings[0][0] + paddings[1][1] + spaceSize;
-    }
+
+    if (verticalDistance > 0) minVerticalDistance = paddings[0][1] + paddings[1][0] + spaceSize;
+    else minVerticalDistance = paddings[0][0] + paddings[1][1] + spaceSize;
+
 
     // zmiesci sie pomiedzy
-    if (verticalDistance > minVerticalDistance) {
+    if (Math.abs(verticalDistance) > minVerticalDistance) {
         middleRoute =
-        `
-            l 0,${ verticalDistance / 2 }
-            l ${horizontalDistance - 50}, 0
-            L ${ secondPinCoordinates[0] - 25}, ${secondPinCoordinates[1]}
-       `
+            `
+                l 0,${ verticalDistance / 2 }
+                l ${horizontalDistance - 50}, 0
+                L ${ secondPinCoordinates[0] - 25}, ${secondPinCoordinates[1]}
+            `
     } else {
-        middleRoute = 
-        `
-            l 0, ${ 2 * paddings[0][0] }
-            l ${horizontalDistance - 50}, 0
-            L ${ secondPinCoordinates[0] - 25}, ${secondPinCoordinates[1]}
-        `
+        middleRoute =
+            `
+                l 0, ${ verticalDistance > 0 ? 2 * paddings[0][0] : -2 * paddings[0][0] }
+                l ${horizontalDistance - 50}, 0
+                L ${ secondPinCoordinates[0] - 25}, ${secondPinCoordinates[1]}
+            `
     }
 
-    // zawsze wychodzi 25 w prawo i o 
-    // jezeli sie zmiesci
-    return `
+
+// zawsze wychodzi 25 w prawo i o 
+// jezeli sie zmiesci
+return `
         M ${firstPinCoordinates}
         l 25, 0
         ${middleRoute}

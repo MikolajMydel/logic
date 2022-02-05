@@ -1,16 +1,31 @@
 import EndNode from "./Components/Node/EndNode";
 import StartNode from "./Components/Node/StartNode";
 
+const compareTop = (a, b) => parseInt(a.style.top.slice(0,-2)) - parseInt(b.style.top.slice(0,-2));
+
 // zapisuje customową funkcję w formie stringa dla nowej bramki na podstawie
 // podanych obiektów endNode
-export function getStringFunctions(endNodes) {
+export function getStringFunctions(canvas) {
+    const inputArea = canvas.childNodes[0];
+    const outputArea = canvas.childNodes[2];
+
+    const endNodes  = [...outputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
+    const startNodes = [...inputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
+
+    console.log(startNodes)
+    //for(const startNode of startNodes){
+
+    //}
     const solve = (output, alreadyVisited) => {
         if (!output || alreadyVisited.indexOf(output) !== -1) // był już sprawdzany
             return;
-        alreadyVisited.push(output);
         if(output instanceof StartNode){
-            return "i[0]"; // TODO index tego startNoda, nie 0
+            for(let i=0; i<startNodes.length; i++){
+                if(output === startNodes[i])
+                    return "i[" + i + "]";
+            }
         } else {
+            alreadyVisited.push(output);
             const gate = output.gate;
             let args = [];
             for(const input of gate.inputs){

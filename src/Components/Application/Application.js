@@ -134,13 +134,7 @@ class Application extends React.Component {
     }
 
     saveGate = () => {
-        const endNodesDOM = this.canvasRef.childNodes[2].childNodes;
-        let endNodes = [];
-        for(let endNode of endNodesDOM){
-            endNode = findReact(endNode);
-            endNodes.push(endNode);
-        }
-        const stringFunctions = getStringFunctions(endNodes);
+        const stringFunctions = getStringFunctions(this.canvasRef);
         console.log(stringFunctions)
     }
 

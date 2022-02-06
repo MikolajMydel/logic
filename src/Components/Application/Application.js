@@ -4,7 +4,7 @@ import LogicGate from "../LogicGate/LogicGate";
 import StartNode from "../Node/StartNode";
 import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
-import {findReact, getStringFunctions} from "../../functions";
+import {findReact, makeNewGate} from "../../functions";
 import Menu from "../Menu/Menu"
 
 class Application extends React.Component {
@@ -21,6 +21,7 @@ class Application extends React.Component {
 
     boardRef = React.createRef()
     canvasRef = React.createRef()
+    controlRef = React.createRef()
 
     // funkcja zmieniajaca aktualnie wybrane wyjscie - pozwala na uzycie kliknietego wyjscia na wejscie bramki logicznej
     setFocusedElement = ( element ) => {
@@ -53,9 +54,10 @@ class Application extends React.Component {
         let newGate;
         elements.board.push(
             <LogicGate
-                gateType={ args.gateLogic }
+                gateName={ args.gateName }
                 inputs={ args.inputCount }
                 outputs={ args.outputCount }
+                function={ args.function }
                 getFocusedElement={ this.getFocusedElement }
                 setFocusedElement={ this.setFocusedElement }
                 reference={el => newGate = el}
@@ -134,8 +136,7 @@ class Application extends React.Component {
     }
 
     saveGate = () => {
-        const stringFunctions = getStringFunctions(this.canvasRef);
-        const newGateObject = {name: "custom", functions: stringFunctions};
+        const newGateObject = makeNewGate(this.canvasRef, "customowa bramka");
         let saved;
         if(localStorage.getItem("savedGates") !== null)
             saved = JSON.parse(localStorage.getItem("savedGates"));
@@ -144,6 +145,7 @@ class Application extends React.Component {
 
         saved.push(newGateObject);
         localStorage.setItem("savedGates", JSON.stringify(saved));
+        findReact(this.controlRef.current).addDummy(newGateObject);
     }
 
     clearCanvas = () => {
@@ -177,7 +179,7 @@ class Application extends React.Component {
                         { this.state.elements.outputs }
                     </div>
                 </div>
-                <ControlPanel addGate={this.addGate} />
+                <ControlPanel addGate={this.addGate} reference={this.controlRef}/>
             </div>
         )
     }

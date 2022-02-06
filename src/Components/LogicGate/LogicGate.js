@@ -20,7 +20,12 @@ const basicFunctions = {
 class LogicGate extends React.Component {
     constructor( {...props} ) {
         super();
-        this.func = basicFunctions[props.gateType];
+        if(basicFunctions[props.gateName] != undefined)
+            this.func = basicFunctions[props.gateName];
+        else
+            this.func = props.function;
+
+        console.log(props.function)
         this.state = {
             value: undefined, // tymczasowo
             render: true,
@@ -63,7 +68,7 @@ class LogicGate extends React.Component {
         // na razie używamy wartości logicznej bramki, żeby ułatwić sprawdzanie czy działają ( i tak korzystamy tylko z bramek 1-outputowych ), później powinny mieć po prostu nazwy danej bramki
         let value = this.state.value;
         if(value === undefined) value = "undefined"
-        const style = gateClass[ this.props.gateType ];
+        const style = gateClass[ this.props.gateName ];
 
         let inputFields = [];
         for (let i = 0; i < this.props.inputs; i++){

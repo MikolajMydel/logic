@@ -1,11 +1,24 @@
 import EndNode from "./Components/Node/EndNode";
 import StartNode from "./Components/Node/StartNode";
 
+//zwraca gotową funkcję na podstawie tablicy stringów z funkcjami
+export function retrieveFunction(functions){
+    let funcs = functions.map(f => eval(f));
+    const func = (inputs) => {
+                    let output = [];
+                    for(let i=0; i<funcs.length; i++){
+                        console.log("siema")
+                        output.push(funcs[i](inputs[i]));
+                    }
+                    return output;
+                }
+    return func;
+}
 const compareTop = (a, b) => parseInt(a.style.top.slice(0,-2)) - parseInt(b.style.top.slice(0,-2));
 
 // zapisuje customową funkcję w formie stringa dla nowej bramki na podstawie
 // podanych obiektów endNode
-export function getStringFunctions(canvas) {
+export function makeNewGate(canvas, name) {
     const inputArea = canvas.childNodes[0];
     const outputArea = canvas.childNodes[2];
 
@@ -42,7 +55,12 @@ export function getStringFunctions(canvas) {
         let func = "(i) => {" + solve(endNode.state.parentPin, []) + "}"
         output.push(func);
     }
-    return output;
+    return {
+        name: name,
+        inputs: startNodes.length,
+        outputs: endNodes.length,
+        functions: output,
+    };
 }
 
 // https://stackoverflow.com/questions/29321742/react-getting-a-component-from-a-dom-element-for-debugging/39165137#39165137

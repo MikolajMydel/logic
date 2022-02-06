@@ -12,10 +12,6 @@ export function getStringFunctions(canvas) {
     const endNodes  = [...outputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
     const startNodes = [...inputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
 
-    console.log(startNodes)
-    //for(const startNode of startNodes){
-
-    //}
     const solve = (output, alreadyVisited) => {
         if (!output || alreadyVisited.indexOf(output) !== -1) // był już sprawdzany
             return;

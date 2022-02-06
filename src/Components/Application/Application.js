@@ -135,7 +135,15 @@ class Application extends React.Component {
 
     saveGate = () => {
         const stringFunctions = getStringFunctions(this.canvasRef);
-        console.log(stringFunctions)
+        const newGateObject = {name: "custom", functions: stringFunctions};
+        let saved;
+        if(localStorage.getItem("savedGates") !== null)
+            saved = JSON.parse(localStorage.getItem("savedGates"));
+        else
+            saved = [];
+
+        saved.push(newGateObject);
+        localStorage.setItem("savedGates", JSON.stringify(saved));
     }
 
     clearCanvas = () => {

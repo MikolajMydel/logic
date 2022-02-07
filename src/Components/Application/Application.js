@@ -48,7 +48,8 @@ class Application extends React.Component {
             );
         else // endNode
             elements.outputs.push(
-                <EndNode getFocusedElement={ this.getFocusedElement } position={ pos }/>
+                <EndNode drawWire={ this.drawWire } removeWire={ this.removeWire } 
+                getFocusedElement={ this.getFocusedElement } position={ pos }/>
             );
         this.setState ({'elements': elements});
     }

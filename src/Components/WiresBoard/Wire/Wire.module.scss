@@ -2,9 +2,20 @@
     position: absolute;
     top: 50%;
 
+
+    // jakby cos sie stalo z klasami opartymi na stanie
     stroke: #000;
+
     stroke-width: 5;
     fill: transparent;
+
+    filter: 
+    drop-shadow(-1px -1px 0px #000) 
+    drop-shadow(1px -1px 0px #000) 
+    drop-shadow(1px 1px 0px #000)
+    drop-shadow(-1px 1px 0px #000);
+    
+
 
     &HighState {
         stroke: lime;

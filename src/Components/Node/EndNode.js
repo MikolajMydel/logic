@@ -26,19 +26,24 @@ class EndNode extends Node {
         this.receiveSignal(undefined);
     }
 
-    changeParentPin(newParent) {
-        if (this.state.parentPin)
-            this.state.parentPin.disconnect(this);
-        newParent.connect(this);
-        this.setState({'parentPin': newParent});
-        this.receiveSignal(newParent.state.value);
+    changeParentPin = (newParent) => {
+        if ( newParent !== this.state.parentPin ){
+            if (this.state.parentPin)
+                this.state.parentPin.disconnect(this);
+
+            newParent.connect(this);
+
+            this.props.drawWire( newParent, this );
+
+            this.setState({'parentPin': newParent});
+            this.receiveSignal(newParent.state.value);
+        }
     }
 
     handleOnClick = () => {
         const newParent = this.props.getFocusedElement();
         if(newParent){
             this.changeParentPin(newParent);
-            this.props.drawWire( newParent, this );
         }
     }
 

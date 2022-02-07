@@ -4,20 +4,14 @@ import styles from './Wire.module.scss';
 
 import reactDom from 'react-dom';
 
-function calculatePathRight(firstPinCoordinates, secondPinCoordinates, paddings) {
+function calculatePathRight(firstPinCoordinates, secondPinCoordinates) {
     const verticalDistance = secondPinCoordinates[1] - firstPinCoordinates[1];
     const horizontalDistance = secondPinCoordinates[0] - firstPinCoordinates[0];
-    const spaceSize = 75;
 
     // jezeli docelowy punkt jest nizej:
-    // ostatnie 3 wartosci a1: 1 20,20
+    // ostatnie 3 wartosci a1: 1 12,12
     // jezeli jest wyzej:
-    // ostatnie 3 wartosci a1: 0 20,-20
-    let minVerticalDistance;
-    if ( verticalDistance > 0 ) minVerticalDistance = paddings[0][1] + paddings[1][0] + spaceSize;
-    else minVerticalDistance = paddings[0][0] + paddings[1][1] + spaceSize;
-    
-    /*
+    // ostatnie 3 wartosci a1: 0 12,-12
     let a1, a2, roundings;
     if (verticalDistance < -25) {
         a1 = "a20,20 0 0 0 12,-12"
@@ -25,49 +19,125 @@ function calculatePathRight(firstPinCoordinates, secondPinCoordinates, paddings)
     } else if (verticalDistance > 25) {
         a1 = "a20,20 0 0 1 12 12";
         a2 = "a20,20 0 0 0 12 12"
-    } */
+    }
 
-    // c0,0 25,25 ${[horizontalDistance, verticalDistance]}
-
+    if (a1) {
+        roundings =
+            `
+                l ${[horizontalDistance / 2, 0]}
+                ${a1} 
+                l ${[ 0, verticalDistance < 0 ? verticalDistance + 25 : verticalDistance - 25 ]} 
+                ${a2}
+                `
+    } else {
+        roundings = "";
+    }
 
     return `M ${firstPinCoordinates} 
-
-    L ${secondPinCoordinates}    
-    `
+            ${roundings}
+        L ${secondPinCoordinates}
+        `
 }
 
 function calculatePathLeft(firstPinCoordinates, secondPinCoordinates, paddings) {
     const verticalDistance = secondPinCoordinates[1] - firstPinCoordinates[1];
     const horizontalDistance = secondPinCoordinates[0] - firstPinCoordinates[0];
 
+    const isAbove = verticalDistance > 0;
+
     let middleRoute = "";
     const spaceSize = 75;
     let minVerticalDistance;
 
-    if ( verticalDistance > 0 ) minVerticalDistance = paddings[0][1] + paddings[1][0] + spaceSize;
+    if (isAbove) minVerticalDistance = paddings[0][1] + paddings[1][0] + spaceSize;
     else minVerticalDistance = paddings[0][0] + paddings[1][1] + spaceSize;
 
     // zmiesci sie pomiedzy
     if (Math.abs(verticalDistance) > minVerticalDistance) {
-        middleRoute =
-            `
-                l 0,${ verticalDistance / 2 }
+
+        // pierwszy jest na gorze
+        if (isAbove) {
+            middleRoute =
+                `
+                a20,20 0 0 1 12,12
+                l 0,${ (verticalDistance / 2) - 25 }
+
+                a20,20 0 0 1 -12,12
+
                 l ${horizontalDistance - 50}, 0
-                L ${ secondPinCoordinates[0] - 25}, ${secondPinCoordinates[1]}
-            `
+
+                a20,20 0 0 0 -12,12
+
+                L ${ secondPinCoordinates[0] - 35}, ${secondPinCoordinates[1] - 15}
+
+                a20,20 0 0 0 12,12
+
+                `
+
+        } else {
+            middleRoute =
+                `   
+                    a20,20 0 0 0 12,-12
+                    l 0,${ (verticalDistance / 2) + 25 }
+
+                    a20,20 0 0 0 -12,-12
+
+                    l ${horizontalDistance - 50}, 0
+
+                    a20,20 0 0 1 -12,-12
+
+                    L ${ secondPinCoordinates[0] - 35}, ${secondPinCoordinates[1] + 15}
+
+                    a20,20 0 0 1 12,-12
+
+                `
+        }
+ 
+    // nie zmiesci sie pomiedzy
     } else {
-        middleRoute =
-            `
-                l 0, ${ verticalDistance > 0 ? 2 * paddings[0][0] : -2 * paddings[0][0] }
-                l ${horizontalDistance - 50}, 0
-                L ${ secondPinCoordinates[0] - 25}, ${secondPinCoordinates[1]}
-            `
+
+        if ( isAbove ){ 
+            middleRoute =
+                `
+                    a20,20 0 0 0 12,-12
+
+                    l 0, ${ 2 * paddings[0][0] }
+
+                    a20,20 0 0 0 -12,-12
+
+                    l ${horizontalDistance - 35}, 0
+
+                    a20,20 0 0 0 -12,12
+
+                    L ${ secondPinCoordinates[0] - 25}, ${secondPinCoordinates[1] - 10}
+
+                    a20,20 0 0 0 12, 12
+                `
+        } else {
+
+            middleRoute =
+                `
+                    a20,20 0 0 1 12,12
+
+                    l 0, ${ -2 * paddings[0][0] }
+
+                    a20,20 0 0 1 -12,12
+
+                    l ${horizontalDistance - 35}, 0
+
+                    a20,20 0 0 1 -12,-12
+
+                    L ${ secondPinCoordinates[0] - 25}, ${secondPinCoordinates[1] + 15}
+
+                    a20,20 0 0 1 12, -12
+                `
+        }
     }
 
 
-// zawsze wychodzi 25 w prawo i o 
-// jezeli sie zmiesci
-return `
+    // zawsze wychodzi 25 w prawo i o 
+    // jezeli sie zmiesci
+    return `
         M ${firstPinCoordinates}
         l 25, 0
         ${middleRoute}
@@ -95,11 +165,11 @@ function calculatePath(firstPinBoundingClient, secondPinBoundingClient, paddings
     // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/path
     // przewod idzie od wyjscia do wejscia
 
-    // jezeli docelowy punkt jest na prawo
-    if (secondPinCoordinates[0] > firstPinCoordinates[0])
+    // jezeli docelowy punkt jest prawo
+    if (secondPinCoordinates[0] > firstPinCoordinates[0] + 30)
         return calculatePathRight(firstPinCoordinates, secondPinCoordinates, paddings)
     else
-        // punkt docelowy jest na lewo / na rowni
+        // punkt docelowy jest na lewo / mniej niz 30px na prawo
         return calculatePathLeft(firstPinCoordinates, secondPinCoordinates, paddings)
 
 
@@ -167,6 +237,7 @@ class Wire extends React.Component {
         }
         className = {
             styles.Wire
+
         }
         />
     }

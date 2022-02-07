@@ -6,4 +6,12 @@
     stroke-width: 5;
     fill: transparent;
 
+    &HighState {
+        stroke: lime;
+    }
+
+    &LowState {
+        stroke: red;
+    }
+
 }

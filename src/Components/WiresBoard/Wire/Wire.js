@@ -196,6 +196,12 @@ class Wire extends React.Component {
 
         this.firstPin = props.firstPin;
         this.secondPin = props.secondPin;
+        this.setWireColor();
+
+         
+        this.firstPin.state.ref.current.addEventListener("signalChange", () => {
+            this.setWireColor();
+        }) 
 
         this.state = {
             // pozycje pinow w momencie stworzenia polaczenia
@@ -222,6 +228,20 @@ class Wire extends React.Component {
 
     }
 
+    setWireColor = () => {
+        let newStateClass = "";
+
+        if ( this.firstPin.state.value ){
+            newStateClass = styles.WireHighState;
+        } else {
+            newStateClass = styles.WireLowState;
+        }
+
+        this.setState({
+            "stateClass": newStateClass
+        });
+    }
+
     // funkcja powodujaca aktualizacje pozycji pinow w stanie
     updatePosition = () => {
         this.setState({
@@ -236,7 +256,10 @@ class Wire extends React.Component {
                 [this.firstPinPaddings, this.secondPinPaddings])
         }
         className = {
-            styles.Wire
+            `
+                ${styles.Wire}
+                ${this.state.stateClass}
+            `
 
         }
         />

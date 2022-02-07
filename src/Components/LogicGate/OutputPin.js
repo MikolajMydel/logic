@@ -1,6 +1,8 @@
 import React from "react";
 import Pin from "./Pin";
 
+import signalChange from "../WiresBoard/Wire/signalChangeEvent";
+
 class OutputPin extends Pin {
     constructor(props) {
         super(props);
@@ -34,6 +36,8 @@ class OutputPin extends Pin {
 
     receiveSignal(signal) {
         this.setState({'value': signal}, function() {
+            this.state.ref.current.dispatchEvent(signalChange);
+
             for (let i = 0; i < this.state.childPins.length; i++) {
                 this.state.childPins[i].receiveSignal(signal);
             }

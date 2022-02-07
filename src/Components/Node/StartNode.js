@@ -1,6 +1,6 @@
 import React from 'react';
 import Node from './Node';
-
+import signalChange from '../WiresBoard/Wire/signalChangeEvent';
 class StartNode extends Node {
     state = {
         value: false,
@@ -42,6 +42,8 @@ class StartNode extends Node {
             for (let i = 0; i < this.state.childPins.length; i++) {
                 this.state.childPins[i].receiveSignal(val);
             }
+
+            this.state.ref.current.dispatchEvent(signalChange);
         });
     }
 }

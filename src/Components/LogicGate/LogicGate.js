@@ -20,12 +20,11 @@ const basicFunctions = {
 class LogicGate extends React.Component {
     constructor( {...props} ) {
         super();
-        if(basicFunctions[props.gateName] != undefined)
+        if(basicFunctions[props.gateName] !== undefined)
             this.func = basicFunctions[props.gateName];
         else
             this.func = props.function;
 
-        console.log(props.function)
         this.state = {
             value: undefined, // tymczasowo
             render: true,

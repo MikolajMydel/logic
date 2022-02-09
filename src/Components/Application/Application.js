@@ -158,8 +158,11 @@ class Application extends React.Component {
             // jeżeli przeniesiony poniżej poziomu 'board', usuń
             if (y + (element.offsetHeight) > board.offsetHeight + board.offsetTop){
                 const comp = findReact(element);
-                if(comp.selfDestruct)
-                    comp.selfDestruct();
+                comp.selfDestruct();
+
+                const focused = this.getFocusedElement();
+                if(focused && focused.gate === comp)
+                    this.setFocusedElement(undefined);
             }
         }
     }

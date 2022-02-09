@@ -7,6 +7,12 @@ import ControlPanel from "../ControlPanel/ControlPanel";
 import {findReact, makeNewGate} from "../../functions";
 import Menu from "../Menu/Menu"
 
+function validateGateName(name) {
+    // nazwa może składać się wyłącznie z liter i cyfr
+    // oraz musi zaczynać się od litery
+    var regex = /^[A-Za-z][A-Za-z0-9]*$/;
+    return regex.test(name);
+}
 class Application extends React.Component {
     state = {
         focusedElement: undefined,    // aktualnie wybrane wyjście
@@ -136,7 +142,13 @@ class Application extends React.Component {
     }
 
     saveGate = () => {
-        const newGateObject = makeNewGate(this.canvasRef, "customowa bramka");
+        let name = "";
+        do {
+            name = prompt();
+            // sprawdza poprawność nazwy i czy nie jest już taka zdefiniowana
+        } while(!validateGateName(name) || global[name] != undefined);
+
+        const newGateObject = makeNewGate(this.canvasRef, name);
         let saved;
         if(localStorage.getItem("savedGates") !== null)
             saved = JSON.parse(localStorage.getItem("savedGates"));

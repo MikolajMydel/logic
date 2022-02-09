@@ -45,6 +45,8 @@ class ControlPanel extends React.Component {
     addDummy = (newGate) => {
         let dummies = this.state.dummies;
         const func = retrieveFunction(newGate.functions);
+        // zrób tą funkcję dostępną globalnie
+        global[newGate.name] = func;
         const newDummy = (
             <DummyGate
             gateName={ newGate.name }

@@ -33,6 +33,8 @@ class LogicGate extends React.Component {
         this.outputs = [];
     }
 
+    get name() {return this.props.gateName;}
+
     // dzięki tej funkcji piny dodają się do tablicy pinów output lub input
     mountPin = (pin) => {
         if(pin instanceof InputPin){

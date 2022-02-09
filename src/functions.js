@@ -15,7 +15,6 @@ export function retrieveFunction(functions){
 
     let funcs = functions.map(f => eval(f));
     return (inputs) => {
-        console.log(inputs)
         let output = [];
         for(let i=0; i<funcs.length; i++){
             output.push(funcs[i](inputs));
@@ -54,7 +53,7 @@ export function makeNewGate(canvas, name) {
                     args.push(undefined)
             }
             return (
-                gate.func.name + "([" + args + "])[" + output.index + "]"
+                gate.name + "([" + args + "])[" + output.index + "]"
             );
         }
     }

@@ -1,18 +1,8 @@
 import EndNode from "./Components/Node/EndNode";
 import StartNode from "./Components/Node/StartNode";
-import {NOT, AND, OR} from "./Components/LogicGate/LogicalFunctions";
-
 
 //zwraca gotową funkcję na podstawie tablicy stringów z funkcjami
 export function retrieveFunction(functions){
-    // to będzie gdzieś indziej
-    // dla testów dałem tutaj
-    // eval używa globalnego scope więc funkcje logiczne muszą
-    // być tam dostępne
-    global.NOT = NOT;
-    global.AND = AND;
-    global.OR = OR;
-
     let funcs = functions.map(f => eval(f));
     return (inputs) => {
         let output = [];
@@ -30,6 +20,7 @@ export function makeNewGate(canvas, name) {
     const inputArea = canvas.childNodes[0];
     const outputArea = canvas.childNodes[2];
 
+    // posortowane od najwyżej położonego do najniżej
     const endNodes  = [...outputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
     const startNodes = [...inputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
 

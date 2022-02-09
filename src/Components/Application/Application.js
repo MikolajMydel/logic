@@ -5,6 +5,7 @@ import StartNode from "../Node/StartNode";
 import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
 import {findReact, makeNewGate} from "../../functions";
+import {AND, NOT, OR} from "../../logicalFunctions"
 import Menu from "../Menu/Menu"
 
 function validateGateName(name) {
@@ -28,6 +29,7 @@ class Application extends React.Component {
     boardRef = React.createRef()
     canvasRef = React.createRef()
     controlRef = React.createRef()
+    controlPanelObject;
 
     // funkcja zmieniajaca aktualnie wybrane wyjscie - pozwala na uzycie kliknietego wyjscia na wejscie bramki logicznej
     setFocusedElement = ( element ) => {
@@ -36,6 +38,26 @@ class Application extends React.Component {
 
     // funkcja zwracajaca aktualnie wybrane wyjscie - umozliwia kliknietej bramce logicznej zmiane wejscia na wczesniej klikniete wyjscie
     getFocusedElement = () => this.state.focusedElement;
+
+    // tylko raz po wyrenderowaniu tego komponentu
+    componentDidMount(){
+        global.NOT = NOT;
+        global.AND = AND;
+        global.OR = OR;
+
+        this.controlPanelObject = findReact(this.controlRef.current);
+
+        // wczytaj zapisane bramki z localstorage
+        let saved;
+        if(localStorage.getItem("savedGates") !== null)
+            saved = JSON.parse(localStorage.getItem("savedGates"));
+        else
+            saved = [];
+
+        for(const savedGate of saved){
+            this.controlPanelObject.addDummy(savedGate);
+        }
+    }
 
     addNode = (e, type) => {
         // dodaj tylko jeżeli kliknięto na czysty obszar (nie np istniejący node)
@@ -141,27 +163,35 @@ class Application extends React.Component {
         }
     }
 
+    // zapisuje obszar roboczy jako nową bramkę do projektu
     saveGate = () => {
         let name = "";
         do {
+            // tutaj będzie wywoływane okno zapisu bramki
+            // z wyborem koloru itd. na razie tylko prompt o nazwe
             name = prompt();
             // sprawdza poprawność nazwy i czy nie jest już taka zdefiniowana
-        } while(!validateGateName(name) || global[name] != undefined);
+        } while(!validateGateName(name) || global[name] !== undefined);
 
         const newGateObject = makeNewGate(this.canvasRef, name);
+
+        // zapisywanie w localStorage
         let saved;
         if(localStorage.getItem("savedGates") !== null)
             saved = JSON.parse(localStorage.getItem("savedGates"));
         else
             saved = [];
-
         saved.push(newGateObject);
         localStorage.setItem("savedGates", JSON.stringify(saved));
-        findReact(this.controlRef.current).addDummy(newGateObject);
+
+        // dodaj nową bramkę do zasobnika
+        this.controlPanelObject.addDummy(newGateObject);
     }
 
+    // wyczyść obszar roboczy
     clearCanvas = () => {
-        this.setState({elements: {inputs: [], board: [], outputs: []}})
+        this.setState({focusedElement: undefined, elements: {inputs: [], board: [], outputs: []}})
+
     }
 
     render() {

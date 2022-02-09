@@ -86,6 +86,7 @@ class Application extends React.Component {
                 inputs={ args.inputCount }
                 outputs={ args.outputCount }
                 function={ args.function }
+                style={ args.style }
                 getFocusedElement={ this.getFocusedElement }
                 setFocusedElement={ this.setFocusedElement }
                 reference={el => newGate = el}
@@ -165,15 +166,17 @@ class Application extends React.Component {
 
     // zapisuje obszar roboczy jako nową bramkę do projektu
     saveGate = () => {
-        let name = "";
         do {
             // tutaj będzie wywoływane okno zapisu bramki
             // z wyborem koloru itd. na razie tylko prompt o nazwe
-            name = prompt();
+            var name = prompt('podaj nazwę dla tej bramki');
             // sprawdza poprawność nazwy i czy nie jest już taka zdefiniowana
         } while(!validateGateName(name) || global[name] !== undefined);
+        do {
+            var color = prompt('podaj kolor');
+        } while(color === "");
 
-        const newGateObject = makeNewGate(this.canvasRef, name);
+        const newGateObject = makeNewGate(this.canvasRef, name, color);
 
         // zapisywanie w localStorage
         let saved;

@@ -3,12 +3,6 @@ import OutputPin from "./OutputPin";
 import InputPin from "./InputPin";
 import styles from "./LogicGate.module.scss";
 
-const gateClass = {
-    'AND': styles.LogicGateAND,
-    'OR': styles.LogicGateOR,
-    'NOT': styles.LogicGateNOT,
-}
-
 class LogicGate extends React.Component {
     constructor(props) {
         super();
@@ -56,7 +50,6 @@ class LogicGate extends React.Component {
         // na razie używamy wartości logicznej bramki, żeby ułatwić sprawdzanie czy działają ( i tak korzystamy tylko z bramek 1-outputowych ), później powinny mieć po prostu nazwy danej bramki
         let value = this.state.value;
         if(value === undefined) value = "undefined"
-        const style = gateClass[ this.name ];
 
         let inputFields = [];
         for (let i = 0; i < this.props.inputs; i++){
@@ -80,7 +73,8 @@ class LogicGate extends React.Component {
             ));
         }
         return (
-            <div className={`LogicGate ${styles.LogicGate} ${style}`}
+            <div className={`LogicGate ${styles.LogicGate}`}
+                style={this.props.style}
                 ref={this.props.reference} >
                 <div className={styles.LogicGateInputs}>
                     { inputFields }

@@ -16,7 +16,7 @@ const compareTop = (a, b) => parseInt(a.style.top.slice(0,-2)) - parseInt(b.styl
 
 // zapisuje customową funkcję w formie stringa dla nowej bramki na podstawie
 // podanych obiektów endNode
-export function makeNewGate(canvas, name) {
+export function makeNewGate(canvas, name, color) {
     const inputArea = canvas.childNodes[0];
     const outputArea = canvas.childNodes[2];
 
@@ -59,6 +59,7 @@ export function makeNewGate(canvas, name) {
         inputs: startNodes.length,
         outputs: endNodes.length,
         functions: output,
+        color: color,
     };
 }
 

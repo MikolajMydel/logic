@@ -14,20 +14,23 @@ class ControlPanel extends React.Component {
                 <DummyGate
                     gateName={ "AND" }
                     function={AND}
+                    color={"cornflowerblue"}
                     inputs={ 2 }
                     outputs={ 1 }
                     addGate={props.addGate}
                 />,
                 <DummyGate
-                gateName={ "NOT" }
+                    gateName={ "NOT" }
                     function={NOT}
+                    color={"red"}
                     inputs={ 1 }
                     outputs={ 1 }
                     addGate={props.addGate}
                 />,
                 <DummyGate
-                gateName={ "OR" }
+                    gateName={ "OR" }
                     function={OR}
+                    color={"chocolate"}
                     inputs={ 2 }
                     outputs={ 1 }
                     addGate={props.addGate}
@@ -44,8 +47,9 @@ class ControlPanel extends React.Component {
 
         const newDummy = (
             <DummyGate
-            gateName={ newGate.name }
+                gateName={ newGate.name }
                 function={ func }
+                color={ newGate.color }
                 inputs={ newGate.inputs }
                 outputs={ newGate.outputs }
                 addGate={ this.props.addGate }

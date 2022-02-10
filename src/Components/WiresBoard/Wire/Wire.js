@@ -1,8 +1,8 @@
 import React from 'react';
-import Pin from '../../LogicGate/Pin';
 import styles from './Wire.module.scss';
 
 import reactDom from 'react-dom';
+import LogicGate from '../../LogicGate/LogicGate';
 
 function calculatePathRight(firstPinCoordinates, secondPinCoordinates) {
     const verticalDistance = secondPinCoordinates[1] - firstPinCoordinates[1];
@@ -42,6 +42,8 @@ function calculatePathRight(firstPinCoordinates, secondPinCoordinates) {
 function calculatePathLeft(firstPinCoordinates, secondPinCoordinates, paddings) {
     const verticalDistance = secondPinCoordinates[1] - firstPinCoordinates[1];
     const horizontalDistance = secondPinCoordinates[0] - firstPinCoordinates[0];
+
+    console.log ( paddings );
 
     const isAbove = verticalDistance > 0;
 
@@ -92,11 +94,11 @@ function calculatePathLeft(firstPinCoordinates, secondPinCoordinates, paddings) 
 
                 `
         }
- 
-    // nie zmiesci sie pomiedzy
+
+        // nie zmiesci sie pomiedzy
     } else {
 
-        if ( isAbove ){ 
+        if (isAbove) {
             middleRoute =
                 `
                     a20,20 0 0 0 12,-12
@@ -133,7 +135,6 @@ function calculatePathLeft(firstPinCoordinates, secondPinCoordinates, paddings) 
                 `
         }
     }
-
 
     // zawsze wychodzi 25 w prawo i o 
     // jezeli sie zmiesci
@@ -174,35 +175,42 @@ function calculatePath(firstPinBoundingClient, secondPinBoundingClient, paddings
 
 
 }
+
+// na wypadek jakby HTML ulegl zmianie
+function findParentGate(pin) {
+
+    let currentParent = pin.parentElement;
+
+    while (!(currentParent.classList.contains("LogicGate"))) {
+        currentParent = currentParent.parentElement;
+    }
+
+    return currentParent;
+}
 class Wire extends React.Component {
 
     constructor(props) {
 
         super(props);
 
-        // przechowujemy te piny, ktore dotycza bramek (a nie wezly startowe i koncowe)
-
-        const gatePins = [
-            props.firstPin,
-            props.secondPin,
-
-        ].filter(pin => pin instanceof Pin);
-
-        // pozycje pinow zostaja zaktualizowane, gdy przejezdzamy mysza po bramce
-        for (let pin of gatePins) {
-            pin.state.ref.current
-                .parentElement.parentElement.addEventListener('mousemove', this.updatePosition);
-        }
-
         this.firstPin = props.firstPin;
         this.secondPin = props.secondPin;
 
-         
+        // jezeli pin jest wezlem startowym, to on jest uznawany za bramke
+        const gates = [this.firstPin, this.secondPin].map(pin => {
+            return (pin.gate ? findParentGate(pin.state.ref.current) : pin.state.ref.current)
+        })
+
+        // pozycje pinow zostaja zaktualizowane, gdy przejezdzamy mysza po bramce / wezle
+        for (let gate of gates) {
+            gate.addEventListener('mousemove', this.updatePosition);
+        }
+
         this.firstPin.state.ref.current.addEventListener("signalChange", () => {
             this.setState({
                 "stateClass": this.getStateClass(),
             })
-        }) 
+        })
 
         this.state = {
             // pozycje pinow w momencie stworzenia polaczenia
@@ -210,30 +218,38 @@ class Wire extends React.Component {
             "secondPinPosition": props.secondPin.state.ref.current.getBoundingClientRect(),
 
             "stateClass": this.getStateClass(),
-            
+
         };
 
         // przyda sie do lepszego zaginania polaczen -
-        // [ odleglosc od gornej granicy bramki, odleglosc od dolnej granicy brmaki ]
-        if (this.firstPin.gate) {
+        // [ odleglosc od gornej granicy bramki, odleglosc od dolnej granicy bramki ]
+        {
+            const gateBoundingClientRect = gates[0].getBoundingClientRect();
+
             this.firstPinPaddings = [
-                reactDom.findDOMNode(this.firstPin.gate).getBoundingClientRect().top - this.state.firstPinPosition.top,
-                reactDom.findDOMNode(this.firstPin.gate).getBoundingClientRect().bottom - this.state.firstPinPosition.bottom
-            ]
-        } else this.firstPinPaddings = [0, 0];
 
-        if (this.secondPin.gate) {
+                gateBoundingClientRect.top - this.state.firstPinPosition.top,
+                gateBoundingClientRect.bottom - this.state.firstPinPosition.bottom
+            ]
+        }
+
+        {
+            const gateBoundingClientRect = gates[1].getBoundingClientRect();
+
             this.secondPinPaddings = [
-                reactDom.findDOMNode(this.secondPin.gate).getBoundingClientRect().top - this.state.secondPinPosition.top,
-                reactDom.findDOMNode(this.secondPin.gate).getBoundingClientRect().bottom - this.state.secondPinPosition.bottom
+                gateBoundingClientRect.top - this.state.secondPinPosition.top,
+                gateBoundingClientRect.bottom - this.state.secondPinPosition.bottom
             ]
-        } else this.secondPinPaddings = [0, 0];
-
+        }
 
     }
 
+
+
+
+
     getStateClass = () => {
-        if ( this.firstPin.state.value ) return styles.WireHighState;
+        if (this.firstPin.state.value) return styles.WireHighState;
         else return styles.WireLowState;
     }
 

@@ -27,8 +27,6 @@ class LogicGate extends React.Component {
         }
         this.inputs = [];
         this.outputs = [];
-
-        this.ref = React.createRef();
     }
 
     // dzięki tej funkcji piny dodają się do tablicy pinów output lub input
@@ -95,7 +93,8 @@ class LogicGate extends React.Component {
         }
         return (
             <div className={`LogicGate ${styles.LogicGate} ${style}`}
-                ref={this.props.reference} >
+                ref={this.props.reference}
+                >
                 <div className={styles.LogicGateInputs}>
                     { inputFields }
                 </div>

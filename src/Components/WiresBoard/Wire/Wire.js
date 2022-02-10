@@ -190,8 +190,8 @@ class Wire extends React.Component {
 
         // pozycje pinow zostaja zaktualizowane, gdy przejezdzamy mysza po bramce
         for (let pin of gatePins) {
-            // tymczasowo - TODO uzycie referencji do elementu html
-            reactDom.findDOMNode(pin.gate).addEventListener('mousemove', this.updatePosition);
+            pin.state.ref.current
+                .parentElement.parentElement.addEventListener('mousemove', this.updatePosition);
         }
 
         this.firstPin = props.firstPin;

@@ -1,9 +1,6 @@
 import React from 'react';
 import styles from './Wire.module.scss';
 
-import reactDom from 'react-dom';
-import LogicGate from '../../LogicGate/LogicGate';
-
 function calculatePathRight(firstPinCoordinates, secondPinCoordinates) {
     const verticalDistance = secondPinCoordinates[1] - firstPinCoordinates[1];
     const horizontalDistance = secondPinCoordinates[0] - firstPinCoordinates[0];
@@ -42,8 +39,6 @@ function calculatePathRight(firstPinCoordinates, secondPinCoordinates) {
 function calculatePathLeft(firstPinCoordinates, secondPinCoordinates, paddings) {
     const verticalDistance = secondPinCoordinates[1] - firstPinCoordinates[1];
     const horizontalDistance = secondPinCoordinates[0] - firstPinCoordinates[0];
-
-    console.log ( paddings );
 
     const isAbove = verticalDistance > 0;
 
@@ -213,7 +208,7 @@ class Wire extends React.Component {
         })
 
         this.state = {
-            // pozycje pinow w momencie stworzenia polaczenia
+            // pozycje pinow w momencie tworzenia polaczenia
             "firstPinPosition": props.firstPin.state.ref.current.getBoundingClientRect(),
             "secondPinPosition": props.secondPin.state.ref.current.getBoundingClientRect(),
 

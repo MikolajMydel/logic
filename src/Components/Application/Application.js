@@ -149,28 +149,6 @@ class Application extends React.Component {
         this.setState({"wires": newWiresList});
     }
 
-    changeInputWire = (oldFirstPin, secondPin, newFirstPin ) => {
-
-        let wireIndex;
-        const wiresArray = this.state.wires;
-
-        for ( let i = 0; i < wiresArray.length; i++ ){
-            if ( wiresArray[i].props.firstPin === oldFirstPin && wiresArray[i].props.secondPin === secondPin ){
-                wireIndex = i;
-                break;
-            }
-        }
-
-        let newWiresArray = [ ...this.state.wires ];
-
-        newWiresArray.splice ( wireIndex, 1 );
-
-        this.setState({"wires": newWiresArray});
-        
-        this.drawWire(newFirstPin, secondPin);
-        
-    }
-
     render() {
         return (
             <div className={ styles.Application }

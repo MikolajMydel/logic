@@ -35,23 +35,19 @@ class InputPin extends Pin {
     // zmień do jakiego outputa podłączony jest ten input
     changeParentPin(newParent) {
 
-        if (this.state.parentPin) {
+        if (this.state.parentPin !== newParent) {
 
-            if (this.state.parentPin !== newParent) {
+            if (this.state.parentPin) this.state.parentPin.disconnect(this);
+            
+            newParent.connect(this);
+            this.setState({
+                'parentPin': newParent
+            });
 
-                // usun polaczenie ze starym rodzicem
-                this.props.changeInputWire(this.state.parentPin, this, newParent);
-            }
-            this.state.parentPin.disconnect(this);
+            this.receiveSignal(newParent.state.value);
+            this.props.drawWire(newParent, this);
+        } 
 
-        } else this.props.drawWire(newParent, this);
-
-        newParent.connect(this);
-        this.setState({
-            'parentPin': newParent
-        });
-
-        this.receiveSignal(newParent.state.value);
     }
 
     receiveSignal(signal) {
@@ -67,8 +63,8 @@ class InputPin extends Pin {
     }
 
     render() {
-        return ( 
-            <button ref = {
+        return ( <
+            button ref = {
                 this.state.ref
             }
             className = {
@@ -76,9 +72,10 @@ class InputPin extends Pin {
             }
             onMouseDown = {
                 this.handleOnClick
-            }>
-                
-            </button>
+            } >
+
+            <
+            /button>
         )
     }
 }

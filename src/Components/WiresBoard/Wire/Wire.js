@@ -266,14 +266,13 @@ class Wire extends React.Component {
 
         return <path d = {
             calculatePath(this.state.firstPinPosition, this.state.secondPinPosition,
-                [this.firstPinPaddings, this.secondPinPaddings])
+                [this.firstPinPaddings, this.secondPinPaddings]).replace(/(\r\n|\n|\r| {2})/gm, "")
         }
         className = {
             `
                 ${styles.Wire}
                 ${this.state.stateClass}
             `
-
         }
         />
     }

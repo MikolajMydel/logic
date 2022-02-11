@@ -63,8 +63,7 @@ class InputPin extends Pin {
     }
 
     render() {
-        return ( <
-            button ref = {
+        return ( <button ref = {
                 this.state.ref
             }
             className = {
@@ -74,8 +73,7 @@ class InputPin extends Pin {
                 this.handleOnClick
             } >
 
-            <
-            /button>
+            </button>
         )
     }
 }

@@ -204,6 +204,14 @@ class Wire extends React.Component {
         this.firstPin.state.ref.current.addEventListener("signalChange", () => {
             this.setState({
                 "stateClass": this.getStateClass(),
+            });
+
+        })
+
+        this.secondPin.state.ref.current.addEventListener("click", () => {
+            this.setState({
+                // render tylko, gdy oba piny sa polaczone
+                "render": this.firstPin === this.secondPin.state.parentPin,
             })
         })
 
@@ -213,6 +221,7 @@ class Wire extends React.Component {
             "secondPinPosition": props.secondPin.state.ref.current.getBoundingClientRect(),
 
             "stateClass": this.getStateClass(),
+            "render": true,
 
         };
 
@@ -239,10 +248,6 @@ class Wire extends React.Component {
 
     }
 
-
-
-
-
     getStateClass = () => {
         if (this.firstPin.state.value) return styles.WireHighState;
         else return styles.WireLowState;
@@ -257,6 +262,8 @@ class Wire extends React.Component {
     }
 
     render() {
+        if ( !this.state.render ) return null;
+
         return <path d = {
             calculatePath(this.state.firstPinPosition, this.state.secondPinPosition,
                 [this.firstPinPaddings, this.secondPinPaddings])

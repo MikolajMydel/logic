@@ -25,7 +25,7 @@ class Application extends React.Component {
 
     }
 
-    boardRef = React.createRef()
+    boardRef = React.createRef();
 
     // funkcja zmieniajaca aktualnie wybrane wyjscie - pozwala na uzycie kliknietego wyjscia na wejscie bramki logicznej
     setFocusedElement = ( element ) => {
@@ -61,7 +61,7 @@ class Application extends React.Component {
             <LogicGate
 
                 drawWire = { this.drawWire }
-                removeWire = { this.removeWire }
+                changeInputWire = { this.changeInputWire }
 
                 gateType={ args.gateLogic }
                 inputs={ args.inputCount }
@@ -149,29 +149,26 @@ class Application extends React.Component {
         this.setState({"wires": newWiresList});
     }
 
-    removeWire = (firstPin, secondPin, callback ) => {
+    changeInputWire = (oldFirstPin, secondPin, newFirstPin ) => {
 
         let wireIndex;
         const wiresArray = this.state.wires;
-    
-        for (let i = 0; i < wiresArray.length; i++){
-            if ( wiresArray[i].props.firstPin === firstPin && wiresArray[i].props.secondPin === secondPin ){
-                    wireIndex = i;
-                    break;
-                }
-        }
-        
-        const newWiresArray = [ ...this.state.wires ];
-        newWiresArray.splice ( wireIndex, 1 );
-    
-        this.setState({
-            "wires": newWiresArray,
-    
-        }, 
-            () => { 
-                if (callback) callback();
+
+        for ( let i = 0; i < wiresArray.length; i++ ){
+            if ( wiresArray[i].props.firstPin === oldFirstPin && wiresArray[i].props.secondPin === secondPin ){
+                wireIndex = i;
+                break;
             }
-        )
+        }
+
+        let newWiresArray = [ ...this.state.wires ];
+
+        newWiresArray.splice ( wireIndex, 1 );
+
+        this.setState({"wires": newWiresArray});
+        
+        this.drawWire(newFirstPin, secondPin);
+        
     }
 
     render() {

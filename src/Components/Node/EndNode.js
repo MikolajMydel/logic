@@ -40,13 +40,6 @@ class EndNode extends Node {
         }
     }
 
-    handleOnClick = () => {
-        const newParent = this.props.getFocusedElement();
-        if(newParent){
-            this.changeParentPin(newParent);
-        }
-    }
-
     receiveSignal(signal) {
         this.setState({'value': signal});
 	}

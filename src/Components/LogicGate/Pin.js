@@ -8,8 +8,11 @@ class Pin extends React.Component {
         super();
         this.index = props.index;
         this.gate = props.gate;
-        if(props.mount)
-            props.mount(this); // dodaj siebie do tablicy pinów swojej bramki
+    }
+
+    componentDidMount() {
+        if(this.props.mount)
+            this.props.mount(this); // dodaj siebie do tablicy pinów swojej bramki
     }
 }
 

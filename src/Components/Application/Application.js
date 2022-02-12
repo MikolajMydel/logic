@@ -4,9 +4,12 @@ import LogicGate from "../LogicGate/LogicGate";
 import StartNode from "../Node/StartNode";
 import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
+import Menu from "../Menu/Menu"
 import {findReact, makeNewGate} from "../../functions";
 import {AND, NOT, OR} from "../../logicalFunctions"
-import Menu from "../Menu/Menu"
+import Wire from '../WiresBoard/Wire/Wire.js';
+import WiresBoard from "../WiresBoard/WiresBoard";
+import remove from "../../Events/remove";
 
 function validateGateName(name) {
     // nazwa może składać się wyłącznie z liter i cyfr
@@ -23,13 +26,14 @@ class Application extends React.Component {
             inputs: [],
             board: [],
             outputs: [],
-        }
+        },
+        wires: [],
     }
 
     boardRef = React.createRef()
     canvasRef = React.createRef()
     controlRef = React.createRef()
-    controlPanelObject;
+    controlPanelObject
 
     // funkcja zmieniajaca aktualnie wybrane wyjscie - pozwala na uzycie kliknietego wyjscia na wejscie bramki logicznej
     setFocusedElement = ( element ) => {
@@ -72,7 +76,8 @@ class Application extends React.Component {
             );
         else // endNode
             elements.outputs.push(
-                <EndNode getFocusedElement={ this.getFocusedElement } position={ pos }/>
+                <EndNode drawWire={ this.drawWire } removeWire={ this.removeWire }
+                getFocusedElement={ this.getFocusedElement } position={ pos }/>
             );
         this.setState ({'elements': elements});
     }
@@ -87,6 +92,7 @@ class Application extends React.Component {
                 outputs={ args.outputCount }
                 function={ args.function }
                 style={ args.style }
+                drawWire = { this.drawWire }
                 getFocusedElement={ this.getFocusedElement }
                 setFocusedElement={ this.setFocusedElement }
                 reference={el => newGate = el}
@@ -159,12 +165,18 @@ class Application extends React.Component {
             if (y + (element.offsetHeight) > board.offsetHeight + board.offsetTop){
                 const comp = findReact(element);
                 comp.selfDestruct();
+                element.dispatchEvent(remove);
 
                 const focused = this.getFocusedElement();
                 if(focused && focused.gate === comp)
                     this.setFocusedElement(undefined);
             }
         }
+    }
+
+    drawWire = (firstPin, secondPin) => {
+        const newWiresList = this.state.wires.concat([ <Wire firstPin={firstPin} secondPin={secondPin} /> ]);
+        this.setState({"wires": newWiresList});
     }
 
     // zapisuje obszar roboczy jako nową bramkę do projektu
@@ -196,7 +208,7 @@ class Application extends React.Component {
 
     // wyczyść obszar roboczy
     clearCanvas = () => {
-        this.setState({focusedElement: undefined, elements: {inputs: [], board: [], outputs: []}})
+        this.setState({focusedElement: undefined, elements: {inputs: [], board: [], outputs: []}, wires: []})
 
     }
 
@@ -208,6 +220,7 @@ class Application extends React.Component {
                 onMouseUp={ () => this.drop() }
             >
                 <Menu functions={[this.saveGate, this.clearCanvas]}/>
+                <WiresBoard wires={this.state.wires} />
                 <div className={ styles.Canvas }
                     ref={el => this.canvasRef = el}
                 >
@@ -219,7 +232,9 @@ class Application extends React.Component {
                     <div className={ styles.Board }
                         ref={this.boardRef}
                     >
+
                         { this.state.elements.board }
+
                     </div>
                     <div className={ `Area ${styles.OutputArea}` }
                         onClick={ (e) => this.addNode(e, 'endNode')}

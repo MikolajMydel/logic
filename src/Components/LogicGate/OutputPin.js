@@ -1,11 +1,16 @@
+import React from "react";
 import Pin from "./Pin";
 
+import signalChange from "../../Events/signalChange";
 class OutputPin extends Pin {
     constructor(props) {
         super(props);
         this.state = {
             childPins: [],
             value: undefined,
+
+            ref: React.createRef(),
+
         }
     }
 
@@ -30,6 +35,8 @@ class OutputPin extends Pin {
 
     receiveSignal(signal) {
         this.setState({'value': signal}, function() {
+            this.state.ref.current.dispatchEvent(signalChange);
+
             for (let i = 0; i < this.state.childPins.length; i++) {
                 this.state.childPins[i].receiveSignal(signal);
             }
@@ -37,7 +44,8 @@ class OutputPin extends Pin {
 	}
 
     render(){
-        return <button className={ this.style.LogicGateOutput } onClick={ () => this.props.setFocusedElement(this) }> </button>;
+        return <button ref={ this.state.ref } className={ this.style.LogicGateOutput } 
+            onClick={ () => this.props.setFocusedElement(this) }> </button>;
     }
 }
 

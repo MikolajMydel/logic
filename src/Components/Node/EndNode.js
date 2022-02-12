@@ -1,39 +1,46 @@
-import Node from './Node';
+import React from "react";
+import parentChange from "../../Events/parentChange";
+import Node from "./Node";
 
 class EndNode extends Node {
-    state = {
-        value: undefined,
-        parentPin: undefined,
-    }
+  state = {
+    value: undefined,
+    parentPin: undefined,
 
-    handleOnClick = (e) => {
-        if(e.button === 0) { // lewy
-            const newParent = this.props.getFocusedElement();
-            if(newParent)
-                this.changeParentPin(newParent);
-        } else if(e.button === 1) { // srodkowy
-            this.disconnect();
+    ref: React.createRef(),
+  };
+
+  handleOnClick = (e) => {
+    const newParent = this.props.getFocusedElement();
+    if (newParent) this.changeParentPin(newParent);
+  };
+
+  disconnect = () => this.changeParentPin(undefined);
+
+  changeParentPin = (newParent) => {
+    if (newParent !== this.state.parentPin) {
+      if (this.state.parentPin) this.state.parentPin.disconnect(this);
+
+      this.setState(
+        { parentPin: newParent },
+        // funkcja powiadamiajaca przewod o usunieciu polaczenia
+        () => {
+          this.state.ref.current.dispatchEvent(parentChange);
         }
-    }
+      );
 
-    disconnect() {
-        if(!this.state.parentPin) return;
-        this.state.parentPin.disconnect(this);
-        this.setState({'parentPin': undefined});
-        this.receiveSignal(undefined);
-    }
-
-    changeParentPin(newParent) {
-        if (this.state.parentPin)
-            this.state.parentPin.disconnect(this);
+      if (newParent) {
         newParent.connect(this);
-        this.setState({'parentPin': newParent});
+        this.props.drawWire(newParent, this);
         this.receiveSignal(newParent.state.value);
-    }
+      } else this.receiveSignal(undefined);
 
-    receiveSignal(signal) {
-        this.setState({'value': signal});
-	}
+    }
+  };
+
+  receiveSignal(signal) {
+    this.setState({ value: signal });
+  }
 }
 
 export default EndNode;

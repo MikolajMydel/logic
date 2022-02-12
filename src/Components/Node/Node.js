@@ -20,10 +20,12 @@ class Node extends React.Component {
         const position = this.props.position + 'px';
 
         return (
-            <div className={ `${styles.Node} ${style}` } onMouseDown={ this.handleOnClick } style={{ top: position }} >
+            <div ref={this.state.ref}
+            className={ `${styles.Node} ${style}` } onMouseDown={ this.handleOnClick } style={{ top: position }} >
             </div>
         )
     }
+
 }
 
 export default Node;

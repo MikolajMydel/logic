@@ -52,15 +52,19 @@ class LogicGate extends React.Component {
         if(value === undefined) value = "undefined"
 
         let inputFields = [];
+
         for (let i = 0; i < this.props.inputs; i++){
             inputFields.push((
                 <InputPin
+                    drawWire={ this.props.drawWire }
+
                     index={ i }
                     gate={ this }
                     getFocusedElement={ this.props.getFocusedElement }
                     mount={ this.mountPin } />
             ));
         }
+
         let outputFields = [];
         for (let i = 0; i < this.props.outputs; i++){
             outputFields.push((
@@ -75,7 +79,8 @@ class LogicGate extends React.Component {
         return (
             <div className={`LogicGate ${styles.LogicGate}`}
                 style={this.props.style}
-                ref={this.props.reference} >
+                ref={this.props.reference}
+            >
                 <div className={styles.LogicGateInputs}>
                     { inputFields }
                 </div>

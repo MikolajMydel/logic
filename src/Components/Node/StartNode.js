@@ -1,9 +1,13 @@
+import React from 'react';
 import Node from './Node';
-
+import signalChange from '../../Events/signalChange';
 class StartNode extends Node {
     state = {
         value: false,
         childPins: [],
+
+        ref: React.createRef(),
+
     }
 
     // przylaczanie innego pina jako dziecko
@@ -38,6 +42,8 @@ class StartNode extends Node {
             for (let i = 0; i < this.state.childPins.length; i++) {
                 this.state.childPins[i].receiveSignal(val);
             }
+
+            this.state.ref.current.dispatchEvent(signalChange);
         });
     }
 }

@@ -2,6 +2,10 @@
     width: 100%;
     height: 24px;
     background-color: #444;
+
+    position: absolute;
+    z-index: 1;
+
     ul {
         list-style: none;
         margin: 0;
@@ -16,6 +20,8 @@
             border: 1px solid #222;
             background-color: #ffb;
             font-size: 9pt;
+
+            cursor: pointer;
         }
     }
 }

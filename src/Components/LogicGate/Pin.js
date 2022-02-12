@@ -6,6 +6,7 @@ class Pin extends React.Component {
 
     constructor(props) {
         super();
+
         this.index = props.index;
         this.gate = props.gate;
     }

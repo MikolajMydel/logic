@@ -1,4 +1,5 @@
 import React from "react";
+import parentChange from "../../Events/parentChange";
 import Pin from "./Pin";
 
 class InputPin extends Pin {
@@ -39,7 +40,7 @@ class InputPin extends Pin {
             newParent.connect(this);
             this.setState({
                 'parentPin': newParent
-            });
+            }, () => this.state.ref.current.dispatchEvent(parentChange));
 
             this.receiveSignal(newParent.state.value);
             this.props.drawWire(newParent, this);

@@ -41,7 +41,7 @@ class Wire extends React.Component {
 
         })
 
-        this.secondPin.state.ref.current.addEventListener("click", () => {
+        this.secondPin.state.ref.current.addEventListener("parentChange", () => {
             this.setState({
                 // render tylko, gdy oba piny sa polaczone
                 "render": this.firstPin === this.secondPin.state.parentPin,

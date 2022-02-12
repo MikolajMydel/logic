@@ -1,4 +1,5 @@
 import React from 'react';
+import parentChange from '../../Events/parentChange';
 import Node from './Node';
 
 class EndNode extends Node {
@@ -10,20 +11,9 @@ class EndNode extends Node {
     }
 
     handleOnClick = (e) => {
-        if(e.button === 0) { // lewy
-            const newParent = this.props.getFocusedElement();
+        const newParent = this.props.getFocusedElement();
             if(newParent)
                 this.changeParentPin(newParent);
-        } else if(e.button === 1) { // srodkowy
-            this.disconnect();
-        }
-    }
-
-    disconnect() {
-        if(!this.state.parentPin) return;
-        this.state.parentPin.disconnect(this);
-        this.setState({'parentPin': undefined});
-        this.receiveSignal(undefined);
     }
 
     changeParentPin = (newParent) => {
@@ -35,7 +25,11 @@ class EndNode extends Node {
 
             this.props.drawWire( newParent, this );
 
-            this.setState({'parentPin': newParent});
+            this.setState({'parentPin': newParent},
+                // funkcja powiadamiajaca przewod o usunieciu polaczenia
+                () => { this.state.ref.current.dispatchEvent(parentChange)}
+            );
+
             this.receiveSignal(newParent.state.value);
         }
     }

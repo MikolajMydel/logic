@@ -17,8 +17,7 @@ class InputPin extends Pin {
     handleOnClick = (e) => {
         const newParent = this.props.getFocusedElement();
         if (newParent)
-                this.changeParentPin(newParent);
-        
+            this.changeParentPin(newParent);
     }
 
     disconnect() {
@@ -36,7 +35,6 @@ class InputPin extends Pin {
         if (this.state.parentPin !== newParent) {
 
             if (this.state.parentPin) this.state.parentPin.disconnect(this);
-            
             newParent.connect(this);
             this.setState({
                 'parentPin': newParent
@@ -44,7 +42,7 @@ class InputPin extends Pin {
 
             this.receiveSignal(newParent.state.value);
             this.props.drawWire(newParent, this);
-        } 
+        }
 
     }
 

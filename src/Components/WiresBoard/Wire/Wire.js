@@ -46,7 +46,7 @@ class Wire extends React.Component {
                 // render tylko, gdy oba piny sa polaczone
                 "render": this.firstPin === this.secondPin.state.parentPin,
             })
-        })
+        });
 
         this.state = {
             // pozycje pinow w momencie tworzenia polaczenia
@@ -104,6 +104,7 @@ class Wire extends React.Component {
         });
     }
 
+
     getStateClass = () => {
         if (this.firstPin.state.value) return styles.WireHighState;
         else return styles.WireLowState;
@@ -119,6 +120,7 @@ class Wire extends React.Component {
 
     render() {
         if (!this.state.render) return null;
+
         return <path d = {
             calculatePath(this.state.firstPinPosition, this.state.secondPinPosition,
                 [this.firstPinPaddings, this.secondPinPaddings]).replace(/(\r\n|\n|\r| {2})/gm, "")

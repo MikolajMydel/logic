@@ -71,7 +71,6 @@ class LogicGate extends React.Component {
             inputFields.push((
                 <InputPin
                     drawWire={ this.props.drawWire }
-                    changeInputWire={ this.props.changeInputWire }
 
                     index={ i }
                     gate={ this }

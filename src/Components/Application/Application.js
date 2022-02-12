@@ -61,7 +61,6 @@ class Application extends React.Component {
             <LogicGate
 
                 drawWire = { this.drawWire }
-                changeInputWire = { this.changeInputWire }
 
                 gateType={ args.gateLogic }
                 inputs={ args.inputCount }

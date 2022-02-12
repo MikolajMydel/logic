@@ -248,6 +248,23 @@ class Wire extends React.Component {
 
     }
 
+    handleOnMouseDown = (e) => {
+        if ( e.button === 1 ){ // srodkowy przycisk myszy
+            this.removeConnection();
+        } 
+    }
+
+    removeConnection = () => {
+        // usuwam polaczenie z perspektywy dziecka i rodzica
+        this.secondPin.disconnect();
+
+        // usuwam graficzny przewod
+        this.setState({
+            "render": false,
+        })
+        
+    }
+
     getStateClass = () => {
         if (this.firstPin.state.value) return styles.WireHighState;
         else return styles.WireLowState;
@@ -274,6 +291,8 @@ class Wire extends React.Component {
                 ${this.state.stateClass}
             `
         }
+
+        onMouseDown={this.handleOnMouseDown}
         />
     }
 }

@@ -14,13 +14,10 @@ class InputPin extends Pin {
     }
 
     handleOnClick = (e) => {
-        if (e.button === 0) { // lewy
-            const newParent = this.props.getFocusedElement();
-            if (newParent)
+        const newParent = this.props.getFocusedElement();
+        if (newParent)
                 this.changeParentPin(newParent);
-        } else if (e.button === 1) { // srodkowy
-            this.disconnect();
-        }
+        
     }
 
     disconnect() {
@@ -69,9 +66,9 @@ class InputPin extends Pin {
             className = {
                 this.style.LogicGateInput
             }
-            onMouseDown = {
+            onClick = {
                 this.handleOnClick
-            } >
+            }>
 
             </button>
         )

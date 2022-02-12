@@ -1,6 +1,6 @@
 import React from 'react';
 import Node from './Node';
-import signalChange from '../WiresBoard/Wire/signalChangeEvent';
+import signalChange from '../../Events/signalChange';
 class StartNode extends Node {
     state = {
         value: false,

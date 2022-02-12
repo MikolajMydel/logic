@@ -280,7 +280,6 @@ class Wire extends React.Component {
 
     render() {
         if ( !this.state.render ) return null;
-
         return <path d = {
             calculatePath(this.state.firstPinPosition, this.state.secondPinPosition,
                 [this.firstPinPaddings, this.secondPinPaddings]).replace(/(\r\n|\n|\r| {2})/gm, "")

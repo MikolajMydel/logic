@@ -1,8 +1,7 @@
 import React from "react";
 import Pin from "./Pin";
 
-import signalChange from "../WiresBoard/Wire/signalChangeEvent";
-
+import signalChange from "../../Events/signalChange";
 class OutputPin extends Pin {
     constructor(props) {
         super(props);

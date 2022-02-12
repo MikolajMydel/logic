@@ -8,7 +8,7 @@ import Wire from '../WiresBoard/Wire/Wire.js';
 import {findReact} from "../../functions";
 import Menu from "../Menu/Menu"
 import WiresBoard from "../WiresBoard/WiresBoard";
-
+import remove from "../../Events/remove";
 
 class Application extends React.Component {
     state = {
@@ -137,8 +137,12 @@ class Application extends React.Component {
             // jeżeli przeniesiony poniżej poziomu 'board', usuń
             if (y + (element.offsetHeight) > board.offsetHeight + board.offsetTop){
                 const comp = findReact(element);
-                if(comp.selfDestruct)
+                if(comp.selfDestruct){
                     comp.selfDestruct();
+
+                    // event powodujacy usuniecie przewodu
+                    element.dispatchEvent(remove);
+                } 
             }
         }
     }

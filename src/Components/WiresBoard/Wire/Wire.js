@@ -192,13 +192,15 @@ class Wire extends React.Component {
         this.secondPin = props.secondPin;
 
         // jezeli pin jest wezlem startowym, to on jest uznawany za bramke
-        const gates = [this.firstPin, this.secondPin].map(pin => {
+        this.gates = [this.firstPin, this.secondPin].map(pin => {
             return (pin.gate ? findParentGate(pin.state.ref.current) : pin.state.ref.current)
         })
 
         // pozycje pinow zostaja zaktualizowane, gdy przejezdzamy mysza po bramce / wezle
-        for (let gate of gates) {
-            gate.addEventListener('mousemove', this.updatePosition);
+        for (let gate of this.gates) {
+            gate.addEventListener("mousemove", this.updatePosition);
+
+            gate.addEventListener("remove", this.removeConnection);
         }
 
         this.firstPin.state.ref.current.addEventListener("signalChange", () => {
@@ -228,7 +230,7 @@ class Wire extends React.Component {
         // przyda sie do lepszego zaginania polaczen -
         // [ odleglosc od gornej granicy bramki, odleglosc od dolnej granicy bramki ]
         {
-            const gateBoundingClientRect = gates[0].getBoundingClientRect();
+            const gateBoundingClientRect = this.gates[0].getBoundingClientRect();
 
             this.firstPinPaddings = [
 
@@ -238,7 +240,7 @@ class Wire extends React.Component {
         }
 
         {
-            const gateBoundingClientRect = gates[1].getBoundingClientRect();
+            const gateBoundingClientRect = this.gates[1].getBoundingClientRect();
 
             this.secondPinPaddings = [
                 gateBoundingClientRect.top - this.state.secondPinPosition.top,
@@ -249,20 +251,26 @@ class Wire extends React.Component {
     }
 
     handleOnMouseDown = (e) => {
-        if ( e.button === 1 ){ // srodkowy przycisk myszy
+        if (e.button === 1) { // srodkowy przycisk myszy
             this.removeConnection();
-        } 
+        }
     }
 
     removeConnection = () => {
+
+        // usuwam event listenery z obu pinow
+        for (let gate of this.gates) {
+            gate.removeEventListener("mousemove", this.updatePosition);
+            gate.removeEventListener("remove", this.removeConnection);
+        }
+
         // usuwam polaczenie z perspektywy dziecka i rodzica
         this.secondPin.disconnect();
 
         // usuwam graficzny przewod
         this.setState({
             "render": false,
-        })
-        
+        });
     }
 
     getStateClass = () => {
@@ -279,7 +287,7 @@ class Wire extends React.Component {
     }
 
     render() {
-        if ( !this.state.render ) return null;
+        if (!this.state.render) return null;
         return <path d = {
             calculatePath(this.state.firstPinPosition, this.state.secondPinPosition,
                 [this.firstPinPaddings, this.secondPinPaddings]).replace(/(\r\n|\n|\r| {2})/gm, "")
@@ -291,7 +299,9 @@ class Wire extends React.Component {
             `
         }
 
-        onMouseDown={this.handleOnMouseDown}
+        onMouseDown = {
+            this.handleOnMouseDown
+        }
         />
     }
 }

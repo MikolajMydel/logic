@@ -1,4 +1,67 @@
 import EndNode from "./Components/Node/EndNode";
+import StartNode from "./Components/Node/StartNode";
+
+//zwraca gotową funkcję na podstawie tablicy stringów z funkcjami
+export function retrieveFunction(functions){
+    let funcs = functions.map(f => eval(f));
+    return (inputs) => {
+        let output = [];
+        for(let i=0; i<funcs.length; i++){
+            output.push(funcs[i](inputs));
+        }
+        return output;
+    }
+}
+const compareTop = (a, b) => parseInt(a.style.top.slice(0,-2)) - parseInt(b.style.top.slice(0,-2));
+
+// zapisuje customową funkcję w formie stringa dla nowej bramki na podstawie
+// podanych obiektów endNode
+export function makeNewGate(canvas, name, color) {
+    const inputArea = canvas.childNodes[0];
+    const outputArea = canvas.childNodes[2];
+
+    // posortowane od najwyżej położonego do najniżej
+    const endNodes  = [...outputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
+    const startNodes = [...inputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
+
+    const solve = (output, alreadyVisited) => {
+        if (!output || alreadyVisited.indexOf(output) !== -1) // był już sprawdzany
+            return;
+        if(output instanceof StartNode){
+            for(let i=0; i<startNodes.length; i++){
+                if(output === startNodes[i])
+                    return "i[" + i + "]";
+            }
+        } else {
+            alreadyVisited.push(output);
+            const gate = output.gate;
+            let args = [];
+            for(const input of gate.inputs){
+                const par = input.state.parentPin;
+                if(par){
+                    args.push(solve(par, alreadyVisited));
+                } else // input bramki nie jest do niczego podpięty
+                    args.push(undefined)
+            }
+            return (
+                gate.name + "([" + args + "])[" + output.index + "]"
+            );
+        }
+    }
+
+    let output = [];
+    for(let endNode of endNodes) {
+        let func = "(i) => " + solve(endNode.state.parentPin, []);
+        output.push(func);
+    }
+    return {
+        name: name,
+        inputs: startNodes.length,
+        outputs: endNodes.length,
+        functions: output,
+        color: color,
+    };
+}
 
 // https://stackoverflow.com/questions/29321742/react-getting-a-component-from-a-dom-element-for-debugging/39165137#39165137
 // znajdź komponent React na podstawie elementu DOM

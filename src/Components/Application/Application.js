@@ -4,12 +4,19 @@ import LogicGate from "../LogicGate/LogicGate";
 import StartNode from "../Node/StartNode";
 import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
-import Wire from '../WiresBoard/Wire/Wire.js';
-import {findReact} from "../../functions";
 import Menu from "../Menu/Menu"
+import {findReact, makeNewGate} from "../../functions";
+import {AND, NOT, OR} from "../../logicalFunctions"
+import Wire from '../WiresBoard/Wire/Wire.js';
 import WiresBoard from "../WiresBoard/WiresBoard";
 import remove from "../../Events/remove";
 
+function validateGateName(name) {
+    // nazwa może składać się wyłącznie z liter i cyfr
+    // oraz musi zaczynać się od litery
+    var regex = /^[A-Za-z][A-Za-z0-9]*$/;
+    return regex.test(name);
+}
 class Application extends React.Component {
     state = {
         focusedElement: undefined,    // aktualnie wybrane wyjście
@@ -20,12 +27,13 @@ class Application extends React.Component {
             board: [],
             outputs: [],
         },
-
         wires: [],
-
     }
 
-    boardRef = React.createRef();
+    boardRef = React.createRef()
+    canvasRef = React.createRef()
+    controlRef = React.createRef()
+    controlPanelObject
 
     // funkcja zmieniajaca aktualnie wybrane wyjscie - pozwala na uzycie kliknietego wyjscia na wejscie bramki logicznej
     setFocusedElement = ( element ) => {
@@ -34,6 +42,26 @@ class Application extends React.Component {
 
     // funkcja zwracajaca aktualnie wybrane wyjscie - umozliwia kliknietej bramce logicznej zmiane wejscia na wczesniej klikniete wyjscie
     getFocusedElement = () => this.state.focusedElement;
+
+    // tylko raz po wyrenderowaniu tego komponentu
+    componentDidMount(){
+        global.NOT = NOT;
+        global.AND = AND;
+        global.OR = OR;
+
+        this.controlPanelObject = findReact(this.controlRef.current);
+
+        // wczytaj zapisane bramki z localstorage
+        let saved;
+        if(localStorage.getItem("savedGates") !== null)
+            saved = JSON.parse(localStorage.getItem("savedGates"));
+        else
+            saved = [];
+
+        for(const savedGate of saved){
+            this.controlPanelObject.addDummy(savedGate);
+        }
+    }
 
     addNode = (e, type) => {
         // dodaj tylko jeżeli kliknięto na czysty obszar (nie np istniejący node)
@@ -48,7 +76,7 @@ class Application extends React.Component {
             );
         else // endNode
             elements.outputs.push(
-                <EndNode drawWire={ this.drawWire } removeWire={ this.removeWire } 
+                <EndNode drawWire={ this.drawWire } removeWire={ this.removeWire }
                 getFocusedElement={ this.getFocusedElement } position={ pos }/>
             );
         this.setState ({'elements': elements});
@@ -59,12 +87,12 @@ class Application extends React.Component {
         let newGate;
         elements.board.push(
             <LogicGate
-
-                drawWire = { this.drawWire }
-
-                gateType={ args.gateLogic }
+                gateName={ args.gateName }
                 inputs={ args.inputCount }
                 outputs={ args.outputCount }
+                function={ args.function }
+                style={ args.style }
+                drawWire = { this.drawWire }
                 getFocusedElement={ this.getFocusedElement }
                 setFocusedElement={ this.setFocusedElement }
                 reference={el => newGate = el}
@@ -136,20 +164,52 @@ class Application extends React.Component {
             // jeżeli przeniesiony poniżej poziomu 'board', usuń
             if (y + (element.offsetHeight) > board.offsetHeight + board.offsetTop){
                 const comp = findReact(element);
-                if(comp.selfDestruct){
-                    comp.selfDestruct();
+                comp.selfDestruct();
+                element.dispatchEvent(remove);
 
-                    // event powodujacy usuniecie przewodu
-                    element.dispatchEvent(remove);
-                } 
+                const focused = this.getFocusedElement();
+                if(focused && focused.gate === comp)
+                    this.setFocusedElement(undefined);
             }
         }
     }
 
     drawWire = (firstPin, secondPin) => {
         const newWiresList = this.state.wires.concat([ <Wire firstPin={firstPin} secondPin={secondPin} /> ]);
-
         this.setState({"wires": newWiresList});
+    }
+
+    // zapisuje obszar roboczy jako nową bramkę do projektu
+    saveGate = () => {
+        do {
+            // tutaj będzie wywoływane okno zapisu bramki
+            // z wyborem koloru itd. na razie tylko prompt o nazwe
+            var name = prompt('podaj nazwę dla tej bramki');
+            // sprawdza poprawność nazwy i czy nie jest już taka zdefiniowana
+        } while(!validateGateName(name) || global[name] !== undefined);
+        do {
+            var color = prompt('podaj kolor');
+        } while(color === "");
+
+        const newGateObject = makeNewGate(this.canvasRef, name, color);
+
+        // zapisywanie w localStorage
+        let saved;
+        if(localStorage.getItem("savedGates") !== null)
+            saved = JSON.parse(localStorage.getItem("savedGates"));
+        else
+            saved = [];
+        saved.push(newGateObject);
+        localStorage.setItem("savedGates", JSON.stringify(saved));
+
+        // dodaj nową bramkę do zasobnika
+        this.controlPanelObject.addDummy(newGateObject);
+    }
+
+    // wyczyść obszar roboczy
+    clearCanvas = () => {
+        this.setState({focusedElement: undefined, elements: {inputs: [], board: [], outputs: []}, wires: []})
+
     }
 
     render() {
@@ -159,11 +219,11 @@ class Application extends React.Component {
                 onMouseMove={ (e) => this.move(e) }
                 onMouseUp={ () => this.drop() }
             >
-                <Menu />
-                
+                <Menu functions={[this.saveGate, this.clearCanvas]}/>
                 <WiresBoard wires={this.state.wires} />
-
-                <div className={ styles.Canvas }>
+                <div className={ styles.Canvas }
+                    ref={el => this.canvasRef = el}
+                >
                     <div className={ `Area ${styles.InputArea}` }
                         onClick={ (e) => this.addNode(e, 'startNode')}
                     >
@@ -182,7 +242,7 @@ class Application extends React.Component {
                         { this.state.elements.outputs }
                     </div>
                 </div>
-                <ControlPanel addGate={this.addGate} />
+                <ControlPanel addGate={this.addGate} reference={this.controlRef}/>
             </div>
         )
     }

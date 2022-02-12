@@ -9,7 +9,10 @@ export const AND = (inputs) => {
     return [true];
 }
 
-export const NOT = (inputs) => [!(inputs[0])]
+export const NOT = (inputs) => {
+    if(inputs[0] === undefined) return [undefined];
+    return [!(inputs[0])];
+}
 
 // jezeli jest chociaz jeden true - zwroc true
 export const OR = (inputs) => {

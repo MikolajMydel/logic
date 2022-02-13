@@ -4,9 +4,9 @@ import Node from "./Node";
 
 class EndNode extends Node {
   state = {
+    render: false,
     value: undefined,
     parentPin: undefined,
-
     ref: React.createRef(),
   };
 
@@ -14,6 +14,8 @@ class EndNode extends Node {
     if (e.button === 0) {
       const newParent = this.props.getFocusedElement();
       if (newParent) this.changeParentPin(newParent);
+    } else if (e.button === 2) {
+        this.selfDestruct();
     }
   };
 
@@ -38,6 +40,11 @@ class EndNode extends Node {
       } else this.receiveSignal(undefined);
     }
   };
+
+  selfDestruct() {
+    this.disconnect();
+    this.setState({render: false});
+  }
 
   receiveSignal(signal) {
     this.setState({ value: signal });

@@ -6,6 +6,7 @@ class Node extends React.Component {
     get value() { return this.state.value }
 
     render() {
+        if(this.state.render === false) return null;
         let style;
         const value = this.state.value;
 

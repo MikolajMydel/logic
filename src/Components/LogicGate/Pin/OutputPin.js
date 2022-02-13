@@ -1,7 +1,7 @@
 import React from "react";
 import Pin from "./Pin";
 
-import signalChange from "../../Events/signalChange";
+import signalChange from "../../../Events/signalChange";
 class OutputPin extends Pin {
     constructor(props) {
         super(props);
@@ -44,7 +44,7 @@ class OutputPin extends Pin {
 	}
 
     render(){
-        return <button ref={ this.state.ref } className={ this.style.LogicGateOutput } 
+        return <button ref={ this.state.ref } className={ this.style.Pin }
             onClick={ () => this.props.setFocusedElement(this) }> </button>;
     }
 }

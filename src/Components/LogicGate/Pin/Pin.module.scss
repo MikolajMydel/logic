@@ -1,0 +1,12 @@
+@import '../variables';
+
+.Pin {
+    height: $input-size;
+    width: $input-size;
+
+    border: 2px solid #000;
+    border-radius: 100%;
+    cursor: pointer;
+
+    margin: 2px 0;
+}

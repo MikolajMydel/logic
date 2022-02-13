@@ -1,12 +1,11 @@
 import React from "react";
-import styles from "./LogicGate.module.scss";
+import styles from './Pin.module.scss';
 
 class Pin extends React.Component {
-    style = styles;
 
     constructor(props) {
         super();
-
+        this.style = styles;
         this.index = props.index;
         this.gate = props.gate;
     }

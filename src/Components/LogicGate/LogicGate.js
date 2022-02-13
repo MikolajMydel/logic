@@ -1,6 +1,6 @@
 import React from "react";
-import OutputPin from "./OutputPin";
-import InputPin from "./InputPin";
+import OutputPin from "./Pin/OutputPin";
+import InputPin from "./Pin/InputPin";
 import styles from "./LogicGate.module.scss";
 
 class LogicGate extends React.Component {

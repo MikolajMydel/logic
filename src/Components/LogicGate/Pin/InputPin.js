@@ -1,5 +1,5 @@
 import React from "react";
-import parentChange from "../../Events/parentChange";
+import parentChange from "../../../Events/parentChange";
 import Pin from "./Pin";
 
 class InputPin extends Pin {
@@ -63,7 +63,7 @@ class InputPin extends Pin {
                 this.state.ref
             }
             className = {
-                this.style.LogicGateInput
+                this.style.Pin
             }
             onClick = {
                 this.handleOnClick

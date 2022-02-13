@@ -10,7 +10,7 @@ class EndNode extends Node {
     ref: React.createRef(),
   };
 
-  handleOnClick = (e) => {
+  handleOnMouseDown = (e) => {
     const newParent = this.props.getFocusedElement();
     if (newParent) this.changeParentPin(newParent);
   };

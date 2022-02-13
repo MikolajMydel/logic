@@ -6,17 +6,17 @@
     cursor: pointer;
 
     border-radius: 100%;
-    border: 1px solid #000;
+    border: 2px solid #000;
 
     &Undefined {
-        background-color: gray;
+        background-color: lighten(gray, 20%);
     }
 
     &True {
-        background-color: lime;
+        background-color: lighten(lime, 20%);
     }
 
     &False {
-        background-color: red;
+        background-color: lighten(red, 20%);
     }
 }

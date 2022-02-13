@@ -2,8 +2,30 @@ import React from 'react';
 import styles from './Node.module.scss';
 
 class Node extends React.Component {
+    state = {
+        name: "",
+        render: true,
+        renderNameBox: false,
+        value: false,
+        ref: React.createRef(),
+    }
 
     get value() { return this.state.value }
+    get name() { return this.state.name }
+
+    handleHandleMouseDown = (e) => {
+        if(e.button === 0){
+            this.setState({renderNameBox: true})
+        } else if (e.button === 2){
+            this.setState({renderNameBox: false})
+        }
+    }
+
+    onInputChange = (e) => {
+        this.setState({
+            name: e.target.value
+        });
+    }
 
     render() {
         if(this.state.render === false) return null;
@@ -19,6 +41,15 @@ class Node extends React.Component {
             style = styles.NodeButtonFalse;
 
         const position = this.props.position + 'px';
+        if(this.state.renderNameBox)
+            var nameBox = (
+                <div
+                    className={styles.NodeNameBox}
+                >
+                    <input onChange={this.onInputChange} value={this.name}/>
+                    <div onClick={this.selfDestruct}>delete</div>
+                </div>
+            );
 
         return (
             <div
@@ -27,6 +58,7 @@ class Node extends React.Component {
             >
                 <div
                     className={styles.NodeHandle}
+                    onMouseDown={this.handleHandleMouseDown}
                 ></div>
 
                 <div
@@ -35,12 +67,7 @@ class Node extends React.Component {
                     onMouseDown={ this.handleOnMouseDown }
                 ></div>
 
-                <div
-                    className={styles.NodeNameBox}
-                >
-                    <input value={"nazwa"}/>
-                    <div onClick={this.selfDestruct}>delete</div>
-                </div>
+                {nameBox}
             </div>
         )
     }

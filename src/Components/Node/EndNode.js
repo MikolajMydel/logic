@@ -1,13 +1,10 @@
-import React from "react";
 import parentChange from "../../Events/parentChange";
 import Node from "./Node";
 
 class EndNode extends Node {
   state = {
-    render: true,
-    value: undefined,
+    ...this.state,
     parentPin: undefined,
-    ref: React.createRef(),
   };
 
   handleOnMouseDown = (e) => {

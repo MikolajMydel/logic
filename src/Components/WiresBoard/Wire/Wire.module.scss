@@ -9,12 +9,11 @@
     stroke-width: 5;
     fill: none;
 
-    filter: 
-    drop-shadow(-1px -1px 0px #000) 
-    drop-shadow(1px -1px 0px #000) 
+    filter:
+    drop-shadow(-1px -1px 0px #000)
+    drop-shadow(1px -1px 0px #000)
     drop-shadow(1px 1px 0px #000)
     drop-shadow(-1px 1px 0px #000);
-    
 
 
     &HighState {

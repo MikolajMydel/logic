@@ -12,10 +12,10 @@
     background-color: #fff;
 
     &HighState {
-        background-color: lime;
+        background-color: lighten(lime, 20%);
     }
 
     &LowState {
-        background-color: red;
+        background-color: lighten(red, 20%);
     }
 }

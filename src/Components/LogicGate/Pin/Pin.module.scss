@@ -9,4 +9,13 @@
     cursor: pointer;
 
     margin: 2px 0;
+    background-color: #fff;
+
+    &HighState {
+        background-color: lime;
+    }
+
+    &LowState {
+        background-color: red;
+    }
 }

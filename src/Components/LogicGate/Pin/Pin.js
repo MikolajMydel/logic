@@ -1,6 +1,12 @@
 import React from "react";
 import styles from './Pin.module.scss';
 
+const stateClasses = {
+    true: styles.PinHighState,
+    false: styles.PinLowState,
+    undefined: "",
+
+}
 class Pin extends React.Component {
 
     constructor(props) {
@@ -8,6 +14,12 @@ class Pin extends React.Component {
         this.style = styles;
         this.index = props.index;
         this.gate = props.gate;
+    }
+
+    setStateClass = () => {
+        this.setState({
+            "stateClass": stateClasses[this.state.value]
+        });
     }
 
     componentDidMount() {

@@ -29,7 +29,7 @@ class StartNode extends Node {
         this.setState({"childPins": updatedChildren });
     }
 
-    handleOnClick = (e) => {
+    handleOnMouseDown = (e) => {
         if(e.button === 0) // Lewy PM
             this.props.setFocusedElement(this);
         else if (e.button === 1) // Środkowy PM

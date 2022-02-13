@@ -21,7 +21,7 @@ class Node extends React.Component {
 
         return (
             <div ref={this.state.ref}
-            className={ `${styles.Node} ${style}` } onMouseDown={ this.handleOnClick } style={{ top: position }} >
+            className={ `${styles.Node} ${style}` } onMouseDown={ this.handleOnMouseDown } style={{ top: position }} >
             </div>
         )
     }

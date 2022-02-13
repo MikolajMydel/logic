@@ -33,11 +33,9 @@ class StartNode extends Node {
             this.props.setFocusedElement(this);
         else if (e.button === 1) // Środkowy PM
             this.toggleValue();
-        else if (e.button === 2) // prawy
-            this.selfDestruct();
     }
 
-    selfDestruct() {
+    selfDestruct = () => {
         this.setState({render: false});
         for(const child of this.state.childPins){
             child.disconnect(this);

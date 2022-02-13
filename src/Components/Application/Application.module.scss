@@ -30,8 +30,14 @@
     background-color: lightslategray;
 }
 .InputArea > div{ // dla Node-ów
-    right: 0;
+    left: 0px;
+}
+.InputArea > div > div{
+    float: left;
 }
 .OutputArea > div{ // dla Node-ów
-    left: 0;
+    right: 0px;
+}
+.OutputArea > div > div{
+    float: right;
 }

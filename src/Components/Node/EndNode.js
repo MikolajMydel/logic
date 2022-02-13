@@ -11,8 +11,10 @@ class EndNode extends Node {
   };
 
   handleOnMouseDown = (e) => {
-    const newParent = this.props.getFocusedElement();
-    if (newParent) this.changeParentPin(newParent);
+    if (e.button === 0) {
+      const newParent = this.props.getFocusedElement();
+      if (newParent) this.changeParentPin(newParent);
+    }
   };
 
   disconnect = () => this.changeParentPin(undefined);
@@ -34,7 +36,6 @@ class EndNode extends Node {
         this.props.drawWire(newParent, this);
         this.receiveSignal(newParent.state.value);
       } else this.receiveSignal(undefined);
-
     }
   };
 

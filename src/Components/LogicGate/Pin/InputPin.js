@@ -9,6 +9,9 @@ class InputPin extends Pin {
       parentPin: undefined,
       value: undefined,
 
+      // bialy pin
+      stateClass: "",
+
       ref: React.createRef(),
     };
   }
@@ -23,6 +26,7 @@ class InputPin extends Pin {
     this.state.parentPin.disconnect(this);
     this.setState({
       parentPin: undefined,
+      stateClass: "",
     });
     this.receiveSignal(undefined);
   }
@@ -47,7 +51,7 @@ class InputPin extends Pin {
   receiveSignal(signal) {
     // najwyraźniej najlepszy sposób na zapobiegniecie zapętlania
     // omg
-    if (signal === this.state.value) return;
+    if (typeof signal !== 'undefined' && signal === this.state.value) return;
 
     this.setState(
       {

@@ -9,6 +9,9 @@ class OutputPin extends Pin {
       childPins: [],
       value: undefined,
 
+      // bialy pin
+      stateClass: "",
+
       ref: React.createRef(),
     };
   }

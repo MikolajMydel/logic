@@ -4,7 +4,7 @@ import styles from './Pin.module.scss';
 const stateClasses = {
     true: styles.PinHighState,
     false: styles.PinLowState,
-    undefined: "",
+    undefined: styles.PinUndefinedState,
 
 }
 class Pin extends React.Component {

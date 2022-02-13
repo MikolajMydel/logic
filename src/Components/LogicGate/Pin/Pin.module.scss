@@ -11,6 +11,10 @@
     margin: 2px 0;
     background-color: #fff;
 
+    &UndefinedState {
+        background-color: lighten(gray, 20%);
+    }
+
     &HighState {
         background-color: lighten(lime, 20%);
     }

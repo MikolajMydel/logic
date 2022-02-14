@@ -45,12 +45,8 @@ class LogicGate extends React.Component {
 
     render() {
         if (this.state.render === false) return null;
-        // na razie używamy wartości logicznej bramki, żeby ułatwić sprawdzanie czy działają ( i tak korzystamy tylko z bramek 1-outputowych ), później powinny mieć po prostu nazwy danej bramki
-        let value = this.state.value;
-        if (value === undefined) value = "undefined";
 
         let inputFields = [];
-
         for (let i = 0; i < this.props.inputs; i++) {
             inputFields.push(
                 <InputPin
@@ -75,6 +71,7 @@ class LogicGate extends React.Component {
                 />
             );
         }
+
         return (
             <div
                 className={`LogicGate ${styles.LogicGate}`}
@@ -82,7 +79,7 @@ class LogicGate extends React.Component {
                 ref={this.props.reference}
             >
                 <div className={styles.LogicGateInputs}>{inputFields}</div>
-                <h5 className={styles.LogicGateValue}> {value.toString()} </h5>
+                <h5 className={styles.LogicGateValue}> {this.name} </h5>
                 <div className={styles.LogicGateOutputs}>{outputFields}</div>
             </div>
         ); // styl LogicGateOutputs jeszcze nie istnieje

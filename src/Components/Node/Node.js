@@ -15,9 +15,7 @@ class Node extends React.Component {
 
     handleHandleMouseDown = (e) => {
         if(e.button === 0){
-            this.setState({renderNameBox: true})
-        } else if (e.button === 2){
-            this.setState({renderNameBox: false})
+            this.setState({renderNameBox: !this.state.renderNameBox})
         }
     }
 
@@ -57,7 +55,7 @@ class Node extends React.Component {
                 style={{ top: position }}
             >
                 <div
-                    className={styles.NodeHandle}
+                    className={`NodeHandle ${styles.NodeHandle}`}
                     onMouseDown={this.handleHandleMouseDown}
                 ></div>
 

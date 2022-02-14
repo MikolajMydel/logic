@@ -113,10 +113,11 @@ class Application extends React.Component {
         });
     }
 
-    // funkcja podnosząca bramkę
+    // funkcja podnosząca element
     grab(e) {
         const element = e.target;
-        if (element.classList.contains("LogicGate")) {
+        if (element.classList.contains("LogicGate") ||
+            element.classList.contains("NodeHandle")) {
             this.setState({heldElement: element});
             // obliczenie różnicy koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
             const xo = e.clientX - element.offsetLeft;
@@ -125,16 +126,18 @@ class Application extends React.Component {
         }
     }
 
+    // przenieś trzymany element
     move(e) {
-        // przenieś bramkę (jeżeli jakaś jest trzymana)
-        if(this.state.heldElement){
-            const element = this.state.heldElement;
-            const canvas  = e.currentTarget;
-            const board   = this.boardRef.current;
+        const element = this.state.heldElement;
+        if(!element) return;
 
-            let x = e.clientX - this.state.heldElementOffset[0]; // różnica x
-            let y = e.clientY - this.state.heldElementOffset[1]; // różnica y
+        const canvas  = e.currentTarget;
+        const board   = this.boardRef.current;
 
+        let x = e.clientX - this.state.heldElementOffset[0]; // różnica x
+        let y = e.clientY - this.state.heldElementOffset[1]; // różnica y
+
+        if(element.classList.contains("LogicGate")){
             if (x < board.offsetLeft)
                 // za daleko w lewo
                 x = board.offsetLeft;
@@ -150,11 +153,21 @@ class Application extends React.Component {
 
             element.style.left = x + 'px';
             element.style.top = y + 'px';
+        } else if(element.classList.contains("NodeHandle")){
+            const node = element.parentElement;
+            y = e.clientY;
+            console.log(node.parentElement.offsetHeight)
+            if (y > node.parentElement.offsetHeight - 20)
+                y = node.parentElement.offsetHeight - 20;
+
+            if (y < node.parentElement.offsetTop + 40)
+                y = node.parentElement.offsetTop + 40;
+            node.style.top = y - 10 + 'px';
         }
     }
 
     drop() {
-        // upuść trzymaną bramkę
+        // upuść trzymany element
         const element = this.state.heldElement;
         if(element){
             this.setState({heldElement: undefined});

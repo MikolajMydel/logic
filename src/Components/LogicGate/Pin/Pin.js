@@ -1,14 +1,12 @@
 import React from "react";
-import styles from './Pin.module.scss';
+import styles from "./Pin.module.scss";
 
 const stateClasses = {
     true: styles.PinHighState,
     false: styles.PinLowState,
     undefined: styles.PinUndefinedState,
-
-}
+};
 class Pin extends React.Component {
-
     constructor(props) {
         super();
         this.style = styles;
@@ -18,13 +16,12 @@ class Pin extends React.Component {
 
     setStateClass = () => {
         this.setState({
-            "stateClass": stateClasses[this.state.value]
+            stateClass: stateClasses[this.state.value],
         });
-    }
+    };
 
     componentDidMount() {
-        if(this.props.mount)
-            this.props.mount(this); // dodaj siebie do tablicy pinów swojej bramki
+        if (this.props.mount) this.props.mount(this); // dodaj siebie do tablicy pinów swojej bramki
     }
 }
 

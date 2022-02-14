@@ -21,6 +21,8 @@ class OutputPin extends Pin {
         let cps = this.state.childPins;
         cps.push(target);
         this.setState({ childPins: cps });
+
+        if (!this.state.stateClass) this.setStateClass();
     }
 
     disconnect(target) {

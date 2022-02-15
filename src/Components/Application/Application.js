@@ -156,7 +156,6 @@ class Application extends React.Component {
         } else if(element.classList.contains("NodeHandle")){
             const node = element.parentElement;
             y = e.clientY;
-            console.log(node.parentElement.offsetHeight)
             if (y > node.parentElement.offsetHeight - 20)
                 y = node.parentElement.offsetHeight - 20;
 

@@ -22,8 +22,8 @@ class Wire extends React.Component {
     // jezeli pin jest wezlem startowym, to on jest uznawany za bramke
     this.gates = [this.firstPin, this.secondPin].map((pin) => {
       return pin.gate
-        ? findParentGate(pin.state.ref.current)
-        : pin.state.ref.current;
+        ? findParentGate(pin.state.ref.current) // bramka
+        : pin.state.ref.current.parentElement; // node
     });
 
     // pozycje pinow zostaja zaktualizowane, gdy przejezdzamy mysza po bramce / wezle

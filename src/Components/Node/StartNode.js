@@ -1,4 +1,3 @@
-import React from 'react';
 import Node from './Node';
 import signalChange from '../../Events/signalChange';
 class StartNode extends Node {

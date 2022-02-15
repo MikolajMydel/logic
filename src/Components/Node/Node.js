@@ -13,7 +13,7 @@ class Node extends React.Component {
     get value() { return this.state.value }
     get name() { return this.state.name }
 
-    handleHandleMouseDown = (e) => {
+    handleHandleMouseUp = (e) => {
         if(e.button === 0){
             this.setState({renderNameBox: !this.state.renderNameBox})
         }
@@ -56,7 +56,7 @@ class Node extends React.Component {
             >
                 <div
                     className={`NodeHandle ${styles.NodeHandle}`}
-                    onMouseDown={this.handleHandleMouseDown}
+                    onMouseUp={this.handleHandleMouseUp}
                 ></div>
 
                 <div

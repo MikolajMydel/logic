@@ -1,8 +1,10 @@
 .Node {
     position: absolute;
-    width: 300px;
+    display: flex;
+    // style aplikacji to zmieniają
+    flex-direction: row;
+
     &Button {
-        float: left;
         height: 20px;
         width: 20px;
         margin: 0 10px 0 10px;
@@ -25,7 +27,6 @@
         }
     }
     &Handle {
-        float: left;
         width: 12px;
         height: 20px;
         cursor: pointer;
@@ -34,7 +35,6 @@
     }
     &NameBox {
         margin-top: -5px;
-        float: left;
         background-color: #222;
         padding: 4px;
 

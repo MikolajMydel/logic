@@ -31,13 +31,9 @@
 }
 .InputArea > div{ // dla Node-ów
     left: 0px;
-}
-.InputArea > div > div{
-    float: left;
+    flex-direction: row;
 }
 .OutputArea > div{ // dla Node-ów
     right: 0px;
-}
-.OutputArea > div > div{
-    float: right;
+    flex-direction: row-reverse;
 }

@@ -7,14 +7,19 @@ class Node extends React.Component {
         render: true,
         renderNameBox: false,
         ref: React.createRef(),
+        value: undefined,
     }
 
     get value() { return this.state.value }
     get name() { return this.state.name }
 
+    toggleNameBox = () => {
+        this.setState({renderNameBox: !this.state.renderNameBox})
+    }
+
     handleHandleMouseUp = (e) => {
         if(e.button === 0){
-            this.setState({renderNameBox: !this.state.renderNameBox})
+            this.toggleNameBox();
         }
     }
 
@@ -43,7 +48,13 @@ class Node extends React.Component {
                 <div
                     className={styles.NodeNameBox}
                 >
-                    <input onChange={this.onInputChange} value={this.name}/>
+                    <input
+                        onChange={this.onInputChange}
+                        value={this.name}
+                        onKeyDown={
+                            (e) => {if(e.key === "Enter") this.toggleNameBox()}
+                        }
+                    />
                     <div onClick={this.selfDestruct}>delete</div>
                 </div>
             );

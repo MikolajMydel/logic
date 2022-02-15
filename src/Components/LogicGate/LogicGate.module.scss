@@ -1,7 +1,6 @@
-.LogicGate {
+@import 'variables';
 
-    $input-size: 20px;
-    $min-gate-height: 60px;
+.LogicGate {
 
     width: 100px;
 
@@ -23,16 +22,8 @@
         margin: 12px;
     }
 
-    button {
-        height: $input-size;
-        width: $input-size;
-
-        border: 2px solid #000;
-        border-radius: 100%;
-        cursor: pointer;
-    }
-
-    &Inputs, &Outputs {
+    &Inputs,
+    &Outputs {
         min-height: $min-gate-height;
         width: $input-size;
 
@@ -43,14 +34,13 @@
 
         position: relative;
 
-        button {
-            margin: 2px 0;
-        }
     }
+
     &Inputs {
         float: left;
         left: calc($input-size / -2);
     }
+
     &Outputs {
         float: right;
         right: calc($input-size / -2);

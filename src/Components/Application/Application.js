@@ -134,10 +134,10 @@ class Application extends React.Component {
         const canvas  = e.currentTarget;
         const board   = this.boardRef.current;
 
-        let x = e.clientX - this.state.heldElementOffset[0]; // różnica x
-        let y = e.clientY - this.state.heldElementOffset[1]; // różnica y
-
         if(element.classList.contains("LogicGate")){
+            let x = e.clientX - this.state.heldElementOffset[0]; // różnica x
+            let y = e.clientY - this.state.heldElementOffset[1]; // różnica y
+
             if (x < board.offsetLeft)
                 // za daleko w lewo
                 x = board.offsetLeft;
@@ -155,12 +155,18 @@ class Application extends React.Component {
             element.style.top = y + 'px';
         } else if(element.classList.contains("NodeHandle")){
             const node = element.parentElement;
-            y = e.clientY;
+            let y = e.clientY;
+            let x = e.clientX;
+
             if (y > node.parentElement.offsetHeight - 20)
                 y = node.parentElement.offsetHeight - 20;
 
             if (y < node.parentElement.offsetTop + 40)
                 y = node.parentElement.offsetTop + 40;
+
+            if(!(x < board.offsetLeft || x > board.offsetWidth + board.offsetLeft))
+                // jeżeli x kursora jest poza obszarami inputów i outputów, upuść
+                this.drop();
             node.style.top = y - 10 + 'px';
         }
     }

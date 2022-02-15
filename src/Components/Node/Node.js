@@ -6,7 +6,6 @@ class Node extends React.Component {
         name: "",
         render: true,
         renderNameBox: false,
-        value: false,
         ref: React.createRef(),
     }
 

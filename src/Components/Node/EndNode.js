@@ -5,6 +5,7 @@ class EndNode extends Node {
   state = {
     ...this.state,
     parentPin: undefined,
+    value: undefined,
   };
 
   handleOnMouseDown = (e) => {

@@ -4,6 +4,7 @@ class StartNode extends Node {
     state = {
         ...this.state,
         childPins: [],
+        value: false,
     }
 
     // przylaczanie innego pina jako dziecko

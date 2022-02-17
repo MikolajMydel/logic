@@ -246,7 +246,16 @@ class Application extends React.Component {
                 onMouseMove={ (e) => this.move(e) }
                 onMouseUp={ () => this.drop() }
             >
-                <Menu functions={[this.saveGate, this.clearCanvas]}/>
+                <Menu functions={[
+                    {
+                        name: "zapisz bramkę",
+                        function: this.saveGate,
+                    },
+                    {
+                        name: "wyczyść",
+                        function: this.clearCanvas,
+                    },
+                ]}/>
                 <WiresBoard wires={this.state.wires} />
                 <div className={ styles.Canvas }
                     ref={el => this.canvasRef = el}

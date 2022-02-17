@@ -18,7 +18,7 @@ class Node extends React.Component {
     }
 
     handleHandleMouseUp = (e) => {
-        if(e.button === 0){
+        if(e.button === 2) { // tylko PPM
             this.toggleNameBox();
         }
     }

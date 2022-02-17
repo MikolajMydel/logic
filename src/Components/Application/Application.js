@@ -49,6 +49,9 @@ class Application extends React.Component {
         global.AND = AND;
         global.OR = OR;
 
+        // bez contextmenu
+        window.addEventListener("contextmenu", (e) => e.preventDefault());
+
         this.controlPanelObject = findReact(this.controlRef.current);
 
         // wczytaj zapisane bramki z localstorage
@@ -113,6 +116,10 @@ class Application extends React.Component {
         });
     }
 
+    handleMouseDown = (e) => {
+        if(e.button === 0)
+            this.grab(e);
+    }
     // funkcja podnosząca element
     grab(e) {
         const element = e.target;
@@ -233,7 +240,7 @@ class Application extends React.Component {
     render() {
         return (
             <div className={ styles.Application }
-                onMouseDown={ (e) => this.grab(e) }
+                onMouseDown={ this.handleMouseDown }
                 onMouseMove={ (e) => this.move(e) }
                 onMouseUp={ () => this.drop() }
             >

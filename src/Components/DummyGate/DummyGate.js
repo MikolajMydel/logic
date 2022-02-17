@@ -5,6 +5,19 @@ import styles from "../LogicGate/LogicGate.module.scss";
 
 class DummyGate extends React.Component {
     style = {backgroundColor: this.props.color}
+
+    handleMouseDown = (e) => {
+        if(e.button === 0) {
+            this.props.addGate(e, {
+                gateName: this.props.gateName,
+                function: this.props.function,
+                style: this.style,
+                inputCount: this.props.inputs,
+                outputCount: this.props.outputs,
+            })
+        }
+    }
+
     render () {
         let inputFields = [];
         for (let i = 0; i < this.props.inputs; i++){
@@ -21,13 +34,8 @@ class DummyGate extends React.Component {
         return (
             <div className={`${styles.LogicGate} ${styles.LogicGateDummy}`}
                 style={this.style}
-                onMouseDown={(e) => this.props.addGate(e, {
-                    gateName: this.props.gateName,
-                    function: this.props.function,
-                    style: this.style,
-                    inputCount: this.props.inputs,
-                    outputCount: this.props.outputs,
-                })} >
+                onMouseDown={ this.handleMouseDown }
+                >
                 <div className={styles.LogicGateInputs} style={{pointerEvents: 'none'}} >
                     { inputFields }
                 </div>

@@ -6,7 +6,7 @@ import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
 import Menu from "../Menu/Menu"
 import {findReact, makeNewGate} from "../../functions";
-import {AND, NOT, OR} from "../../logicalFunctions"
+import {AND, NOT, OR, FALSE, TRUE} from "../../logicalFunctions"
 import Wire from '../WiresBoard/Wire/Wire.js';
 import WiresBoard from "../WiresBoard/WiresBoard";
 import remove from "../../Events/remove";
@@ -48,6 +48,8 @@ class Application extends React.Component {
         global.NOT = NOT;
         global.AND = AND;
         global.OR = OR;
+        global.TRUE = TRUE;
+        global.FALSE = FALSE;
 
         // bez contextmenu
         window.addEventListener("contextmenu", (e) => e.preventDefault());

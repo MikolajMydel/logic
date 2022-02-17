@@ -25,6 +25,11 @@ class LogicGate extends React.Component {
         }
     };
 
+    componentDidMount(){
+        // bramki constant nigdy nie przetwarzałyby swoich wartości
+        this.processOutput();
+    }
+
     selfDestruct() {
         // usuń wszystkie połączenia
         this.inputs.forEach((i) => i.disconnect());

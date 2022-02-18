@@ -20,8 +20,9 @@ class DummyGate extends React.Component {
         }
         return (
             <div
-                style={{float: 'left', height: '100px', padding: '10px', overflow: 'hidden', display: "flex"}}
+                style={{display: "inline-block", verticalAlign: 'top'}}
             >
+                <div style={{height: '100px', padding: '10px', overflow: 'hidden', display: "flex"}}>
                 <div className={`${styles.LogicGate} ${styles.LogicGateDummy}`}
                     style={this.style}
                     onMouseDown={(e) => this.props.addGate(e, {
@@ -38,6 +39,7 @@ class DummyGate extends React.Component {
                     <div className={styles.LogicGateOutputs} style={{pointerEvents: 'none'}} >
                         { outputFields }
                     </div>
+                </div>
                 </div>
             </div>
         )

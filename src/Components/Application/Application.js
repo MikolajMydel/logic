@@ -101,7 +101,7 @@ class Application extends React.Component {
         this.setState ({'elements': elements}, function(){
             // 'e.target' odnosi się teraz do komponentu DummyGate
             const xo = e.clientX - e.target.offsetLeft;
-            const yo = e.clientY - e.target.offsetTop;
+            const yo = e.clientY - e.target.offsetTop + (e.target.offsetHeight/2);
 
             newGate.style.left = e.clientX - xo + 'px';
             newGate.style.top  = e.clientY - yo + 'px';

@@ -8,12 +8,10 @@ class InputPin extends Pin {
         this.state = {
             parentPin: undefined,
             value: undefined,
-
-            // bialy pin
-            stateClass: "",
-
             ref: React.createRef(),
         };
+
+        this.setStateClass();
     }
 
     handleOnClick = (e) => {

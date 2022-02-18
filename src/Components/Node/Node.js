@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './Node.module.scss';
+import remove from '../../Events/remove';
 
 class Node extends React.Component {
     state = {
@@ -27,6 +28,11 @@ class Node extends React.Component {
         this.setState({
             name: e.target.value
         });
+    }
+
+    fireEvent = () => {
+        // event sygnalizujacy usuniecie polaczenia dla Wire
+        this.state.ref.current.dispatchEvent(remove);
     }
 
     render() {

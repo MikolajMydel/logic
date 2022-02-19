@@ -19,21 +19,27 @@ class DummyGate extends React.Component {
             ));
         }
         return (
-            <div className={`${styles.LogicGate} ${styles.LogicGateDummy}`}
-                style={this.style}
-                onMouseDown={(e) => this.props.addGate(e, {
-                    gateName: this.props.gateName,
-                    function: this.props.function,
-                    style: this.style,
-                    inputCount: this.props.inputs,
-                    outputCount: this.props.outputs,
-                })} >
-                <div className={styles.LogicGateInputs} style={{pointerEvents: 'none'}} >
-                    { inputFields }
+            <div
+                style={{display: "inline-block", verticalAlign: 'top'}}
+            >
+                <div style={{height: '100px', padding: '10px', overflow: 'hidden', display: "flex"}}>
+                <div className={`${styles.LogicGate} ${styles.LogicGateDummy}`}
+                    style={this.style}
+                    onMouseDown={(e) => this.props.addGate(e, {
+                        gateName: this.props.gateName,
+                        function: this.props.function,
+                        style: this.style,
+                        inputCount: this.props.inputs,
+                        outputCount: this.props.outputs,
+                    })} >
+                    <div className={styles.LogicGateInputs} style={{pointerEvents: 'none'}} >
+                        { inputFields }
+                    </div>
+                    <h5 className={styles.LogicGateValue}> { this.props.gateName.replace('f_', '') } </h5>
+                    <div className={styles.LogicGateOutputs} style={{pointerEvents: 'none'}} >
+                        { outputFields }
+                    </div>
                 </div>
-                <h5 className={styles.LogicGateValue}> { this.props.gateName.replace('f_', '') } </h5>
-                <div className={styles.LogicGateOutputs} style={{pointerEvents: 'none'}} >
-                    { outputFields }
                 </div>
             </div>
         )

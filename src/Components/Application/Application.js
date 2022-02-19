@@ -100,11 +100,12 @@ class Application extends React.Component {
         );
         this.setState ({'elements': elements}, function(){
             // 'e.target' odnosi się teraz do komponentu DummyGate
-            const xo = e.clientX - e.target.offsetLeft;
-            const yo = e.clientY - e.target.offsetTop;
+            const xo = e.clientX - e.target.offsetLeft + this.controlRef.current.scrollLeft;
+            const yo = e.clientY - e.target.offsetTop + (e.target.offsetHeight/2);
 
             newGate.style.left = e.clientX - xo + 'px';
             newGate.style.top  = e.clientY - yo + 'px';
+            newGate.style.zIndex = 2;
 
             this.setState({
                 heldElement: newGate,
@@ -117,6 +118,7 @@ class Application extends React.Component {
     grab(e) {
         const element = e.target;
         if (element.classList.contains("LogicGate")) {
+            element.style.zIndex = 1;
             this.setState({heldElement: element});
             // obliczenie różnicy koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
             const xo = e.clientX - element.offsetLeft;
@@ -170,6 +172,8 @@ class Application extends React.Component {
                 const focused = this.getFocusedElement();
                 if(focused && focused.gate === comp)
                     this.setFocusedElement(undefined);
+            } else {
+                element.style.zIndex = 0;
             }
         }
     }

@@ -42,7 +42,7 @@ export function makeNewGate(canvas, name, color) {
                 if(par){
                     args.push(solve(par, alreadyVisited));
                 } else // input bramki nie jest do niczego podpięty
-                    args.push(undefined)
+                    args.push("undefined")
             }
             return (
                 gate.name + "([" + args + "])[" + output.index + "]"

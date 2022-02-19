@@ -31,7 +31,7 @@ class DummyGate extends React.Component {
                 <div className={styles.LogicGateInputs} style={{pointerEvents: 'none'}} >
                     { inputFields }
                 </div>
-                <h5 className={styles.LogicGateValue}> { this.props.gateName } </h5>
+                <h5 className={styles.LogicGateValue}> { this.props.gateName.replace('f_', '') } </h5>
                 <div className={styles.LogicGateOutputs} style={{pointerEvents: 'none'}} >
                     { outputFields }
                 </div>

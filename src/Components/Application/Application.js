@@ -179,6 +179,7 @@ class Application extends React.Component {
                 // jeżeli x kursora jest poza obszarami inputów i outputów, upuść
                 this.drop();
             node.style.top = y - 10 + 'px';
+            node.dispatchEvent(move);
         }
     }
 

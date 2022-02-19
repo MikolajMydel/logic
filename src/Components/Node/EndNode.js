@@ -38,7 +38,7 @@ class EndNode extends Node {
   };
 
   selfDestruct = () => {
-    this.fireEvent();
+    this.fireRemoveEvent();
 
     this.disconnect();
     this.setState({render: false});

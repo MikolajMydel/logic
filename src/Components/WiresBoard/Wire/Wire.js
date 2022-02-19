@@ -23,10 +23,10 @@ class Wire extends React.Component {
     this.gates = [this.firstPin, this.secondPin].map((pin) => {
       return pin.gate
         ? findParentGate(pin.state.ref.current) // bramka
-        : pin.state.ref.current; // node
+        : pin.state.ref.current.parentElement; // node
     });
 
-    // pozycje pinow zostaja zaktualizowane, gdy przejezdzamy mysza po bramce / wezle
+    // pozycje pinow zostaja zaktualizowane, gdy zostaje wywolany event move
     for (let gate of this.gates) {
       gate.addEventListener("move", this.updatePosition);
 

@@ -1,6 +1,6 @@
 import React from "react";
-import OutputPin from "../LogicGate/OutputPin";
-import InputPin from "../LogicGate/InputPin";
+import OutputPin from "../LogicGate/Pin/OutputPin";
+import InputPin from "../LogicGate/Pin/InputPin";
 import styles from "../LogicGate/LogicGate.module.scss";
 
 class DummyGate extends React.Component {
@@ -31,7 +31,7 @@ class DummyGate extends React.Component {
                 <div className={styles.LogicGateInputs} style={{pointerEvents: 'none'}} >
                     { inputFields }
                 </div>
-                <h5 className={styles.LogicGateValue}> { this.props.gateName } </h5>
+                <h5 className={styles.LogicGateValue}> { this.props.gateName.replace('f_', '') } </h5>
                 <div className={styles.LogicGateOutputs} style={{pointerEvents: 'none'}} >
                     { outputFields }
                 </div>

@@ -14,7 +14,7 @@ import remove from "../../Events/remove";
 function validateGateName(name) {
     // nazwa może składać się wyłącznie z liter i cyfr
     // oraz musi zaczynać się od litery
-    var regex = /^[A-Za-z][A-Za-z0-9]*$/;
+    var regex = /^f_[A-Za-z0-9]*$/;
     return regex.test(name);
 }
 class Application extends React.Component {
@@ -188,7 +188,7 @@ class Application extends React.Component {
         do {
             // tutaj będzie wywoływane okno zapisu bramki
             // z wyborem koloru itd. na razie tylko prompt o nazwe
-            var name = prompt('podaj nazwę dla tej bramki');
+            var name = 'f_' + prompt('podaj nazwę dla tej bramki');
             // sprawdza poprawność nazwy i czy nie jest już taka zdefiniowana
         } while(!validateGateName(name) || global[name] !== undefined);
         do {

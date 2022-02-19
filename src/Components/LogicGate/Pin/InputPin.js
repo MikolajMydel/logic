@@ -47,16 +47,11 @@ class InputPin extends Pin {
     }
 
     receiveSignal(signal) {
-        // najwyraźniej najlepszy sposób na zapobiegniecie zapętlania
-        // omg
-        if (typeof signal !== "undefined" && signal === this.state.value)
+        // zapobiega pętli przy okazji
+        if (signal === this.state.value)
             return;
 
-        this.setState(
-            {
-                value: signal,
-            },
-            function () {
+        this.setState({value: signal}, function() {
                 this.setStateClass();
                 this.gate.processOutput();
             }

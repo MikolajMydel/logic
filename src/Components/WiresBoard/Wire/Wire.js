@@ -138,11 +138,8 @@ class Wire extends React.Component {
                     this.state.secondPinPosition,
                     [this.firstPinPaddings, this.secondPinPaddings]
                 ).replace(/(\r\n|\n|\r| {2})/gm, "")}
-                className={`
-                ${styles.Wire}
-                ${this.state.stateClass}
-            `}
-                onClick={this.handleOnClick}
+		className={`${styles.Wire} ${this.state.stateClass}`}
+		onClick={this.handleOnClick}
             />
         );
     }

@@ -10,6 +10,7 @@ import {AND, NOT, OR, FALSE, TRUE} from "../../logicalFunctions"
 import Wire from '../WiresBoard/Wire/Wire.js';
 import WiresBoard from "../WiresBoard/WiresBoard";
 import remove from "../../Events/remove";
+import move from "../../Events/move";
 
 function validateGateName(name) {
     // nazwa może składać się wyłącznie z liter i cyfr
@@ -162,6 +163,7 @@ class Application extends React.Component {
 
             element.style.left = x + 'px';
             element.style.top = y + 'px';
+            element.dispatchEvent(move);
         } else if(element.classList.contains("NodeHandle")){
             const node = element.parentElement;
             let y = e.clientY;

@@ -71,10 +71,14 @@ class Wire extends React.Component {
     }
 
     attachEventListeners = () => {
-        // pozycje pinow zostaja zaktualizowane, gdy przejezdzamy mysza po bramce / wezle
+        window.addEventListener(
+            "resize",
+            this.updatePosition
+        );
+
         for (let gate of this.gates) {
             gate.addEventListener(
-                "mousemove",
+                "mousemove",    // zmiana na move
                 this.updatePosition
             );
 
@@ -96,6 +100,11 @@ class Wire extends React.Component {
     }
 
     detachEventListeners = () => {
+        window.removeEventListener(
+            "resize",
+            this.updatePosition
+        );
+
         // usuwam event listenery z obu pinow
         for (let gate of this.gates) {
             gate.removeEventListener(

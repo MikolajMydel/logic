@@ -19,7 +19,7 @@ function calculatePathRight(firstPinCoordinates, secondPinCoordinates) {
         roundings =
             `
                 l ${[horizontalDistance / 2, 0]}
-                ${a1} 
+                ${a1}
                 l ${[ 0, verticalDistance < 0 ? verticalDistance + 25 : verticalDistance - 25 ]} 
                 ${a2}
                 `
@@ -27,7 +27,7 @@ function calculatePathRight(firstPinCoordinates, secondPinCoordinates) {
         roundings = "";
     }
 
-    return `M ${firstPinCoordinates} 
+    return `M ${firstPinCoordinates}
             ${roundings}
         L ${secondPinCoordinates}
         `

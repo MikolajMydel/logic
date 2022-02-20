@@ -2,7 +2,6 @@
     position: absolute;
     top: 50%;
 
-
     // jakby cos sie stalo z klasami opartymi na stanie
     stroke: #000;
 
@@ -24,4 +23,12 @@
         stroke: red;
     }
 
+}
+
+.ClickableArea {
+    stroke-width: 20;
+    stroke: transparent;
+    fill: none;
+
+    cursor: pointer;
 }

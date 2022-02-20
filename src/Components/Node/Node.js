@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './Node.module.scss';
 import remove from '../../Events/remove';
+import StartNode from './StartNode';
 
 class Node extends React.Component {
     state = {
@@ -67,7 +68,7 @@ class Node extends React.Component {
 
         return (
             <div
-                className={styles.Node}
+                className={`${styles.Node} ${this instanceof StartNode ? styles.NodeStart:styles.NodeEnd }`}
                 style={{ top: position }}
             >
                 <div

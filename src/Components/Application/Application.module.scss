@@ -29,11 +29,3 @@
     padding: 4px 0;
     background-color: lightslategray;
 }
-.InputArea > div{ // dla Node-ów
-    left: 0px;
-    flex-direction: row;
-}
-.OutputArea > div{ // dla Node-ów
-    right: 0px;
-    flex-direction: row-reverse;
-}

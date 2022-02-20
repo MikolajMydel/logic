@@ -167,7 +167,6 @@ class Application extends React.Component {
         } else if(element.classList.contains("NodeHandle")){
             const node = element.parentElement;
             let y = e.clientY;
-            let x = e.clientX;
 
             if (y > node.parentElement.offsetHeight - 20)
                 y = node.parentElement.offsetHeight - 20;
@@ -175,9 +174,6 @@ class Application extends React.Component {
             if (y < node.parentElement.offsetTop + 40)
                 y = node.parentElement.offsetTop + 40;
 
-            if(!(x < board.offsetLeft || x > board.offsetWidth + board.offsetLeft))
-                // jeżeli x kursora jest poza obszarami inputów i outputów, upuść
-                this.drop();
             node.style.top = y - 10 + 'px';
             node.dispatchEvent(move);
         }

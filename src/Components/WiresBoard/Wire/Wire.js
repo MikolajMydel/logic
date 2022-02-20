@@ -32,23 +32,7 @@ class Wire extends React.Component {
                 : pin.state.ref.current;
         });
 
-        // pozycje pinow zostaja zaktualizowane, gdy przejezdzamy mysza po bramce / wezle
-        for (let gate of this.gates) {
-            gate.addEventListener("mousemove", this.updatePosition);
-
-            gate.addEventListener("remove", this.removeConnection);
-        }
-
-        this.firstPin.state.ref.current.addEventListener("signalChange", () => {
-            this.setState({
-                stateClass: this.getStateClass(),
-            });
-        });
-
-        this.secondPin.state.ref.current.addEventListener(
-            "parentChange",
-            this.examineWireVisibility
-        );
+        this.attachEventListeners();
 
         this.state = {
             // pozycje pinow w momencie tworzenia polaczenia
@@ -86,20 +70,61 @@ class Wire extends React.Component {
         }
     }
 
-    handleOnClick = () => this.removeConnection();
+    attachEventListeners = () => {
+        // pozycje pinow zostaja zaktualizowane, gdy przejezdzamy mysza po bramce / wezle
+        for (let gate of this.gates) {
+            gate.addEventListener(
+                "mousemove",
+                this.updatePosition
+            );
 
-    removeConnection = () => {
+            gate.addEventListener(
+                "remove",
+                this.removeConnection
+            );
+        }
+
+        this.firstPin.state.ref.current.addEventListener(
+            "signalChange",
+            this.updateStateClass
+        );
+
+        this.secondPin.state.ref.current.addEventListener(
+            "parentChange",
+            this.examineWireVisibility
+        );
+    }
+
+    detachEventListeners = () => {
         // usuwam event listenery z obu pinow
         for (let gate of this.gates) {
-            gate.removeEventListener("mousemove", this.updatePosition);
-            gate.removeEventListener("remove", this.removeConnection);
+            gate.removeEventListener(
+                "mousemove",
+                this.updatePosition
+            );
+
+            gate.removeEventListener(
+                "remove",
+                this.removeConnection
+            );
         }
+
+        this.firstPin.state.ref.current.removeEventListener(
+            "signalChange",
+            this.updateStateClass
+        );
 
         // zapobieganie "powracaniu" dawnych przewodow podczas przywracania dawnego polaczenia
         this.secondPin.state.ref.current.removeEventListener(
             "parentChange",
             this.examineWireVisibility
         );
+    }
+
+    handleOnClick = () => this.removeConnection();
+
+    removeConnection = () => {
+        this.detachEventListeners();
 
         // usuwam polaczenie z perspektywy dziecka i rodzica
         this.secondPin.disconnect();
@@ -118,6 +143,12 @@ class Wire extends React.Component {
     };
 
     getStateClass = () => stateClasses[this.firstPin.state.value];
+
+    updateStateClass = () => {
+        this.setState({
+            stateClass: this.getStateClass(),
+        })
+    };
 
     // funkcja powodujaca aktualizacje pozycji pinow w stanie
     updatePosition = () => {

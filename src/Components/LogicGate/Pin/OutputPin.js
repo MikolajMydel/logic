@@ -8,12 +8,10 @@ class OutputPin extends Pin {
         this.state = {
             childPins: [],
             value: undefined,
-
-            // bialy pin
-            stateClass: "",
-
             ref: React.createRef(),
         };
+
+        this.setStateClass();
     }
 
     // przylaczanie innego pina jako dziecko
@@ -21,6 +19,8 @@ class OutputPin extends Pin {
         let cps = this.state.childPins;
         cps.push(target);
         this.setState({ childPins: cps });
+
+        if (!this.state.stateClass) this.setStateClass();
     }
 
     disconnect(target) {

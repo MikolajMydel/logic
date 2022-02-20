@@ -19,8 +19,8 @@
 
     &Dummy {
         position: relative;
-        float: left;
-        margin: 12px;
+        top: 50%;
+        transform: translateY(-50%);
     }
 
     &Inputs,

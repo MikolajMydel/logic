@@ -54,6 +54,7 @@ class ControlPanel extends React.Component {
             ],
         }
     }
+
     addDummy = (newGate) => {
         let dummies = this.state.dummies;
         const func = retrieveFunction(newGate.functions);
@@ -75,13 +76,20 @@ class ControlPanel extends React.Component {
         this.setState({dummies: dummies});
     }
 
+    handleOnWheel = (e) => {
+        const el = e.currentTarget;
+        el.scrollLeft += e.deltaY;
+    }
+
     render(){
         return (
-        <nav className={ styles.ControlPanel }
+        <div
+            className={ styles.ControlPanel }
             ref={this.props.reference}
+            onWheel={this.handleOnWheel}
         >
             {this.state.dummies}
-        </nav>
+        </div>
         );
     }
 }

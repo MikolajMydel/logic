@@ -26,7 +26,8 @@ export function makeNewGate(canvas, name, color) {
 
     const solve = (output, alreadyVisited) => {
         if (!output || alreadyVisited.indexOf(output) !== -1) // był już sprawdzany
-            return;
+            // to jest do poprawy
+            return [false];
         if(output instanceof StartNode){
             for(let i=0; i<startNodes.length; i++){
                 if(output === startNodes[i])

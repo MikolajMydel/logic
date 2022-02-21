@@ -26,7 +26,7 @@ export function makeNewGate(canvas, name, color) {
 
     const solve = (input, alreadyVisited) => {
         const output = input.state.parentPin;
-        if (!output || alreadyVisited.indexOf(output) !== -1) // był już sprawdzany
+        if (!output || (alreadyVisited[output] && alreadyVisited[output].indexOf(input) !== -1)) // był już sprawdzany
             // to jest do poprawy
             return "undefined";
         if(output instanceof StartNode){
@@ -35,7 +35,11 @@ export function makeNewGate(canvas, name, color) {
                     return "i[" + i + "]";
             }
         } else {
-            alreadyVisited.push(output);
+            if(!alreadyVisited[output])
+                alreadyVisited[output] = [input];
+            else
+                alreadyVisited[output].push(input);
+
             const gate = output.gate;
             let args = [];
             for(const input of gate.inputs){

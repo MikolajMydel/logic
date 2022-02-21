@@ -24,10 +24,11 @@ export function makeNewGate(canvas, name, color) {
     const endNodes  = [...outputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
     const startNodes = [...inputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
 
-    const solve = (output, alreadyVisited) => {
+    const solve = (input, alreadyVisited) => {
+        const output = input.state.parentPin;
         if (!output || alreadyVisited.indexOf(output) !== -1) // był już sprawdzany
             // to jest do poprawy
-            return [false];
+            return "undefined";
         if(output instanceof StartNode){
             for(let i=0; i<startNodes.length; i++){
                 if(output === startNodes[i])
@@ -40,7 +41,7 @@ export function makeNewGate(canvas, name, color) {
             for(const input of gate.inputs){
                 const par = input.state.parentPin;
                 if(par){
-                    args.push(solve(par, alreadyVisited));
+                    args.push(solve(input, alreadyVisited));
                 } else // input bramki nie jest do niczego podpięty
                     args.push("undefined")
             }
@@ -52,7 +53,7 @@ export function makeNewGate(canvas, name, color) {
 
     let output = [];
     for(let endNode of endNodes) {
-        let func = "(i) => " + solve(endNode.state.parentPin, []);
+        let func = "(i) => " + solve(endNode, []);
         output.push(func);
     }
     return {

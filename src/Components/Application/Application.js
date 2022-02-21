@@ -118,7 +118,7 @@ class Application extends React.Component {
     grab(e) {
         const element = e.target;
         if (element.classList.contains("LogicGate")) {
-            element.style.zIndex = 1;
+            element.style.zIndex = 2;
             this.setState({heldElement: element});
             // obliczenie różnicy koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
             const xo = e.clientX - element.offsetLeft;

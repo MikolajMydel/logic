@@ -33,7 +33,7 @@ class Node extends React.Component {
 
     fireRemoveEvent = () => {
         // event sygnalizujacy usuniecie polaczenia dla Wire
-        this.state.ref.current.dispatchEvent(remove);
+        this.state.ref.current.parentElement.dispatchEvent(remove);
     }
 
     render() {

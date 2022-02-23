@@ -25,7 +25,8 @@ class EndNode extends Node {
         { parentPin: newParent },
         // funkcja powiadamiajaca przewod o usunieciu polaczenia
         () => {
-          this.state.ref.current.dispatchEvent(parentChange);
+          if( this.state.ref.current )
+            this.state.ref.current.dispatchEvent(parentChange);
         }
       );
 

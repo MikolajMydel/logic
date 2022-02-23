@@ -1,33 +1,13 @@
 import React from "react";
 import styles from "./Wire.module.scss";
 import calculatePath from "./pathFunctions";
+import { findParentGate, findParentNode } from "../../../functions";
 
 const stateClasses = {
     true: styles.WireHighState,
     false: styles.WireLowState,
     undefined: styles.WireUndefinedState,
 };
-
-function findParentGate(pin) {
-    let currentParent = pin.parentElement;
-
-    while (!currentParent.classList.contains("LogicGate")) {
-        currentParent = currentParent.parentElement;
-    }
-
-    return currentParent;
-}
-
-function findParentNode(pin) {
-    let currentParent = pin.parentElement;
-
-    while (!currentParent.className.includes("Node")) {
-        currentParent = currentParent.parentElement;
-    }
-
-    return currentParent;
-
-}
 
 class Wire extends React.Component {
     constructor(props) {

@@ -8,7 +8,6 @@ const stateClasses = {
     undefined: styles.WireUndefinedState,
 };
 
-// na wypadek jakby HTML ulegl zmianie
 function findParentGate(pin) {
     let currentParent = pin.parentElement;
 
@@ -18,6 +17,18 @@ function findParentGate(pin) {
 
     return currentParent;
 }
+
+function findParentNode(pin) {
+    let currentParent = pin.parentElement;
+
+    while (!currentParent.className.includes("Node")) {
+        currentParent = currentParent.parentElement;
+    }
+
+    return currentParent;
+
+}
+
 class Wire extends React.Component {
     constructor(props) {
         super(props);
@@ -29,7 +40,7 @@ class Wire extends React.Component {
         this.gates = [this.firstPin, this.secondPin].map((pin) => {
           return pin.gate
             ? findParentGate(pin.state.ref.current) // bramka
-            : pin.state.ref.current.parentElement; // node
+            : findParentNode(pin.state.ref.current); // node
         });
 
         this.attachEventListeners();

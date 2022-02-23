@@ -173,7 +173,7 @@ class Application extends React.Component {
                 if(focused && focused.gate === comp)
                     this.setFocusedElement(undefined);
             } else {
-                element.style.zIndex = 0;
+                element.style.zIndex = 1;
             }
         }
     }

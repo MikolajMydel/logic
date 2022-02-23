@@ -1,7 +1,7 @@
-$control-panel-height: 150px;
+$control-panel-height: 130px;
 
 .ControlPanel {
-    max-height: $control-panel-height;
+    height: $control-panel-height;
     display: flex;
     justify-content: left;
 

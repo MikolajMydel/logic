@@ -129,7 +129,7 @@ class Application extends React.Component {
         const element = e.target;
         if (element.classList.contains("LogicGate") ||
             element.classList.contains("NodeHandle")) {
-            element.style.zIndex = 1;
+            element.style.zIndex = 2;
             this.setState({heldElement: element});
             // obliczenie różnicy koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
             const xo = e.clientX - element.offsetLeft;
@@ -199,7 +199,7 @@ class Application extends React.Component {
                 if(focused && focused.gate === comp)
                     this.setFocusedElement(undefined);
             } else {
-                element.style.zIndex = 0;
+                element.style.zIndex = 1;
             }
         }
     }

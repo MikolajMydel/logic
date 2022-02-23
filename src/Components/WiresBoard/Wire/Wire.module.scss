@@ -1,7 +1,4 @@
 .Wire {
-    position: absolute;
-    top: 50%;
-
     // jakby cos sie stalo z klasami opartymi na stanie
     stroke: #000;
 
@@ -26,7 +23,7 @@
 }
 
 .ClickableArea {
-    stroke-width: 20;
+    stroke-width: 25;
     stroke: transparent;
     fill: none;
 

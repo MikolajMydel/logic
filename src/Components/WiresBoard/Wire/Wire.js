@@ -144,7 +144,6 @@ class Wire extends React.Component {
                     d={dAttribute}
                     className={`${styles.Wire} ${this.state.stateClass}`}
                 />
-
                 <path
                     d={dAttribute}
                     className={styles.ClickableArea}

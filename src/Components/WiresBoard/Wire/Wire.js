@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./Wire.module.scss";
 import calculatePath from "./pathFunctions";
+import { findParentGate, findParentNode } from "../../../findingFunctions";
 
 const stateClasses = {
     true: styles.WireHighState,
@@ -8,16 +9,6 @@ const stateClasses = {
     undefined: styles.WireUndefinedState,
 };
 
-// na wypadek jakby HTML ulegl zmianie
-function findParentGate(pin) {
-    let currentParent = pin.parentElement;
-
-    while (!currentParent.classList.contains("LogicGate")) {
-        currentParent = currentParent.parentElement;
-    }
-
-    return currentParent;
-}
 class Wire extends React.Component {
     constructor(props) {
         super(props);
@@ -27,9 +18,9 @@ class Wire extends React.Component {
 
         // jezeli pin jest wezlem startowym, to on jest uznawany za bramke
         this.gates = [this.firstPin, this.secondPin].map((pin) => {
-            return pin.gate
-                ? findParentGate(pin.state.ref.current)
-                : pin.state.ref.current;
+          return pin.gate
+            ? findParentGate(pin.state.ref.current) // bramka
+            : findParentNode(pin.state.ref.current); // node
         });
 
         this.attachEventListeners();
@@ -53,8 +44,7 @@ class Wire extends React.Component {
 
             this.firstPinPaddings = [
                 gateBoundingClientRect.top - this.state.firstPinPosition.top,
-                gateBoundingClientRect.bottom -
-                    this.state.firstPinPosition.bottom,
+                gateBoundingClientRect.bottom - this.state.firstPinPosition.bottom,
             ];
         }
 
@@ -64,8 +54,7 @@ class Wire extends React.Component {
 
             this.secondPinPaddings = [
                 gateBoundingClientRect.top - this.state.secondPinPosition.top,
-                gateBoundingClientRect.bottom -
-                    this.state.secondPinPosition.bottom,
+                gateBoundingClientRect.bottom - this.state.secondPinPosition.bottom,
             ];
         }
     }
@@ -78,7 +67,7 @@ class Wire extends React.Component {
 
         for (let gate of this.gates) {
             gate.addEventListener(
-                "mousemove",    // zmiana na move
+                "move",    // zmiana na move
                 this.updatePosition
             );
 
@@ -108,7 +97,7 @@ class Wire extends React.Component {
         // usuwam event listenery z obu pinow
         for (let gate of this.gates) {
             gate.removeEventListener(
-                "mousemove",
+                "move",
                 this.updatePosition
             );
 

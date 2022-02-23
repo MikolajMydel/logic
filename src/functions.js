@@ -157,3 +157,4 @@ function getChildGates(gate) {
     }
     return childGates;
 }
+

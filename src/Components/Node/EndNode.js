@@ -1,13 +1,11 @@
-import React from "react";
 import parentChange from "../../Events/parentChange";
 import Node from "./Node";
 
 class EndNode extends Node {
   state = {
-    value: undefined,
+    ...this.state,
     parentPin: undefined,
-
-    ref: React.createRef(),
+    value: undefined,
   };
 
   handleOnMouseDown = (e) => {
@@ -27,7 +25,8 @@ class EndNode extends Node {
         { parentPin: newParent },
         // funkcja powiadamiajaca przewod o usunieciu polaczenia
         () => {
-          this.state.ref.current.dispatchEvent(parentChange);
+          if( this.state.ref.current )
+            this.state.ref.current.dispatchEvent(parentChange);
         }
       );
 
@@ -38,6 +37,13 @@ class EndNode extends Node {
       } else this.receiveSignal(undefined);
     }
   };
+
+  selfDestruct = () => {
+    this.fireRemoveEvent();
+
+    this.disconnect();
+    this.setState({render: false});
+  }
 
   receiveSignal(signal) {
     this.setState({ value: signal });

@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Wire.module.scss";
 import calculatePath from "./pathFunctions";
-import { findParentGate, findParentNode } from "../../../functions";
+import { findParentGate, findParentNode } from "../../../findingFunctions";
 
 const stateClasses = {
     true: styles.WireHighState,

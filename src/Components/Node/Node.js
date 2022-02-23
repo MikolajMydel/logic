@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Node.module.scss';
 import remove from '../../Events/remove';
 import StartNode from './StartNode';
-
+import { findParentNode } from '../../findingFunctions';
 class Node extends React.Component {
     state = {
         name: "",
@@ -33,7 +33,7 @@ class Node extends React.Component {
 
     fireRemoveEvent = () => {
         // event sygnalizujacy usuniecie polaczenia dla Wire
-        this.state.ref.current.parentElement.dispatchEvent(remove);
+        findParentNode(this.state.ref.current).dispatchEvent(remove);
     }
 
     render() {

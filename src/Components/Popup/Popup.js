@@ -6,6 +6,11 @@ class Popup extends React.Component {
         maxWidth: '400px',
         height: '400px',
     }
+
+    selfDestruct = () => {
+        this.props.killPopup();
+    }
+
     render(contents){
         return(
             <div className={styles.Cover}>
@@ -13,7 +18,7 @@ class Popup extends React.Component {
                     className={styles.Popup}
                     style={this.style}
                 >
-                    <p onClick={this.props.killPopup}>X</p>
+                    <p onClick={this.selfDestruct}>X</p>
                     {contents}
                 </div>
             </div>

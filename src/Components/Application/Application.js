@@ -46,6 +46,8 @@ class Application extends React.Component {
     // funkcja zwracajaca aktualnie wybrane wyjscie - umozliwia kliknietej bramce logicznej zmiane wejscia na wczesniej klikniete wyjscie
     getFocusedElement = () => this.state.focusedElement;
 
+    getCurrentProjectName = () => this.currentProjectName;
+
     // tylko raz po wyrenderowaniu tego komponentu
     componentDidMount(){
         global.NOT = NOT;
@@ -64,9 +66,7 @@ class Application extends React.Component {
 
     // wczytaj zapisany projekt z localstorage
     loadProject = (projectName) => {
-        this.controlPanelObject.reset();
-
-        this.currentProjectName = projectName;
+        this.currentProjectName = projectName !== undefined ? projectName : "Projekt";
 
         let saved = [];
         let projects = {};
@@ -75,6 +75,8 @@ class Application extends React.Component {
             if(projects[projectName] !== undefined)
                 saved = projects[projectName];
         }
+
+        this.controlPanelObject.reset();
 
         for(const savedGate of saved){
             this.controlPanelObject.addDummy(savedGate);
@@ -253,7 +255,7 @@ class Application extends React.Component {
         var popup;
         switch(name) {
             case 'project':
-                popup = (<ProjectPopup killPopup={this.killPopup} loadProject={this.loadProject}/>);
+                popup = (<ProjectPopup getCurrentProjectName={this.getCurrentProjectName} killPopup={this.killPopup} loadProject={this.loadProject}/>);
                 break;
             case 'save':
                 popup = null; // TODO

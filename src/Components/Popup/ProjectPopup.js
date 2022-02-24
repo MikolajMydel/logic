@@ -32,6 +32,13 @@ class ProjectPopup extends Popup {
         this.props.killPopup();
     }
 
+    selfDestruct = () => {
+        if(this.props.getCurrentProjectName() === undefined){
+            alert('wybierz lub utwórz projekt')
+            return;
+        }
+        this.props.killPopup();
+    }
     render(){
         var projects = [];
         return super.render((

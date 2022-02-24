@@ -24,7 +24,7 @@ class Application extends React.Component {
         focusedElement: undefined,    // aktualnie wybrane wyjście
         heldElement: undefined,       // aktualnie trzymana bramka
         heldElementOffset: [0, 0],    // różnica koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
-        popups: [],
+        popup: null,
         elements: {
             inputs: [],
             board: [],
@@ -238,20 +238,27 @@ class Application extends React.Component {
         this.controlPanelObject.addDummy(newGateObject);
     }
 
-    showPopup = (popup) => {
-        let popups = this.state.popups;
-        switch(popup) {
+    showPopup = (name) => {
+        var popup;
+        switch(name) {
             case 'project':
-                popups = [...popups, <Popup content={
-                    null
-                }
-                killPopup={this.killPopup}
-                />];
+                popup = (
+                    <Popup
+                        content={
+                            null
+                        }
+                        killPopup={this.killPopup}
+                    />
+                );
                 break;
             default:
-                break;
+                return;
         }
-        this.setState({'popups': popups});
+        this.setState({'popup': popup});
+    }
+
+    killPopup = () => {
+        this.setState({popup: null})
     }
 
     // wyczyść obszar roboczy
@@ -267,7 +274,7 @@ class Application extends React.Component {
                 onMouseMove={ (e) => this.move(e) }
                 onMouseUp={ () => this.drop() }
             >
-                {this.state.popups}
+                {this.state.popup}
                 <Menu functions={[
                     {
                         name: "zapisz bramkę",

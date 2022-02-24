@@ -1,0 +1,15 @@
+.Popup {
+    z-index: 99;
+    position: absolute;
+    height: 400px;
+    max-width: 400px;
+
+    left: 0;
+    right: 0;
+    margin: auto;
+    transform: translateY(50%);
+
+    border: 3px solid darkred;
+    padding: 15px;
+    background-color: white;
+}

@@ -4,9 +4,10 @@ import LogicGate from "../LogicGate/LogicGate";
 import StartNode from "../Node/StartNode";
 import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
-import Menu from "../Menu/Menu"
+import Menu from "../Menu/Menu";
+import Popup from "../Popup/Popup";
 import {findReact, makeNewGate} from "../../functions";
-import {AND, NOT, OR, FALSE, TRUE} from "../../logicalFunctions"
+import {AND, NOT, OR, FALSE, TRUE} from "../../logicalFunctions";
 import Wire from '../WiresBoard/Wire/Wire.js';
 import WiresBoard from "../WiresBoard/WiresBoard";
 import remove from "../../Events/remove";
@@ -23,6 +24,7 @@ class Application extends React.Component {
         focusedElement: undefined,    // aktualnie wybrane wyjście
         heldElement: undefined,       // aktualnie trzymana bramka
         heldElementOffset: [0, 0],    // różnica koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
+        popups: [],
         elements: {
             inputs: [],
             board: [],
@@ -236,6 +238,22 @@ class Application extends React.Component {
         this.controlPanelObject.addDummy(newGateObject);
     }
 
+    showPopup = (popup) => {
+        let popups = this.state.popups;
+        switch(popup) {
+            case 'project':
+                popups = [...popups, <Popup content={
+                    null
+                }
+                killPopup={this.killPopup}
+                />];
+                break;
+            default:
+                break;
+        }
+        this.setState({'popups': popups});
+    }
+
     // wyczyść obszar roboczy
     clearCanvas = () => {
         this.setState({focusedElement: undefined, elements: {inputs: [], board: [], outputs: []}, wires: []})
@@ -249,6 +267,7 @@ class Application extends React.Component {
                 onMouseMove={ (e) => this.move(e) }
                 onMouseUp={ () => this.drop() }
             >
+                {this.state.popups}
                 <Menu functions={[
                     {
                         name: "zapisz bramkę",
@@ -257,6 +276,10 @@ class Application extends React.Component {
                     {
                         name: "wyczyść",
                         function: this.clearCanvas,
+                    },
+                    {
+                        name: "popup",
+                        function: () => this.showPopup('project')
                     },
                 ]}/>
                 <WiresBoard wires={this.state.wires} />

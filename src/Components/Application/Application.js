@@ -60,12 +60,13 @@ class Application extends React.Component {
         this.controlPanelObject = findReact(this.controlRef.current);
 
         this.showPopup('project')
-        this.currentProjectName = "Projekt1";
-        this.loadProject(this.currentProjectName);
+
+        this.loadProject("Projekt");
     }
 
     // wczytaj zapisane bramki z localstorage
-    loadProject(projectName){
+    loadProject = (projectName) => {
+        this.currentProjectName = projectName;
         let saved = [];
         let projects = {};
         if(localStorage.getItem('projects') !== null){
@@ -251,7 +252,7 @@ class Application extends React.Component {
         var popup;
         switch(name) {
             case 'project':
-                popup = (<ProjectPopup killPopup={this.killPopup}/>);
+                popup = (<ProjectPopup killPopup={this.killPopup} loadProject={this.loadProject}/>);
                 break;
             case 'save':
                 popup = null; // TODO

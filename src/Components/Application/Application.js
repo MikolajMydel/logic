@@ -59,18 +59,20 @@ class Application extends React.Component {
 
         this.controlPanelObject = findReact(this.controlRef.current);
 
-        //this.showPopup('project')
+        this.showPopup('project')
         this.currentProjectName = "Projekt1";
         this.loadProject(this.currentProjectName);
     }
 
     // wczytaj zapisane bramki z localstorage
     loadProject(projectName){
-        let saved;
-        if(localStorage.getItem(projectName) !== null)
-            saved = JSON.parse(localStorage.getItem(projectName));
-        else
-            saved = [];
+        let saved = [];
+        let projects = {};
+        if(localStorage.getItem('projects') !== null){
+            projects = JSON.parse(localStorage.getItem('projects'));
+            if(projects[projectName] !== undefined)
+                saved = projects[projectName];
+        }
 
         for(const savedGate of saved){
             this.controlPanelObject.addDummy(savedGate);
@@ -232,13 +234,14 @@ class Application extends React.Component {
         const newGateObject = makeNewGate(this.canvasRef, name, color);
 
         // zapisywanie w localStorage
-        let saved;
-        if(localStorage.getItem(this.currentProjectName) !== null)
-            saved = JSON.parse(localStorage.getItem(this.currentProjectName));
-        else
-            saved = [];
-        saved.push(newGateObject);
-        localStorage.setItem(this.currentProjectName, JSON.stringify(saved));
+        let projects = {};
+        if(localStorage.getItem('projects') !== null)
+            projects = JSON.parse(localStorage.getItem('projects'));
+        if(projects[this.currentProjectName] === undefined)
+            projects[this.currentProjectName] = [];
+
+        projects[this.currentProjectName].push(newGateObject);
+        localStorage.setItem("projects", JSON.stringify(projects));
 
         // dodaj nową bramkę do zasobnika
         this.controlPanelObject.addDummy(newGateObject);
@@ -251,10 +254,10 @@ class Application extends React.Component {
                 popup = (<ProjectPopup killPopup={this.killPopup}/>);
                 break;
             case 'save':
-                popup = null;
+                popup = null; // TODO
                 break;
             case 'settings':
-                popup = null;
+                popup = null; // TODO
                 break;
             default:
                 return;

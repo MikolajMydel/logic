@@ -6,7 +6,7 @@ class Popup extends React.Component {
         maxWidth: '400px',
         height: '400px',
     }
-    render(){
+    render(contents){
         return(
             <div className={styles.Cover}>
                 <div
@@ -14,7 +14,7 @@ class Popup extends React.Component {
                     style={this.style}
                 >
                     <p onClick={this.props.killPopup}>X</p>
-                    {this.props.content}
+                    {contents}
                 </div>
             </div>
         );

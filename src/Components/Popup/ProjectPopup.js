@@ -1,16 +1,35 @@
 import Popup from './Popup';
 import styles from './ProjectPopup.module.scss';
 
+function validateProjectName(name) {
+    if(name === undefined) return false;
+    var regex = /^[A-Za-z0-9 ]+$/;
+    return regex.test(name);
+}
 class ProjectPopup extends Popup {
     style = {
         maxWidth: '440px',
         height: '600px',
     }
 
+    state = {
+        givenName: undefined,
+    }
+
     handleOnChange = (e) => {
         this.setState({
             givenName: e.target.value
         });
+    }
+
+    handleOnClick = () => {
+        const name = this.state.givenName;
+        if (!validateProjectName(name)) {
+            alert('niepoprawna nazwa');
+            return;
+        }
+        this.props.loadProject(this.state.givenName);
+        this.props.killPopup();
     }
 
     render(){
@@ -27,7 +46,7 @@ class ProjectPopup extends Popup {
                         type="button"
                         value="+"
                         className={styles.MainNewButton}
-                        onClick={() => {this.props.loadProject(this.state.givenName); this.props.killPopup();}}
+                        onClick={this.handleOnClick}
                     />
                 <hr/>
                 {projects}

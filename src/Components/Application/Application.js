@@ -59,10 +59,16 @@ class Application extends React.Component {
 
         this.controlPanelObject = findReact(this.controlRef.current);
 
-        // wczytaj zapisane bramki z localstorage
+        //this.showPopup('project')
+        this.currentProjectName = "Projekt1";
+        this.loadProject(this.currentProjectName);
+    }
+
+    // wczytaj zapisane bramki z localstorage
+    loadProject(projectName){
         let saved;
-        if(localStorage.getItem("savedGates") !== null)
-            saved = JSON.parse(localStorage.getItem("savedGates"));
+        if(localStorage.getItem(projectName) !== null)
+            saved = JSON.parse(localStorage.getItem(projectName));
         else
             saved = [];
 
@@ -227,12 +233,12 @@ class Application extends React.Component {
 
         // zapisywanie w localStorage
         let saved;
-        if(localStorage.getItem("savedGates") !== null)
-            saved = JSON.parse(localStorage.getItem("savedGates"));
+        if(localStorage.getItem(this.currentProjectName) !== null)
+            saved = JSON.parse(localStorage.getItem(this.currentProjectName));
         else
             saved = [];
         saved.push(newGateObject);
-        localStorage.setItem("savedGates", JSON.stringify(saved));
+        localStorage.setItem(this.currentProjectName, JSON.stringify(saved));
 
         // dodaj nową bramkę do zasobnika
         this.controlPanelObject.addDummy(newGateObject);
@@ -242,6 +248,26 @@ class Application extends React.Component {
         var popup;
         switch(name) {
             case 'project':
+                popup = (
+                    <Popup
+                        content={
+                            null
+                        }
+                        killPopup={this.killPopup}
+                    />
+                );
+                break;
+            case 'save':
+                popup = (
+                    <Popup
+                        content={
+                            null
+                        }
+                        killPopup={this.killPopup}
+                    />
+                );
+                break;
+            case 'settings':
                 popup = (
                     <Popup
                         content={

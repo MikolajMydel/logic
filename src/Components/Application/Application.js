@@ -60,13 +60,14 @@ class Application extends React.Component {
         this.controlPanelObject = findReact(this.controlRef.current);
 
         this.showPopup('project')
-
-        this.loadProject("Projekt");
     }
 
-    // wczytaj zapisane bramki z localstorage
+    // wczytaj zapisany projekt z localstorage
     loadProject = (projectName) => {
+        this.controlPanelObject.reset();
+
         this.currentProjectName = projectName;
+
         let saved = [];
         let projects = {};
         if(localStorage.getItem('projects') !== null){

@@ -5,7 +5,7 @@ import StartNode from "../Node/StartNode";
 import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
 import Menu from "../Menu/Menu";
-import Popup from "../Popup/Popup";
+import ProjectPopup from "../Popup/ProjectPopup";
 import {findReact, makeNewGate} from "../../functions";
 import {AND, NOT, OR, FALSE, TRUE} from "../../logicalFunctions";
 import Wire from '../WiresBoard/Wire/Wire.js';
@@ -248,34 +248,13 @@ class Application extends React.Component {
         var popup;
         switch(name) {
             case 'project':
-                popup = (
-                    <Popup
-                        content={
-                            null
-                        }
-                        killPopup={this.killPopup}
-                    />
-                );
+                popup = (<ProjectPopup killPopup={this.killPopup}/>);
                 break;
             case 'save':
-                popup = (
-                    <Popup
-                        content={
-                            null
-                        }
-                        killPopup={this.killPopup}
-                    />
-                );
+                popup = null;
                 break;
             case 'settings':
-                popup = (
-                    <Popup
-                        content={
-                            null
-                        }
-                        killPopup={this.killPopup}
-                    />
-                );
+                popup = null;
                 break;
             default:
                 return;

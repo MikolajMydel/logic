@@ -278,8 +278,8 @@ class Application extends React.Component {
                         function: this.clearCanvas,
                     },
                     {
-                        name: "popup",
-                        function: () => this.showPopup('project')
+                        name: "projekt",
+                        function: () => this.showPopup('project'),
                     },
                 ]}/>
                 <WiresBoard wires={this.state.wires} />

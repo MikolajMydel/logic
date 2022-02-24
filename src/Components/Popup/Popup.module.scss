@@ -1,8 +1,13 @@
-.Popup {
-    z-index: 99;
+.Cover {
     position: absolute;
-    height: 400px;
-    max-width: 400px;
+    height: 100vh;
+    width: 100vw;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.Popup {
+    position: absolute;
+    padding: 15px;
 
     left: 0;
     right: 0;
@@ -10,6 +15,5 @@
     transform: translateY(50%);
 
     border: 3px solid darkred;
-    padding: 15px;
     background-color: white;
 }

@@ -55,16 +55,22 @@ class ControlPanel extends React.Component {
         }
     }
 
-    reset = () => this.setState({dummies: defaultDummies(this.props.addGate)})
+    // wczytuje tylko bramki domyślne i te przesłane jako argument
+    reset = (savedGates) => {
+        let newDummies = [];
+        for(const savedGate of savedGates){
+            newDummies.push(this.createDummy(savedGate));
+        }
+        this.setState({dummies: defaultDummies(this.props.addGate).concat(newDummies)})
+    }
 
-    addDummy = (newGate) => {
-        let dummies = this.state.dummies;
+    createDummy = (newGate) => {
         const func = retrieveFunction(newGate.functions);
 
         // zrób tą funkcję dostępną globalnie
         global[newGate.name] = func;
 
-        const newDummy = (
+        return (
             <DummyGate
                 gateName={ newGate.name }
                 function={ func }
@@ -74,7 +80,10 @@ class ControlPanel extends React.Component {
                 addGate={ this.props.addGate }
             />
         )
-        dummies.push(newDummy);
+    }
+    addDummy = (newGate) => {
+        let dummies = this.state.dummies;
+        dummies.push(this.createDummy(newGate));
         this.setState({dummies: dummies});
     }
 

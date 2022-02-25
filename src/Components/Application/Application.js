@@ -67,7 +67,6 @@ class Application extends React.Component {
     // wczytaj zapisany projekt z localstorage
     loadProject = (projectName) => {
         this.currentProjectName = projectName !== undefined ? projectName : "Projekt";
-        this.controlPanelObject.reset();
 
         let saved = [];
         let projects = {};
@@ -77,9 +76,8 @@ class Application extends React.Component {
                 saved = projects[projectName];
         }
 
-        for(const savedGate of saved){
-            this.controlPanelObject.addDummy(savedGate);
-        }
+        this.controlPanelObject.reset(saved);
+        this.clearCanvas();
     }
 
     addNode = (e, type) => {

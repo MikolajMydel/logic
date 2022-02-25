@@ -166,16 +166,25 @@ class Wire extends React.Component {
 
     render() {
         if (!this.state.render) return null;
+
+        const dAttribute = calculatePath(
+            this.state.firstPinPosition,
+            this.state.secondPinPosition,
+            [this.firstPinPaddings, this.secondPinPaddings]
+        ).replace(/(\r\n|\n|\r| {2})/gm, "");
+
         return (
-            <path
-                d={calculatePath(
-                    this.state.firstPinPosition,
-                    this.state.secondPinPosition,
-                    [this.firstPinPaddings, this.secondPinPaddings]
-                ).replace(/(\r\n|\n|\r| {2})/gm, "")}
-		className={`${styles.Wire} ${this.state.stateClass}`}
-		onClick={this.handleOnClick}
-            />
+            <g>
+                <path
+                    d={dAttribute}
+                    className={`${styles.Wire} ${this.state.stateClass}`}
+                />
+                <path
+                    d={dAttribute}
+                    className={styles.ClickableArea}
+                    onClick={this.handleOnClick}
+                />
+            </g>
         );
     }
 }

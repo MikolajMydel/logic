@@ -1,12 +1,10 @@
 .Wire {
-    position: absolute;
-    top: 50%;
-
-
     // jakby cos sie stalo z klasami opartymi na stanie
     stroke: #000;
 
     user-select: none;
+
+    pointer-events: none;
 
     stroke-width: 5;
     fill: none;
@@ -26,4 +24,12 @@
         stroke: red;
     }
 
+}
+
+.ClickableArea {
+    stroke-width: 30;
+    stroke: transparent;
+    fill: none;
+
+    cursor: pointer;
 }

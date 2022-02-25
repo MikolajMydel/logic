@@ -4,6 +4,8 @@
 
     user-select: none;
 
+    pointer-events: none;
+
     stroke-width: 5;
     fill: none;
 
@@ -25,7 +27,7 @@
 }
 
 .ClickableArea {
-    stroke-width: 25;
+    stroke-width: 30;
     stroke: transparent;
     fill: none;
 

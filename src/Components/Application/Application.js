@@ -66,15 +66,23 @@ class Application extends React.Component {
 
     // wczytaj zapisany projekt z localstorage
     loadProject = (projectName) => {
-        this.currentProjectName = projectName !== undefined ? projectName : "Projekt";
-
         let saved = [];
         let projects = {};
         if(localStorage.getItem('projects') !== null){
             projects = JSON.parse(localStorage.getItem('projects'));
+
+            // usuwa z globalnego kontekstu customowe funkcje poprzedniego projektu
+            if(projects[this.currentProjectName] !== undefined)
+                for (const saved of projects[this.currentProjectName]){
+                    global[saved['name']] = undefined;
+                }
+
+            // wpisuje do 'saved' zapisane bramki
             if(projects[projectName] !== undefined)
                 saved = projects[projectName];
         }
+
+        this.currentProjectName = projectName;
 
         this.controlPanelObject.reset(saved);
         this.clearCanvas();

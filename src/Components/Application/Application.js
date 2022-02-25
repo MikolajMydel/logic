@@ -6,10 +6,11 @@ import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
 import Menu from "../Menu/Menu"
 import {findReact, makeNewGate} from "../../functions";
-import {AND, NOT, OR} from "../../logicalFunctions"
+import {AND, NOT, OR, FALSE, TRUE} from "../../logicalFunctions"
 import Wire from '../WiresBoard/Wire/Wire.js';
 import WiresBoard from "../WiresBoard/WiresBoard";
 import remove from "../../Events/remove";
+import move from "../../Events/move";
 
 function validateGateName(name) {
     // nazwa może składać się wyłącznie z liter i cyfr
@@ -48,6 +49,11 @@ class Application extends React.Component {
         global.NOT = NOT;
         global.AND = AND;
         global.OR = OR;
+        global.TRUE = TRUE;
+        global.FALSE = FALSE;
+
+        // bez contextmenu
+        window.addEventListener("contextmenu", (e) => e.preventDefault());
 
         this.controlPanelObject = findReact(this.controlRef.current);
 
@@ -114,11 +120,16 @@ class Application extends React.Component {
         });
     }
 
-    // funkcja podnosząca bramkę
+    handleMouseDown = (e) => {
+        if(e.button === 0)
+            this.grab(e);
+    }
+    // funkcja podnosząca element
     grab(e) {
         const element = e.target;
-        if (element.classList.contains("LogicGate")) {
-            element.style.zIndex = 1;
+        if (element.classList.contains("LogicGate") ||
+            element.classList.contains("NodeHandle")) {
+            element.style.zIndex = 2;
             this.setState({heldElement: element});
             // obliczenie różnicy koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
             const xo = e.clientX - element.offsetLeft;
@@ -127,13 +138,15 @@ class Application extends React.Component {
         }
     }
 
+    // przenieś trzymany element
     move(e) {
-        // przenieś bramkę (jeżeli jakaś jest trzymana)
-        if(this.state.heldElement){
-            const element = this.state.heldElement;
-            const canvas  = e.currentTarget;
-            const board   = this.boardRef.current;
+        const element = this.state.heldElement;
+        if(!element) return;
 
+        const canvas  = e.currentTarget;
+        const board   = this.boardRef.current;
+
+        if(element.classList.contains("LogicGate")){
             let x = e.clientX - this.state.heldElementOffset[0]; // różnica x
             let y = e.clientY - this.state.heldElementOffset[1]; // różnica y
 
@@ -152,11 +165,24 @@ class Application extends React.Component {
 
             element.style.left = x + 'px';
             element.style.top = y + 'px';
+            element.dispatchEvent(move);
+        } else if(element.classList.contains("NodeHandle")){
+            const node = element.parentElement;
+            let y = e.clientY;
+
+            if (y > node.parentElement.offsetHeight - 20)
+                y = node.parentElement.offsetHeight - 20;
+
+            if (y < node.parentElement.offsetTop + 40)
+                y = node.parentElement.offsetTop + 40;
+
+            node.style.top = y - 10 + 'px';
+            node.dispatchEvent(move);
         }
     }
 
     drop() {
-        // upuść trzymaną bramkę
+        // upuść trzymany element
         const element = this.state.heldElement;
         if(element){
             this.setState({heldElement: undefined});
@@ -173,7 +199,7 @@ class Application extends React.Component {
                 if(focused && focused.gate === comp)
                     this.setFocusedElement(undefined);
             } else {
-                element.style.zIndex = 0;
+                element.style.zIndex = 1;
             }
         }
     }
@@ -219,11 +245,20 @@ class Application extends React.Component {
     render() {
         return (
             <div className={ styles.Application }
-                onMouseDown={ (e) => this.grab(e) }
+                onMouseDown={ this.handleMouseDown }
                 onMouseMove={ (e) => this.move(e) }
                 onMouseUp={ () => this.drop() }
             >
-                <Menu functions={[this.saveGate, this.clearCanvas]}/>
+                <Menu functions={[
+                    {
+                        name: "zapisz bramkę",
+                        function: this.saveGate,
+                    },
+                    {
+                        name: "wyczyść",
+                        function: this.clearCanvas,
+                    },
+                ]}/>
                 <WiresBoard wires={this.state.wires} />
                 <div className={ styles.Canvas }
                     ref={el => this.canvasRef = el}

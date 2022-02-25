@@ -3,6 +3,10 @@
     margin: 0;
 }
 
+body {
+    overflow: hidden;
+}
+
 .Application {
     width: 100%;
     height: 100%;
@@ -28,10 +32,4 @@
     width: 50px;
     padding: 4px 0;
     background-color: lightslategray;
-}
-.InputArea > div{ // dla Node-ów
-    right: 0;
-}
-.OutputArea > div{ // dla Node-ów
-    left: 0;
 }

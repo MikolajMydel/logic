@@ -1,22 +1,113 @@
 .Node {
     position: absolute;
-    height: 20px;
-    width: 20px;
+    left: 0;
+    right: 0;
 
-    cursor: pointer;
+    display: flex;
+    // style aplikacji to zmieniają
+    flex-direction: row;
 
-    border-radius: 100%;
-    border: 2px solid #000;
+    &Start {
 
-    &Undefined {
-        background-color: lighten(gray, 20%);
+        .NodeButton {
+            margin-left: auto;
+            margin-right: 0;
+        }
+
+        .NodeNameBox {
+            left: 110%;
+        }
     }
 
-    &True {
-        background-color: lighten(lime, 20%);
+    &End {
+
+        flex-direction: row-reverse;
+
+        .NodeNameBox {
+            right: 110%;
+        }
+
+        .NodeButton {
+            margin-right: auto;
+            margin-left: 0;
+        }
+
+        .NodeHandle {
+            transform: rotate(180deg) translateY(25%);
+        }
     }
 
-    &False {
-        background-color: lighten(red, 20%);
+    &Button {
+        height: 20px;
+        width: 20px;
+        
+        cursor: pointer;
+
+        border-radius: 100%;
+        border: 1px solid #000;
+
+        &Undefined {
+            background-color: lighten(gray, 20%);
+        }
+
+        &True {
+            background-color: lighten(lime, 20%);
+        }
+
+        &False {
+            background-color: lighten(red, 20%);
+        }
+    }
+    &Handle {
+
+        $handle-color: #000000;
+
+        transform: translateY(-25%);
+        cursor: move;
+
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 18px 0 18px 28px;
+        border-color: transparent transparent transparent $handle-color;
+        line-height: 0px;
+        _border-color: #ffffff #ffffff #ffffff $handle-color;
+        _filter: progid:DXImageTransform.Microsoft.Chroma(color=$handle-color);
+
+    }
+    &NameBox {
+        // abs zeby nie wplywalo na ulozenie handle i button
+        position: absolute;
+        top: -55%;
+    
+        font-size: 16px;
+
+        border: 2px solid #222;
+
+        input {
+
+            padding: 5px;
+            outline: none;
+            border: none;
+            user-select: none;
+        
+        }
+        div {
+
+            font-size: 14px;
+            color: white;
+            font-weight: bold;
+
+            border-top: 2px solid #222;
+            padding: 4px;
+            
+            cursor: pointer;
+            user-select: none;
+            text-align: center;
+            background-color: red;
+            width: 100%;
+
+
+        }
     }
 }

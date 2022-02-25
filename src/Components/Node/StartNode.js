@@ -1,13 +1,10 @@
-import React from 'react';
 import Node from './Node';
 import signalChange from '../../Events/signalChange';
 class StartNode extends Node {
     state = {
-        value: false,
+        ...this.state,
         childPins: [],
-
-        ref: React.createRef(),
-
+        value: false,
     }
 
     // przylaczanie innego pina jako dziecko
@@ -34,6 +31,15 @@ class StartNode extends Node {
             this.props.setFocusedElement(this);
         else if (e.button === 1) // Środkowy PM
             this.toggleValue();
+    }
+
+    selfDestruct = () => {
+        this.fireRemoveEvent();
+
+        this.setState({render: false});
+        for(const child of this.state.childPins){
+            child.disconnect(this);
+        }
     }
 
     toggleValue() {

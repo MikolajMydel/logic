@@ -24,3 +24,6 @@ export const OR = (inputs) => {
     if ( isUndefined ) return [undefined];
     return [false];
 }
+
+export const TRUE = () => [true]
+export const FALSE = () => [false]

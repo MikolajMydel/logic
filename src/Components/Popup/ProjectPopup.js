@@ -14,6 +14,7 @@ class ProjectPopup extends Popup {
 
     state = {
         givenName: undefined,
+        projects: JSON.parse(localStorage.getItem("projects")),
     }
 
     handleOnChange = (e) => {
@@ -31,6 +32,17 @@ class ProjectPopup extends Popup {
         this.props.killPopup();
     }
 
+    deleteProject = (project) => {
+        if(this.props.getCurrentProjectName() === project) {
+            alert('nie możesz usunąć otwartego projektu');
+            return;
+        }
+        let obj = this.state.projects;
+        delete obj[project];
+        this.setState({projects: obj});
+        localStorage.setItem("projects", JSON.stringify(obj));
+    }
+
     selfDestruct = () => {
         if(this.props.getCurrentProjectName() === undefined){
             alert('wybierz lub utwórz projekt')
@@ -38,33 +50,42 @@ class ProjectPopup extends Popup {
         }
         this.props.killPopup();
     }
+
     render(){
         var projects = [];
-        for (const proj in JSON.parse(localStorage.getItem("projects"))){
+        for (const proj in this.state.projects){
             projects.push(
                 <div
                     className={styles.MainListProject}
-                    onClick={() => this.loadProject(proj)}
                 >
-                    {proj}
+                    <div
+                        className={styles.MainListProjectBody}
+                        onClick={() => this.loadProject(proj)}
+                    >
+                        <p>{proj}</p>
+                    </div>
+                    <div
+                        className={styles.MainListProjectDelete}
+                        onClick={() => this.deleteProject(proj)}
+                    ></div>
                 </div>
             );
         }
 
         return super.render((
             <div className={styles.Main}>
-                    <input
-                        type="text"
-                        className={styles.MainNewText}
-                        placeHolder="Nowy projekt"
-                        onChange={this.handleOnChange}
-                    />
-                    <input
-                        type="button"
-                        value="+"
-                        className={styles.MainNewButton}
-                        onClick={() => this.loadProject(this.state.givenName)}
-                    />
+                <input
+                    type="text"
+                    className={styles.MainNewText}
+                    placeHolder="Nowy projekt"
+                    onChange={this.handleOnChange}
+                />
+                <input
+                    type="button"
+                    value="+"
+                    className={styles.MainNewButton}
+                    onClick={() => this.loadProject(this.state.givenName)}
+                />
                 <hr/>
                 <div className={styles.MainList}>
                     {projects}

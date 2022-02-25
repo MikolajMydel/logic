@@ -15,16 +15,32 @@
         display: flex;
         flex-direction: column;
         max-height: 480px;
+
         &Project {
             flex-shrink: 0;
-            margin-bottom: 12px;
+            padding: 5px;
             height: 50px;
             width: 100%;
-            padding: 10px;
 
-            border: 3px solid #1181d8;
-            background-color: white;
-            border-radius: 14px;
+            &Body {
+                float: left;
+                width: 86%;
+                height: 100%;
+                border: 3px solid #1181d8;
+                background-color: white;
+                padding: 5px;
+                border-radius: 14px;
+            }
+            &Delete {
+                float: right;
+                width: 10%;
+                height: 100%;
+                margin-left: 12px;
+                border: 3px solid darkred;
+                background-color: white;
+                background-color: red;
+                border-radius: 14px;
+            }
         }
     }
 }

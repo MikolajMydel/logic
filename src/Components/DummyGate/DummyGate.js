@@ -35,11 +35,11 @@ class DummyGate extends React.Component {
             <div className={`${styles.LogicGate} ${styles.LogicGateDummy}`}
                 style={this.style}
                 onMouseDown={(e) => this.props.addGate(e, {
-                gateName: this.props.gateName,
-                function: this.props.function,
-                style: this.style,
-                inputCount: this.props.inputs,
-                outputCount: this.props.outputs,
+                    gateName: this.props.gateName,
+                    function: this.props.function,
+                    style: this.style,
+                    inputCount: this.props.inputs,
+                    outputCount: this.props.outputs,
             })}>
                 <div className={styles.LogicGateInputs}>
                     { inputFields }

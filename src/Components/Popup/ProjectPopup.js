@@ -22,13 +22,12 @@ class ProjectPopup extends Popup {
         });
     }
 
-    handleOnClick = () => {
-        const name = this.state.givenName;
+    loadProject = (name) => {
         if (!validateProjectName(name)) {
             alert('niepoprawna nazwa');
             return;
         }
-        this.props.loadProject(this.state.givenName);
+        this.props.loadProject(name);
         this.props.killPopup();
     }
 
@@ -41,6 +40,17 @@ class ProjectPopup extends Popup {
     }
     render(){
         var projects = [];
+        for (const proj in JSON.parse(localStorage.getItem("projects"))){
+            projects.push(
+                <div
+                    className={styles.MainListProject}
+                    onClick={() => this.loadProject(proj)}
+                >
+                    {proj}
+                </div>
+            );
+        }
+
         return super.render((
             <div className={styles.Main}>
                     <input
@@ -53,10 +63,12 @@ class ProjectPopup extends Popup {
                         type="button"
                         value="+"
                         className={styles.MainNewButton}
-                        onClick={this.handleOnClick}
+                        onClick={() => this.loadProject(this.state.givenName)}
                     />
                 <hr/>
-                {projects}
+                <div className={styles.MainList}>
+                    {projects}
+                </div>
             </div>
         ));
     }

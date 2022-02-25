@@ -73,7 +73,7 @@ class Wire extends React.Component {
 
             gate.addEventListener(
                 "remove",
-                this.removeConnection
+                this.onGateRemoval
             );
         }
 
@@ -84,11 +84,12 @@ class Wire extends React.Component {
 
         this.secondPin.state.ref.current.addEventListener(
             "parentChange",
-            this.examineWireVisibility
+            this.onPinParentChange
         );
     }
 
     detachEventListeners = () => {
+
         window.removeEventListener(
             "resize",
             this.updatePosition
@@ -103,7 +104,7 @@ class Wire extends React.Component {
 
             gate.removeEventListener(
                 "remove",
-                this.removeConnection
+                this.onGateRemoval
             );
         }
 
@@ -115,30 +116,35 @@ class Wire extends React.Component {
         // zapobieganie "powracaniu" dawnych przewodow podczas przywracania dawnego polaczenia
         this.secondPin.state.ref.current.removeEventListener(
             "parentChange",
-            this.examineWireVisibility
+            this.onPinParentChange
         );
     }
 
-    handleOnClick = () => this.removeConnection();
+    hideWire = () => this.setState({
+        "render": false,
+    });
 
-    removeConnection = () => {
+    handleOnClick = () => {
         this.detachEventListeners();
 
         // usuwam polaczenie z perspektywy dziecka i rodzica
         this.secondPin.disconnect();
 
         // usuwam graficzny przewod
-        this.setState({
-            render: false,
-        });
+        this.hideWire();
     };
 
-    examineWireVisibility = () => {
-        this.setState({
-            // render tylko, gdy oba piny sa polaczone
-            render: this.firstPin === this.secondPin.state.parentPin,
-        });
+    onPinParentChange = () => {
+        if (this.firstPin !== this.secondPin.state.parentPin){
+            this.hideWire();
+            this.detachEventListeners();
+        }
     };
+
+    onGateRemoval = () => {
+        this.detachEventListeners();
+        this.hideWire();
+    }
 
     getStateClass = () => stateClasses[this.firstPin.state.value];
 

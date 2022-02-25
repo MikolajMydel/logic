@@ -23,23 +23,43 @@
             width: 100%;
 
             &Body {
+                display: flex;
+                align-items: center;
+
                 float: left;
                 width: 86%;
                 height: 100%;
+                padding: 10px;
+
                 border: 3px solid #1181d8;
                 background-color: white;
-                padding: 5px;
                 border-radius: 14px;
+
+                cursor: pointer;
+            }
+            &Body:hover {
+                background-color: lightgray;
             }
             &Delete {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
                 float: right;
                 width: 10%;
                 height: 100%;
+                line-height: 100%;
                 margin-left: 12px;
+
                 border: 3px solid darkred;
                 background-color: white;
                 background-color: red;
                 border-radius: 14px;
+                color: white;
+
+                cursor: pointer;
+
+                text-align: center;
             }
         }
     }

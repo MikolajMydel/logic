@@ -18,7 +18,7 @@ class Popup extends React.Component {
                     className={styles.Popup}
                     style={this.style}
                 >
-                    <p onClick={this.selfDestruct}>X</p>
+                    <strong onClick={this.selfDestruct}>X</strong>
                     {contents}
                 </div>
             </div>

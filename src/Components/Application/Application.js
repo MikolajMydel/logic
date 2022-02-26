@@ -4,9 +4,10 @@ import LogicGate from "../LogicGate/LogicGate";
 import StartNode from "../Node/StartNode";
 import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
-import Menu from "../Menu/Menu"
+import Menu from "../Menu/Menu";
+import ProjectPopup from "../Popup/ProjectPopup";
 import {findReact, makeNewGate} from "../../functions";
-import {AND, NOT, OR, FALSE, TRUE} from "../../logicalFunctions"
+import {AND, NOT, OR, FALSE, TRUE} from "../../logicalFunctions";
 import Wire from '../WiresBoard/Wire/Wire.js';
 import WiresBoard from "../WiresBoard/WiresBoard";
 import remove from "../../Events/remove";
@@ -23,6 +24,7 @@ class Application extends React.Component {
         focusedElement: undefined,    // aktualnie wybrane wyjście
         heldElement: undefined,       // aktualnie trzymana bramka
         heldElementOffset: [0, 0],    // różnica koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
+        popup: null,
         elements: {
             inputs: [],
             board: [],
@@ -44,6 +46,8 @@ class Application extends React.Component {
     // funkcja zwracajaca aktualnie wybrane wyjscie - umozliwia kliknietej bramce logicznej zmiane wejscia na wczesniej klikniete wyjscie
     getFocusedElement = () => this.state.focusedElement;
 
+    getCurrentProjectName = () => this.currentProjectName;
+
     // tylko raz po wyrenderowaniu tego komponentu
     componentDidMount(){
         global.NOT = NOT;
@@ -57,16 +61,31 @@ class Application extends React.Component {
 
         this.controlPanelObject = findReact(this.controlRef.current);
 
-        // wczytaj zapisane bramki z localstorage
-        let saved;
-        if(localStorage.getItem("savedGates") !== null)
-            saved = JSON.parse(localStorage.getItem("savedGates"));
-        else
-            saved = [];
+        this.showPopup('project')
+    }
 
-        for(const savedGate of saved){
-            this.controlPanelObject.addDummy(savedGate);
+    // wczytaj zapisany projekt z localstorage
+    loadProject = (projectName) => {
+        let saved = [];
+        let projects = {};
+        if(localStorage.getItem('projects') !== null){
+            projects = JSON.parse(localStorage.getItem('projects'));
+
+            // usuwa z globalnego kontekstu customowe funkcje poprzedniego projektu
+            if(projects[this.currentProjectName] !== undefined)
+                for (const saved of projects[this.currentProjectName]){
+                    global[saved['name']] = undefined;
+                }
+
+            // wpisuje do 'saved' zapisane bramki
+            if(projects[projectName] !== undefined)
+                saved = projects[projectName];
         }
+
+        this.currentProjectName = projectName;
+
+        this.controlPanelObject.reset(saved);
+        this.clearCanvas();
     }
 
     addNode = (e, type) => {
@@ -224,16 +243,39 @@ class Application extends React.Component {
         const newGateObject = makeNewGate(this.canvasRef, name, color);
 
         // zapisywanie w localStorage
-        let saved;
-        if(localStorage.getItem("savedGates") !== null)
-            saved = JSON.parse(localStorage.getItem("savedGates"));
-        else
-            saved = [];
-        saved.push(newGateObject);
-        localStorage.setItem("savedGates", JSON.stringify(saved));
+        let projects = {};
+        if(localStorage.getItem('projects') !== null)
+            projects = JSON.parse(localStorage.getItem('projects'));
+        if(projects[this.currentProjectName] === undefined)
+            projects[this.currentProjectName] = [];
+
+        projects[this.currentProjectName].push(newGateObject);
+        localStorage.setItem("projects", JSON.stringify(projects));
 
         // dodaj nową bramkę do zasobnika
         this.controlPanelObject.addDummy(newGateObject);
+    }
+
+    showPopup = (name) => {
+        var popup;
+        switch(name) {
+            case 'project':
+                popup = (<ProjectPopup getCurrentProjectName={this.getCurrentProjectName} killPopup={this.killPopup} loadProject={this.loadProject}/>);
+                break;
+            case 'save':
+                popup = null; // TODO
+                break;
+            case 'settings':
+                popup = null; // TODO
+                break;
+            default:
+                return;
+        }
+        this.setState({'popup': popup});
+    }
+
+    killPopup = () => {
+        this.setState({popup: null})
     }
 
     // wyczyść obszar roboczy
@@ -249,6 +291,7 @@ class Application extends React.Component {
                 onMouseMove={ (e) => this.move(e) }
                 onMouseUp={ () => this.drop() }
             >
+                {this.state.popup}
                 <Menu functions={[
                     {
                         name: "zapisz bramkę",
@@ -257,6 +300,10 @@ class Application extends React.Component {
                     {
                         name: "wyczyść",
                         function: this.clearCanvas,
+                    },
+                    {
+                        name: "projekt",
+                        function: () => this.showPopup('project'),
                     },
                 ]}/>
                 <WiresBoard wires={this.state.wires} />

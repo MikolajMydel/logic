@@ -4,65 +4,73 @@ import {retrieveFunction} from '../../functions';
 import {AND, NOT, OR, FALSE, TRUE} from "../../logicalFunctions"
 import React from "react";
 
+// NAZWA BRAMKI MUSI BYĆ TAKA SAMA JAK NAZWA JEJ FUNKCJI
+const defaultDummies = (addgate) => [
+    <DummyGate
+        gateName={ "AND" }
+        function={AND}
+        color={"cornflowerblue"}
+        inputs={ 2 }
+        outputs={ 1 }
+        addGate={addgate}
+    />,
+    <DummyGate
+        gateName={ "NOT" }
+        function={NOT}
+        color={"purple"}
+        inputs={ 1 }
+        outputs={ 1 }
+        addGate={addgate}
+    />,
+    <DummyGate
+        gateName={ "OR" }
+        function={OR}
+        color={"chocolate"}
+        inputs={ 2 }
+        outputs={ 1 }
+        addGate={addgate}
+    />,
+    <DummyGate
+        gateName={ "FALSE" }
+        function={FALSE}
+        color={"red"}
+        inputs={ 0 }
+        outputs={ 1 }
+        addGate={addgate}
+    />,
+    <DummyGate
+        gateName={ "TRUE" }
+        function={TRUE}
+        color={"lime"}
+        inputs={ 0 }
+        outputs={ 1 }
+        addGate={addgate}
+    />,
+]
 class ControlPanel extends React.Component {
-
     constructor(props){
         super();
         this.state = {
-            // NAZWA BRAMKI MUSI BYĆ TAKA SAMA JAK NAZWA JEJ FUNKCJI
-            dummies: [
-                <DummyGate
-                    gateName={ "AND" }
-                    function={AND}
-                    color={"cornflowerblue"}
-                    inputs={ 2 }
-                    outputs={ 1 }
-                    addGate={props.addGate}
-                />,
-                <DummyGate
-                    gateName={ "NOT" }
-                    function={NOT}
-                    color={"purple"}
-                    inputs={ 1 }
-                    outputs={ 1 }
-                    addGate={props.addGate}
-                />,
-                <DummyGate
-                    gateName={ "OR" }
-                    function={OR}
-                    color={"chocolate"}
-                    inputs={ 2 }
-                    outputs={ 1 }
-                    addGate={props.addGate}
-                />,
-                <DummyGate
-                    gateName={ "FALSE" }
-                    function={FALSE}
-                    color={"red"}
-                    inputs={ 0 }
-                    outputs={ 1 }
-                    addGate={props.addGate}
-                />,
-                <DummyGate
-                    gateName={ "TRUE" }
-                    function={TRUE}
-                    color={"lime"}
-                    inputs={ 0 }
-                    outputs={ 1 }
-                    addGate={props.addGate}
-                />,
-            ],
+            dummies: defaultDummies(props.addGate),
         }
     }
 
-    addDummy = (newGate) => {
-        let dummies = this.state.dummies;
+    // wczytuje tylko bramki domyślne i te przesłane jako argument
+    reset = (savedGates) => {
+        let newDummies = [];
+        for(const savedGate of savedGates){
+            newDummies.push(this.createDummy(savedGate));
+        }
+        this.setState({dummies: defaultDummies(this.props.addGate).concat(newDummies)})
+    }
+
+    createDummy = (newGate) => {
         const func = retrieveFunction(newGate.functions);
 
         // zrób tą funkcję dostępną globalnie
         global[newGate.name] = func;
 
-        const newDummy = (
+        return (
             <DummyGate
                 gateName={ newGate.name }
                 function={ func }
@@ -72,7 +80,10 @@ class ControlPanel extends React.Component {
                 addGate={ this.props.addGate }
             />
         )
-        dummies.push(newDummy);
+    }
+    addDummy = (newGate) => {
+        let dummies = this.state.dummies;
+        dummies.push(this.createDummy(newGate));
         this.setState({dummies: dummies});
     }
 

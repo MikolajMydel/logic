@@ -1,0 +1,28 @@
+.Cover {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+.Popup {
+    box-sizing: border-box;
+    position: absolute;
+    padding: 15px;
+
+    left: 0; right: 0;
+    top: 0; bottom: 0;
+    margin: auto;
+
+    border: 3px solid darkred;
+    border-radius: 15px;
+    background-color: white;
+
+    strong {
+        cursor: pointer;
+        padding: 5px;
+    }
+    strong:hover {
+        color: gray;
+    }
+}

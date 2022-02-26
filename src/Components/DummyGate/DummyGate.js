@@ -4,8 +4,6 @@ import InputPin from "../LogicGate/Pin/InputPin";
 import styles from "../LogicGate/LogicGate.module.scss";
 
 class DummyGate extends React.Component {
-    style = {backgroundColor: this.props.color}
-
     handleMouseDown = (e) => {
         if(e.button === 0) {
             this.props.addGate(e, {
@@ -31,15 +29,17 @@ class DummyGate extends React.Component {
                 <OutputPin />
             ));
         }
+        const style = {backgroundColor: this.props.color}
+
         return (
             <div className={`${styles.LogicGate} ${styles.LogicGateDummy}`}
-                style={this.style}
+                style={style}
                 onMouseDown={(e) => this.props.addGate(e, {
-                gateName: this.props.gateName,
-                function: this.props.function,
-                style: this.style,
-                inputCount: this.props.inputs,
-                outputCount: this.props.outputs,
+                    gateName: this.props.gateName,
+                    function: this.props.function,
+                    style: style,
+                    inputCount: this.props.inputs,
+                    outputCount: this.props.outputs,
             })}>
                 <div className={styles.LogicGateInputs}>
                     { inputFields }

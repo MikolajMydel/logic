@@ -3,7 +3,6 @@ import styles from './SaveGatePopup.module.scss';
 
 function validateGateName(name) {
     // nazwa może składać się wyłącznie z liter i cyfr
-    // oraz musi zaczynać się od litery
     var regex = /^f_[A-Za-z0-9]*$/;
     return regex.test(name);
 }

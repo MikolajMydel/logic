@@ -1,5 +1,5 @@
 import React from "react";
-import styles from './NodeSet.module.scss';
+import './NodeSet.scss';
 
 class NodeSet extends React.Component {
     constructor(props){
@@ -29,8 +29,8 @@ class NodeSet extends React.Component {
     render(){
         const position = this.props.position + "px";
         return (
-            <div ref={this.state.ref} style={{top:position}} className={styles.NodeSet} onClick={this.show}>
-                <div className={`NodeSetHandle ${styles.NodeSetHandle}`}>
+            <div ref={this.state.ref} style={{top:position}} className={'NodeSet'} onClick={this.show}>
+                <div className={`NodeSetHandle`}>
                 </div>
                 {this.nodes}
             </div>

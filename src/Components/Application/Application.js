@@ -31,7 +31,7 @@ class Application extends React.Component {
             outputs: [],
         },
         wires: [],
-        grid: 20, // ile pikseli na siatkę
+        grid: 40, // ile pikseli na siatkę
     }
 
     boardRef = React.createRef()
@@ -316,22 +316,28 @@ class Application extends React.Component {
                     },
                 ]}/>
                 <WiresBoard wires={this.state.wires} />
-                <div className={ styles.Canvas }
+                <div
+                    className={ styles.Canvas }
                     ref={el => this.canvasRef = el}
                 >
-                    <div className={ `Area ${styles.InputArea}` }
+                    <div
+                        className={ `Area ${styles.InputArea}` }
                         onClick={ (e) => this.addNode(e, 'startNode')}
                     >
                         { this.state.elements.inputs }
                     </div>
-                    <div className={ styles.Board }
+                    <div
+                        className={ styles.Board }
                         ref={this.boardRef}
+                        // rysuje siatkę o odpowiednim rozmiarze na tle
+                        style={{backgroundSize: this.state.grid + 'px ' + this.state.grid + 'px'}}
                     >
 
                         { this.state.elements.board }
 
                     </div>
-                    <div className={ `Area ${styles.OutputArea}` }
+                    <div
+                        className={ `Area ${styles.OutputArea}` }
                         onClick={ (e) => this.addNode(e, 'endNode')}
                     >
                         { this.state.elements.outputs }

@@ -1,0 +1,19 @@
+.Main {
+    &NameText {
+        text-align: center;
+        width: 80%;
+        height: 36px;
+    }
+    &Color {
+        box-sizing: border-box;
+        width: 100%;
+        height: 40px;
+        margin: 0;
+        padding: 0;
+    }
+    &NewButton {
+        margin: 10px 0 10px 0;
+        width: 20%;
+        height: 36px;
+    }
+}

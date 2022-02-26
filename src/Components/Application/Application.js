@@ -24,11 +24,11 @@ class Application extends React.Component {
         focusedElement: undefined,    // aktualnie wybrane wyjście
         heldElement: undefined,       // aktualnie trzymana bramka
         heldElementOffset: [0, 0],    // różnica koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
-        elements: {
-            inputs: [],
-            board: [],
-            outputs: [],
-        },
+
+        inputs: [],
+        board: [],
+        outputs: [],
+
         wires: [],
     }
 
@@ -76,40 +76,45 @@ class Application extends React.Component {
             return;
 
         const pos = e.clientY - e.target.offsetTop - 10; // 10 - połowa wysokości
-        let elements = this.state.elements;
+        let stateCopy = Object.assign({}, this.state);
 
-        // tworze NodeSet z 4 node'ami
         if (type === "startNode")
-            elements.inputs.push(
+            stateCopy.inputs.push(
                 <StartNode position={pos} setFocusedElement={ this.setFocusedElement }/>,
             );
         else // endNode
-            elements.outputs.push(
+            stateCopy.outputs.push(
                 <EndNode drawWire={ this.drawWire } removeWire={ this.removeWire }
                 getFocusedElement={ this.getFocusedElement } position={ pos }/>
             );
-        this.setState ({'elements': elements});
+        this.setState (stateCopy);
     }
 
     mergeNodes = (elements) => {
+        let stateCopy = Object.assign({}, this.state);
+
         if (elements.nodeSets.length === 0){
-            this.state.elements.inputs.push(<NodeSet nodes={elements.nodes} />);
+            stateCopy.inputs.push(<NodeSet nodes={elements.nodes} />);
         } else {
             const childNodes = [];
             for (let i = 0; i < elements.nodeSets.length; i++){
                 childNodes.push(...elements.nodeSets[i].childNodes);
             }
 
-            this.state.elements.inputs.push(<NodeSet nodes={childNodes.filter(
+            stateCopy.inputs.push(<NodeSet nodes={childNodes.filter(
                 (node) => node.classList.contains("Node")
             )}/>)
         }
+
+        this.setState(stateCopy);
+
     }
 
     addGate = (e, args) => {
-        let elements = this.state.elements;
+        const boardCopy = [...this.state.board];
+
         let newGate;
-        elements.board.push(
+        boardCopy.push(
             <LogicGate
                 gateName={ args.gateName }
                 inputs={ args.inputCount }
@@ -122,7 +127,7 @@ class Application extends React.Component {
                 reference={el => newGate = el}
             />
         );
-        this.setState ({'elements': elements}, function(){
+        this.setState ({'board': boardCopy}, function(){
             // 'e.target' odnosi się teraz do komponentu DummyGate
             const xo = e.clientX - e.target.offsetLeft + this.controlRef.current.scrollLeft;
             const yo = e.clientY - e.target.offsetTop + (e.target.offsetHeight/2);
@@ -279,7 +284,7 @@ class Application extends React.Component {
 
     // wyczyść obszar roboczy
     clearCanvas = () => {
-        this.setState({focusedElement: undefined, elements: {inputs: [], board: [], outputs: []}, wires: []})
+        this.setState({focusedElement: undefined, inputs: [], board: [], outputs: [], wires: []})
 
     }
 
@@ -307,19 +312,19 @@ class Application extends React.Component {
                     <div className={ `Area ${styles.InputArea}` }
                         onClick={ (e) => this.addNode(e, 'startNode')}
                     >
-                        { this.state.elements.inputs }
+                        { this.state.inputs }
                     </div>
                     <div className={ styles.Board }
                         ref={this.boardRef}
                     >
 
-                        { this.state.elements.board }
+                        { this.state.board }
 
                     </div>
                     <div className={ `Area ${styles.OutputArea}` }
                         onClick={ (e) => this.addNode(e, 'endNode')}
                     >
-                        { this.state.elements.outputs }
+                        { this.state.outputs }
                     </div>
                 </div>
                 <ControlPanel addGate={this.addGate} reference={this.controlRef}/>

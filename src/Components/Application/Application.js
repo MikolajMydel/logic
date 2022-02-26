@@ -91,9 +91,19 @@ class Application extends React.Component {
         this.setState ({'elements': elements});
     }
 
-    mergeNodes = (nodes) => {
-        const newNodeSet = <NodeSet HTMLChildren={nodes} />;
-        this.state.elements.inputs.push(newNodeSet);
+    mergeNodes = (elements) => {
+        if (elements.nodeSets.length === 0){
+            this.state.elements.inputs.push(<NodeSet nodes={elements.nodes} />);
+        } else {
+            const childNodes = [];
+            for (let i = 0; i < elements.nodeSets.length; i++){
+                childNodes.push(...elements.nodeSets[i].childNodes);
+            }
+
+            this.state.elements.inputs.push(<NodeSet nodes={childNodes.filter(
+                (node) => node.classList.contains("Node")
+            )}/>)
+        }
     }
 
     addGate = (e, args) => {
@@ -197,14 +207,22 @@ class Application extends React.Component {
     drop(e) {
         const element = this.state.heldElement;
 
-        // wszystkie node'y / nodesety znajdujace sie pod kursorem
-        const elementsUnderCursor = document.elementsFromPoint(e.clientX, e.clientY).filter(
-            (element) => element.classList.contains("Node")
-        );
+        // wszystkie elementy znajdujace sie pod kursorem
+        const elementsUnderCursor = document.elementsFromPoint(e.clientX, e.clientY);
 
-        if ( elementsUnderCursor.length > 1 ) {
-            this.mergeNodes(elementsUnderCursor);
-        }
+        // posegregowanie elementow
+        const interactiveElements = {
+            'nodes': [],
+            'nodeSets': [],
+        };
+        elementsUnderCursor.forEach((element) => {
+            if (element.classList.contains("Node")) interactiveElements["nodes"].push(element);
+            else if (element.classList.contains("NodeSet")) interactiveElements["nodeSets"].push(element);
+        });
+
+        // jezeli jest co scalac, to scal
+        if (interactiveElements.nodes.length + interactiveElements.nodeSets.length > 1)
+            this.mergeNodes(interactiveElements);
 
         // upuść trzymany element
         if(element){

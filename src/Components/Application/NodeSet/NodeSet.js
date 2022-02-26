@@ -6,14 +6,22 @@ class NodeSet extends React.Component {
         super(props);
         this.state = {
             ref: React.createRef(),
+            nodes: this.props.nodes,
 
         }
 
-        this.position = props.HTMLChildren[0].style.top;
+        this.position = props.nodes[0].style.top;
+    }
+
+    addNodes = (nodes) => {
+        const newNodesArray = this.state.nodes.concat(nodes);
+        this.setState({
+            'nodes': newNodesArray,
+        });
     }
 
     calculateValue = () => {
-        const nodes = this.nodes;
+        const nodes = this.state.nodes;
         for (let i = 0; i < nodes.length; i++){
             console.log(nodes[i]);
         }
@@ -22,7 +30,7 @@ class NodeSet extends React.Component {
     componentDidMount(){
         this.state.ref.current.addEventListener('signalChange', this.calculateValue);
 
-        const children = this.props.HTMLChildren;
+        const children = this.state.nodes;
 
         for (let i = 0; i < children.length; i++){
             // usuwam style zwiazane z indywidualna pozycja node

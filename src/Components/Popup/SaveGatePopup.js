@@ -7,6 +7,9 @@ function validateGateName(name) {
     var regex = /^f_[A-Za-z0-9]*$/;
     return regex.test(name);
 }
+
+const getRandomColor = () => '#' + Math.floor(Math.random()*16777215).toString(16)
+
 class ProjectPopup extends Popup {
     style = {
         maxWidth: '440px',
@@ -15,7 +18,7 @@ class ProjectPopup extends Popup {
 
     state = {
         givenName: undefined,
-        givenColor: '#ff00ff',
+        givenColor: getRandomColor(),
     }
 
     handleOnChangeName = (e) => {

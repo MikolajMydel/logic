@@ -8,7 +8,8 @@ class NodeSet extends React.Component {
             ref: React.createRef(),
 
         }
-        this.nodes = props.nodes;
+
+        this.position = props.HTMLChildren[0].style.top;
     }
 
     calculateValue = () => {
@@ -20,6 +21,14 @@ class NodeSet extends React.Component {
 
     componentDidMount(){
         this.state.ref.current.addEventListener('signalChange', this.calculateValue);
+
+        const children = this.props.HTMLChildren;
+
+        for (let i = 0; i < children.length; i++){
+            // usuwam style zwiazane z indywidualna pozycja node
+            children[i].style.top = "";
+            this.state.ref.current.appendChild(children[i]);
+        }
     }
 
     componentWillUnmount(){
@@ -27,12 +36,10 @@ class NodeSet extends React.Component {
     }
 
     render(){
-        const position = this.props.position + "px";
         return (
-            <div ref={this.state.ref} style={{top:position}} className={'NodeSet'} onClick={this.show}>
+            <div ref={this.state.ref} style={{top:this.position}} className={'NodeSet'} onClick={this.show}>
                 <div className={`NodeSetHandle`}>
                 </div>
-                {this.nodes}
             </div>
         )
     }

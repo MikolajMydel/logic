@@ -91,6 +91,11 @@ class Application extends React.Component {
         this.setState ({'elements': elements});
     }
 
+    mergeNodes = (nodes) => {
+        const newNodeSet = <NodeSet HTMLChildren={nodes} />;
+        this.state.elements.inputs.push(newNodeSet);
+    }
+
     addGate = (e, args) => {
         let elements = this.state.elements;
         let newGate;
@@ -189,9 +194,19 @@ class Application extends React.Component {
         };
     }
 
-    drop() {
-        // upuść trzymany element
+    drop(e) {
         const element = this.state.heldElement;
+
+        // wszystkie node'y / nodesety znajdujace sie pod kursorem
+        const elementsUnderCursor = document.elementsFromPoint(e.clientX, e.clientY).filter(
+            (element) => element.classList.contains("Node")
+        );
+
+        if ( elementsUnderCursor.length > 1 ) {
+            this.mergeNodes(elementsUnderCursor);
+        }
+
+        // upuść trzymany element
         if(element){
             this.setState({heldElement: undefined});
             const board = this.boardRef.current;
@@ -255,7 +270,7 @@ class Application extends React.Component {
             <div className={ styles.Application }
                 onMouseDown={ this.handleMouseDown }
                 onMouseMove={ (e) => this.move(e) }
-                onMouseUp={ () => this.drop() }
+                onMouseUp={ (e) => this.drop(e) }
             >
                 <Menu functions={[
                     {

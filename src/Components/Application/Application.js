@@ -31,6 +31,7 @@ class Application extends React.Component {
             outputs: [],
         },
         wires: [],
+        grid: 20, // ile pikseli na siatkę
     }
 
     boardRef = React.createRef()
@@ -150,9 +151,12 @@ class Application extends React.Component {
             element.classList.contains("NodeHandle")) {
             element.style.zIndex = 2;
             this.setState({heldElement: element});
+
+            const grid = this.state.grid
             // obliczenie różnicy koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
-            const xo = e.clientX - element.offsetLeft;
-            const yo = e.clientY - element.offsetTop;
+            // uwzględnia szerokość siatki
+            const xo = e.clientX - element.offsetLeft - grid/2;
+            const yo = e.clientY - element.offsetTop - grid/2;
             this.setState({heldElementOffset: [xo, yo]});
         }
     }
@@ -166,8 +170,12 @@ class Application extends React.Component {
         const board   = this.boardRef.current;
 
         if(element.classList.contains("LogicGate")){
-            let x = e.clientX - this.state.heldElementOffset[0]; // różnica x
+            let x = e.clientX - this.state.heldElementOffset[0] - board.offsetLeft; // różnica x
             let y = e.clientY - this.state.heldElementOffset[1]; // różnica y
+
+            const grid = this.state.grid;
+            x = x - (x % grid) + board.offsetLeft;
+            y = y - (y % grid);
 
             if (x < board.offsetLeft)
                 // za daleko w lewo
@@ -175,16 +183,17 @@ class Application extends React.Component {
             else if (x + element.offsetWidth > board.offsetWidth + board.offsetLeft)
                 // za daleko w prawo
                 x = board.offsetWidth + board.offsetLeft - element.offsetWidth;
-            if (y < canvas.offsetTop)
+            if (y < board.offsetTop)
                 // za daleko w górę
-                y = canvas.offsetTop;
-            else if (y + element.offsetHeight > canvas.offsetHeight + canvas.offsetTop)
+                y = board.offsetTop;
+            else if (y + element.offsetHeight > canvas.offsetHeight)
                 // za daleko w dół
                 y = canvas.offsetHeight + canvas.offsetTop - element.offsetHeight;
 
             element.style.left = x + 'px';
             element.style.top = y + 'px';
             element.dispatchEvent(move);
+
         } else if(element.classList.contains("NodeHandle")){
             const node = element.parentElement;
             let y = e.clientY;

@@ -7,17 +7,10 @@ class NodeSet extends React.Component {
         this.state = {
             ref: React.createRef(),
             nodes: this.props.nodes,
-
+            render: true,
         }
 
         this.position = props.nodes[0].style.top;
-    }
-
-    addNodes = (nodes) => {
-        const newNodesArray = this.state.nodes.concat(nodes);
-        this.setState({
-            'nodes': newNodesArray,
-        });
     }
 
     calculateValue = () => {
@@ -27,8 +20,13 @@ class NodeSet extends React.Component {
         }
     }
 
+    hideNodeSet = () => this.setState({
+        'render': false,
+    });
+
     componentDidMount(){
         this.state.ref.current.addEventListener('signalChange', this.calculateValue);
+        this.state.ref.current.addEventListener('merge', this.hideNodeSet);
 
         const children = this.state.nodes;
 
@@ -41,9 +39,12 @@ class NodeSet extends React.Component {
 
     componentWillUnmount(){
         this.state.ref.current.removeEventListener('signalChange', this.calculateValue);
+        this.state.ref.current.removeEventListener('merge', this.hideNodeSet);
     }
 
     render(){
+        if (!this.state.render) return null;
+
         return (
             <div ref={this.state.ref} style={{top:this.position}} className={'NodeSet'} onClick={this.show}>
                 <div className={`NodeSetHandle`}>

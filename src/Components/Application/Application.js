@@ -12,6 +12,7 @@ import WiresBoard from "../WiresBoard/WiresBoard";
 import remove from "../../Events/remove";
 import move from "../../Events/move";
 import NodeSet from "./NodeSet/NodeSet";
+import merge from "../../Events/merge";
 
 function validateGateName(name) {
     // nazwa może składać się wyłącznie z liter i cyfr
@@ -97,17 +98,25 @@ class Application extends React.Component {
             stateCopy.inputs.push(<NodeSet nodes={elements.nodes} />);
         } else {
             const childNodes = [];
+
+            // dodaj do tablicy wszystkie dzieci node setow
             for (let i = 0; i < elements.nodeSets.length; i++){
                 childNodes.push(...elements.nodeSets[i].childNodes);
             }
 
+            // stworz nowy nodeset i podaj jako nody pobrane wczesniej
+            // dzieci
             stateCopy.inputs.push(<NodeSet nodes={childNodes.filter(
                 (node) => node.classList.contains("Node")
             )}/>)
+
+            // powiadom nodesety o scaleniu
+            for (let nodeSet of elements.nodeSets){
+                nodeSet.dispatchEvent(merge);
+            }
         }
 
         this.setState(stateCopy);
-
     }
 
     addGate = (e, args) => {
@@ -284,8 +293,7 @@ class Application extends React.Component {
 
     // wyczyść obszar roboczy
     clearCanvas = () => {
-        this.setState({focusedElement: undefined, inputs: [], board: [], outputs: [], wires: []})
-
+        this.setState({focusedElement: undefined, inputs: [], board: [], outputs: [], wires: []});
     }
 
     render() {

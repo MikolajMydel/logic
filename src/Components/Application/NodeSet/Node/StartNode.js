@@ -1,5 +1,5 @@
 import Node from './Node';
-import signalChange from '../../Events/signalChange';
+import signalChange from '../../../../Events/signalChange';
 class StartNode extends Node {
     state = {
         ...this.state,

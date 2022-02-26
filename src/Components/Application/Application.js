@@ -1,8 +1,8 @@
 import React from "react";
 import styles from './Application.module.scss';
 import LogicGate from "../LogicGate/LogicGate";
-import StartNode from "../Node/StartNode";
-import EndNode from "../Node/EndNode";
+import StartNode from "./NodeSet/Node/StartNode";
+import EndNode from "./NodeSet/Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
 import Menu from "../Menu/Menu"
 import {findReact, makeNewGate} from "../../functions";
@@ -11,6 +11,7 @@ import Wire from '../WiresBoard/Wire/Wire.js';
 import WiresBoard from "../WiresBoard/WiresBoard";
 import remove from "../../Events/remove";
 import move from "../../Events/move";
+import NodeSet from "./NodeSet/NodeSet";
 
 function validateGateName(name) {
     // nazwa może składać się wyłącznie z liter i cyfr
@@ -76,9 +77,17 @@ class Application extends React.Component {
 
         const pos = e.clientY - e.target.offsetTop - 10; // 10 - połowa wysokości
         let elements = this.state.elements;
+
+        // tworze NodeSet z 1 node'em
         if (type === "startNode")
             elements.inputs.push(
-                <StartNode setFocusedElement={ this.setFocusedElement } position={ pos }/>
+                <NodeSet
+                    position={ pos }
+
+                    nodes ={[
+                        <StartNode setFocusedElement={ this.setFocusedElement }/>,
+                    ]}
+                />
             );
         else // endNode
             elements.outputs.push(
@@ -127,8 +136,11 @@ class Application extends React.Component {
     // funkcja podnosząca element
     grab(e) {
         const element = e.target;
-        if (element.classList.contains("LogicGate") ||
-            element.classList.contains("NodeHandle")) {
+
+        if (element.classList.contains("LogicGate")
+            || element.classList.contains("NodeHandle")
+            || element.classList.contains("NodeSetHandle")
+            ) {
             element.style.zIndex = 2;
             this.setState({heldElement: element});
             // obliczenie różnicy koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
@@ -166,7 +178,9 @@ class Application extends React.Component {
             element.style.left = x + 'px';
             element.style.top = y + 'px';
             element.dispatchEvent(move);
-        } else if(element.classList.contains("NodeHandle")){
+        } else if (element.classList.contains("NodeSetHandle")
+            || element.classList.contains("NodeHandle")
+        ){
             const node = element.parentElement;
             let y = e.clientY;
 
@@ -178,7 +192,9 @@ class Application extends React.Component {
 
             node.style.top = y - 10 + 'px';
             node.dispatchEvent(move);
-        }
+        };
+
+
     }
 
     drop() {

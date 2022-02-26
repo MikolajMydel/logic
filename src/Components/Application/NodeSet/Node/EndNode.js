@@ -1,4 +1,4 @@
-import parentChange from "../../Events/parentChange";
+import parentChange from "../../../../Events/parentChange";
 import Node from "./Node";
 
 class EndNode extends Node {

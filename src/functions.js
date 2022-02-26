@@ -1,5 +1,5 @@
-import EndNode from "./Components/Node/EndNode";
-import StartNode from "./Components/Node/StartNode";
+import EndNode from "./Components/Application/NodeSet/Node/EndNode";
+import StartNode from "./Components/Application/NodeSet/Node/StartNode";
 
 //zwraca gotową funkcję na podstawie tablicy stringów z funkcjami
 export function retrieveFunction(functions){

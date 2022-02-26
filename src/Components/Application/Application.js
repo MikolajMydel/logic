@@ -78,16 +78,10 @@ class Application extends React.Component {
         const pos = e.clientY - e.target.offsetTop - 10; // 10 - połowa wysokości
         let elements = this.state.elements;
 
-        // tworze NodeSet z 1 node'em
+        // tworze NodeSet z 4 node'ami
         if (type === "startNode")
             elements.inputs.push(
-                <NodeSet
-                    position={ pos }
-
-                    nodes ={[
-                        <StartNode setFocusedElement={ this.setFocusedElement }/>,
-                    ]}
-                />
+                <StartNode position={pos} setFocusedElement={ this.setFocusedElement }/>,
             );
         else // endNode
             elements.outputs.push(
@@ -193,8 +187,6 @@ class Application extends React.Component {
             node.style.top = y - 10 + 'px';
             node.dispatchEvent(move);
         };
-
-
     }
 
     drop() {

@@ -33,6 +33,7 @@ class Application extends React.Component {
         },
         wires: [],
         grid: 40, // ile pikseli na siatkę
+        showGrid: true, // czy siatka ma byc widoczna
     }
 
     boardRef = React.createRef()
@@ -271,6 +272,7 @@ class Application extends React.Component {
     adjustSettings = (settings) => {
         this.setState({
             grid: settings.grid,
+            showGrid: settings.showGrid,
         });
     }
 
@@ -284,7 +286,7 @@ class Application extends React.Component {
                 popup = null; // TODO
                 break;
             case 'settings':
-                popup = (<SettingsPopup killPopup={this.killPopup} adjustSettings={this.adjustSettings} getGrid={this.getGrid}/>);
+                popup = (<SettingsPopup killPopup={this.killPopup} adjustSettings={this.adjustSettings} settings={{gridWidth: this.state.grid, showGrid: this.state.showGrid}}/>);
                 break;
             default:
                 return;
@@ -303,6 +305,10 @@ class Application extends React.Component {
     }
 
     render() {
+        console.log(this.state.showGrid)
+        if(this.state.showGrid)
+            var gridStyle = {backgroundSize: this.state.grid + 'px ' + this.state.grid + 'px'};
+
         return (
             <div className={ styles.Application }
                 onMouseDown={ this.handleMouseDown }
@@ -343,7 +349,7 @@ class Application extends React.Component {
                         className={ styles.Board }
                         ref={this.boardRef}
                         // rysuje siatkę o odpowiednim rozmiarze na tle
-                        style={{backgroundSize: this.state.grid + 'px ' + this.state.grid + 'px'}}
+                        style={gridStyle}
                     >
 
                         { this.state.elements.board }

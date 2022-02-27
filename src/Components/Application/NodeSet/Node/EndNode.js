@@ -1,4 +1,5 @@
 import parentChange from "../../../../Events/parentChange";
+import signalChange from "../../../../Events/signalChange";
 import Node from "./Node";
 
 class EndNode extends Node {
@@ -46,7 +47,10 @@ class EndNode extends Node {
   }
 
   receiveSignal(signal) {
-    this.setState({ value: signal });
+    this.setState({ value: signal },
+      () => this.state.ref.current.dispatchEvent(signalChange)
+    );
+
   }
 }
 

@@ -126,15 +126,15 @@ class Application extends React.Component {
                 else interactiveElements["nodeSets"].push(element);
             });
 
-            this.mergeNodes(interactiveElements, position);
+            this.mergeNodes(interactiveElements, position, e.clientX <= 50);
         }
     }
 
-    mergeNodes = (elements, position) => {
+    mergeNodes = (elements, position, isInputArea) => {
         let stateCopy = Object.assign({}, this.state);
-
+        let newNodeSet;
         if (elements.nodeSets.length === 0){
-            stateCopy.inputs.push(<NodeSet nodes={elements.nodes} position={position} />);
+            newNodeSet = <NodeSet nodes={elements.nodes} position={position} />;
         } else {
             let childNodes = [];
 
@@ -154,16 +154,19 @@ class Application extends React.Component {
 
             // stworz nowy nodeset i podaj jako nody pobrane wczesniej
             // dzieci
-            stateCopy.inputs.push(<NodeSet
+            newNodeSet = <NodeSet
                 nodes={childNodes}
                 position={position}
-            />)
+            />;
 
             // powiadom nodesety o scaleniu
             for (let nodeSet of elements.nodeSets){
                 nodeSet.dispatchEvent(merge);
             }
         }
+
+        if (isInputArea) stateCopy.inputs.push(newNodeSet);
+        else stateCopy.outputs.push(newNodeSet);
 
         this.setState(stateCopy);
     }

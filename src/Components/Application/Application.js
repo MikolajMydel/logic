@@ -6,6 +6,7 @@ import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
 import Menu from "../Menu/Menu";
 import ProjectPopup from "../Popup/ProjectPopup";
+import SaveGatePopup from "../Popup/SaveGatePopup";
 import {findReact, makeNewGate} from "../../functions";
 import {AND, NOT, OR, FALSE, TRUE} from "../../logicalFunctions";
 import Wire from '../WiresBoard/Wire/Wire.js';
@@ -13,12 +14,6 @@ import WiresBoard from "../WiresBoard/WiresBoard";
 import remove from "../../Events/remove";
 import move from "../../Events/move";
 
-function validateGateName(name) {
-    // nazwa może składać się wyłącznie z liter i cyfr
-    // oraz musi zaczynać się od litery
-    var regex = /^f_[A-Za-z0-9]*$/;
-    return regex.test(name);
-}
 class Application extends React.Component {
     state = {
         focusedElement: undefined,    // aktualnie wybrane wyjście
@@ -238,17 +233,7 @@ class Application extends React.Component {
     }
 
     // zapisuje obszar roboczy jako nową bramkę do projektu
-    saveGate = () => {
-        do {
-            // tutaj będzie wywoływane okno zapisu bramki
-            // z wyborem koloru itd. na razie tylko prompt o nazwe
-            var name = 'f_' + prompt('podaj nazwę dla tej bramki');
-            // sprawdza poprawność nazwy i czy nie jest już taka zdefiniowana
-        } while(!validateGateName(name) || global[name] !== undefined);
-        do {
-            var color = prompt('podaj kolor');
-        } while(color === "");
-
+    saveGate = (name, color) => {
         const newGateObject = makeNewGate(this.canvasRef, name, color);
 
         // zapisywanie w localStorage
@@ -263,6 +248,7 @@ class Application extends React.Component {
 
         // dodaj nową bramkę do zasobnika
         this.controlPanelObject.addDummy(newGateObject);
+        this.clearCanvas();
     }
 
     showPopup = (name) => {
@@ -272,7 +258,7 @@ class Application extends React.Component {
                 popup = (<ProjectPopup getCurrentProjectName={this.getCurrentProjectName} killPopup={this.killPopup} loadProject={this.loadProject}/>);
                 break;
             case 'save':
-                popup = null; // TODO
+                popup = (<SaveGatePopup saveGate={this.saveGate} killPopup={this.killPopup}/>);
                 break;
             case 'settings':
                 popup = null; // TODO
@@ -304,7 +290,7 @@ class Application extends React.Component {
                 <Menu functions={[
                     {
                         name: "zapisz bramkę",
-                        function: this.saveGate,
+                        function: () => this.showPopup('save'),
                     },
                     {
                         name: "wyczyść",

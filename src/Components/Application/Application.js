@@ -91,6 +91,39 @@ class Application extends React.Component {
         this.setState (stateCopy);
     }
 
+    sideAreaModification = (e, focusedElement) => {
+        // node'y i nodesety znajdujace sie pod kursorem
+        const elementsUnderCursor = document.elementsFromPoint(e.clientX, e.clientY).filter(
+            (element) => element.classList.contains("Node")
+                || element.classList.contains("NodeSet")
+        );
+
+        // sa elementy do scalenia
+        if (elementsUnderCursor.length > 1){
+            let position;
+
+            // szukamy elementu, od ktorego pobierzemy pozycje
+            // (tego, ktory nie byl trzymany)
+            for (let sideAreaElement of elementsUnderCursor){
+                if (sideAreaElement !== focusedElement.parentElement){
+                    position = sideAreaElement.style.top;
+                }
+            }
+            // posegregowanie elementow
+            const interactiveElements = {
+                'nodes': [],
+                'nodeSets': [],
+            };
+
+            elementsUnderCursor.forEach((element) => {
+                if (element.classList.contains("Node")) interactiveElements["nodes"].push(element);
+                else if (element.classList.contains("NodeSet")) interactiveElements["nodeSets"].push(element);
+            });
+
+            this.mergeNodes(interactiveElements, position);
+        }
+    }
+
     mergeNodes = (elements, position) => {
         let stateCopy = Object.assign({}, this.state);
 
@@ -228,39 +261,12 @@ class Application extends React.Component {
     drop(e) {
         const element = this.state.heldElement;
 
-        // node'y i nodesety znajdujace sie pod kursorem
-        const elementsUnderCursor = document.elementsFromPoint(e.clientX, e.clientY).filter(
-            (element) => element.classList.contains("Node")
-                || element.classList.contains("NodeSet")
-        );
-
-        if (element && elementsUnderCursor.length > 1){
-            let position;
-
-            // szukamy elementu, od ktorego pobierzemy pozycje
-            // (tego, ktory nie byl trzymany)
-            for (let sideAreaElement of elementsUnderCursor){
-                if (sideAreaElement !== element.parentElement){
-                    position = sideAreaElement.style.top;
-                }
+        if (element){
+            if (element.classList.contains("NodeSetHandle") || element.classList.contains("NodeHandle")){
+                this.sideAreaModification(e, element);
             }
 
-            // posegregowanie elementow
-            const interactiveElements = {
-                'nodes': [],
-                'nodeSets': [],
-            };
-            elementsUnderCursor.forEach((element) => {
-                if (element.classList.contains("Node")) interactiveElements["nodes"].push(element);
-                else if (element.classList.contains("NodeSet")) interactiveElements["nodeSets"].push(element);
-            });
-
-            this.mergeNodes(interactiveElements, position);
-        }
-
-
-        // upuść trzymany element
-        if(element){
+            // upuść trzymany element
             this.setState({heldElement: undefined});
             const board = this.boardRef.current;
             const y = parseInt(element.style.top.split('px')[0])

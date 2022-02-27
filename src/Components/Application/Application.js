@@ -36,8 +36,8 @@ class Application extends React.Component {
         showGrid: true, // czy siatka ma byc widoczna
     }
 
-    boardRef = React.createRef()
-    canvasRef = React.createRef()
+    boardRef   = React.createRef()
+    canvasRef  = React.createRef()
     controlRef = React.createRef()
     controlPanelObject
 
@@ -55,10 +55,10 @@ class Application extends React.Component {
 
     // tylko raz po wyrenderowaniu tego komponentu
     componentDidMount(){
-        global.NOT = NOT;
-        global.AND = AND;
-        global.OR = OR;
-        global.TRUE = TRUE;
+        global.NOT   = NOT;
+        global.AND   = AND;
+        global.OR    = OR;
+        global.TRUE  = TRUE;
         global.FALSE = FALSE;
 
         // bez contextmenu
@@ -148,6 +148,7 @@ class Application extends React.Component {
         if(e.button === 0)
             this.grab(e);
     }
+
     // funkcja podnosząca element
     grab(e) {
         const element = e.target;
@@ -270,10 +271,7 @@ class Application extends React.Component {
     }
 
     adjustSettings = (settings) => {
-        this.setState({
-            grid: settings.grid,
-            showGrid: settings.showGrid,
-        });
+        this.setState(settings);
     }
 
     showPopup = (name) => {
@@ -286,7 +284,7 @@ class Application extends React.Component {
                 popup = null; // TODO
                 break;
             case 'settings':
-                popup = (<SettingsPopup killPopup={this.killPopup} adjustSettings={this.adjustSettings} settings={{gridWidth: this.state.grid, showGrid: this.state.showGrid}}/>);
+                popup = (<SettingsPopup killPopup={this.killPopup} adjustSettings={this.adjustSettings} settings={{grid: this.state.grid, showGrid: this.state.showGrid}}/>);
                 break;
             default:
                 return;

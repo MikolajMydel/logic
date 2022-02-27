@@ -4,12 +4,12 @@ import styles from './SettingsPopup.module.scss';
 class SettingsPopup extends Popup {
     style = {
         maxWidth: '440px',
-        height: '440px',
+        height:   '440px',
     }
 
     state = {
-        gridSlider: this.props.settings['gridWidth'],
-        showGrid: this.props.settings['showGrid'],
+        gridSlider: this.props.settings['grid'],
+        showGrid:   this.props.settings['showGrid'],
     }
 
     handleOnChangeSlider = (e) => {
@@ -25,7 +25,10 @@ class SettingsPopup extends Popup {
     }
 
     selfDestruct = () => {
-        this.props.adjustSettings({grid: this.state.gridSlider, showGrid: this.state.showGrid})
+        this.props.adjustSettings({
+            grid:     this.state.gridSlider,
+            showGrid: this.state.showGrid,
+        })
         this.props.killPopup();
     }
 

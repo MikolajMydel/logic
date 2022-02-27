@@ -4,13 +4,15 @@ import './NodeSet.scss';
 class NodeSet extends React.Component {
     constructor(props){
         super(props);
+
         this.state = {
             ref: React.createRef(),
             nodes: this.props.nodes,
             render: true,
-        }
 
-        this.position = props.nodes[0].style.top;
+            position: this.props.position,
+
+        }
     }
 
     calculateValue = () => {
@@ -20,24 +22,26 @@ class NodeSet extends React.Component {
         }
     }
 
-    hideNodeSet = () => this.setState({
-        'render': false,
-    });
+    hideNodeSet = () => {
+        this.setState({
+            'render': false,
+        },
+        this.detachEventListeners()
+        );
+    }
 
     componentDidMount(){
         this.state.ref.current.addEventListener('signalChange', this.calculateValue);
         this.state.ref.current.addEventListener('merge', this.hideNodeSet);
 
         const children = this.state.nodes;
-
         for (let i = 0; i < children.length; i++){
-            // usuwam style zwiazane z indywidualna pozycja node
             children[i].style.top = "";
             this.state.ref.current.appendChild(children[i]);
         }
     }
 
-    componentWillUnmount(){
+    detachEventListeners = () => {
         this.state.ref.current.removeEventListener('signalChange', this.calculateValue);
         this.state.ref.current.removeEventListener('merge', this.hideNodeSet);
     }
@@ -46,7 +50,7 @@ class NodeSet extends React.Component {
         if (!this.state.render) return null;
 
         return (
-            <div ref={this.state.ref} style={{top:this.position}} className={'NodeSet'} onClick={this.show}>
+            <div ref={this.state.ref} style={{top: this.state.position}} className={'NodeSet'} onClick={this.show}>
                 <div className={`NodeSetHandle`}>
                 </div>
             </div>

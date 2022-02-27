@@ -91,24 +91,31 @@ class Application extends React.Component {
         this.setState (stateCopy);
     }
 
-    mergeNodes = (elements) => {
+    mergeNodes = (elements, position) => {
         let stateCopy = Object.assign({}, this.state);
 
         if (elements.nodeSets.length === 0){
-            stateCopy.inputs.push(<NodeSet nodes={elements.nodes} />);
+            stateCopy.inputs.push(<NodeSet nodes={elements.nodes} position={position} />);
         } else {
-            const childNodes = [];
+            let childNodes = [];
 
-            // dodaj do tablicy wszystkie dzieci node setow
+            // dodaj do tablicy wszystkie nody nalezace do nodesetow
             for (let i = 0; i < elements.nodeSets.length; i++){
-                childNodes.push(...elements.nodeSets[i].childNodes);
-            }
+                childNodes.push(
+                    ...elements.nodeSets[i].childNodes
+                );
+            };
+
+            // zostawiamy tylko node'y
+            childNodes = childNodes.filter(
+                (node) => node.classList.contains("Node"));
 
             // stworz nowy nodeset i podaj jako nody pobrane wczesniej
             // dzieci
-            stateCopy.inputs.push(<NodeSet nodes={childNodes.filter(
-                (node) => node.classList.contains("Node")
-            )}/>)
+            stateCopy.inputs.push(<NodeSet
+                nodes={childNodes}
+                position={position}
+            />)
 
             // powiadom nodesety o scaleniu
             for (let nodeSet of elements.nodeSets){
@@ -221,22 +228,36 @@ class Application extends React.Component {
     drop(e) {
         const element = this.state.heldElement;
 
-        // wszystkie elementy znajdujace sie pod kursorem
-        const elementsUnderCursor = document.elementsFromPoint(e.clientX, e.clientY);
+        // node'y i nodesety znajdujace sie pod kursorem
+        const elementsUnderCursor = document.elementsFromPoint(e.clientX, e.clientY).filter(
+            (element) => element.classList.contains("Node")
+                || element.classList.contains("NodeSet")
+        );
 
-        // posegregowanie elementow
-        const interactiveElements = {
-            'nodes': [],
-            'nodeSets': [],
-        };
-        elementsUnderCursor.forEach((element) => {
-            if (element.classList.contains("Node")) interactiveElements["nodes"].push(element);
-            else if (element.classList.contains("NodeSet")) interactiveElements["nodeSets"].push(element);
-        });
+        if (element && elementsUnderCursor.length > 1){
+            let position;
 
-        // jezeli jest co scalac, to scal
-        if (interactiveElements.nodes.length + interactiveElements.nodeSets.length > 1)
-            this.mergeNodes(interactiveElements);
+            // szukamy elementu, od ktorego pobierzemy pozycje
+            // (tego, ktory nie byl trzymany)
+            for (let sideAreaElement of elementsUnderCursor){
+                if (sideAreaElement !== element.parentElement){
+                    position = sideAreaElement.style.top;
+                }
+            }
+
+            // posegregowanie elementow
+            const interactiveElements = {
+                'nodes': [],
+                'nodeSets': [],
+            };
+            elementsUnderCursor.forEach((element) => {
+                if (element.classList.contains("Node")) interactiveElements["nodes"].push(element);
+                else if (element.classList.contains("NodeSet")) interactiveElements["nodeSets"].push(element);
+            });
+
+            this.mergeNodes(interactiveElements, position);
+        }
+
 
         // upuść trzymany element
         if(element){

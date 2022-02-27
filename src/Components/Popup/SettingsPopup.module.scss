@@ -1,5 +1,18 @@
 .Main {
-    &GridSlider {
-        width: 100%;
+    p {
+        margin: 12px 0 6px 12px;
+        font-weight: bold;
+    }
+    &Section {
+        padding: 10px;
+        border: 1px solid black;
+        border-radius: 6px;
+
+        input {
+            float: right;
+        }
+        &GridSlider {
+            width: 60%;
+        }
     }
 }

@@ -32,22 +32,35 @@ class SettingsPopup extends Popup {
         this.props.killPopup();
     }
 
+    getGridSliderValue = () => {
+        var val = this.state.gridSlider;
+        if(val === '1') val = "off";
+        return val;
+    }
+
     render(){
         return super.render((
             <div className={styles.Main}>
-                <input
-                    type="range"
-                    min="1"
-                    max="60"
-                    value={this.state.gridSlider}
-                    onChange={this.handleOnChangeSlider}
-                    className={styles.MainGridSlider}
-                />
-                <input
-                    type="checkbox"
-                    checked={this.state.showGrid}
-                    onChange={this.handleOnChangeCheckbox}
-                />
+                <p>Grid</p>
+                <div className={styles.MainSection}>
+                    <span>{"width: " + this.getGridSliderValue()}</span>
+                    <input
+                        type="range"
+                        min="1"
+                        max="60"
+                        value={this.state.gridSlider}
+                        onChange={this.handleOnChangeSlider}
+                        className={styles.MainSectionGridSlider}
+                    />
+                    <br/>
+                    <br/>
+                    <span>show grid</span>
+                    <input
+                        type="checkbox"
+                        checked={this.state.showGrid}
+                        onChange={this.handleOnChangeCheckbox}
+                    />
+                </div>
             </div>
         ));
     }

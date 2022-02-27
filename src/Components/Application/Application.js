@@ -130,7 +130,7 @@ class Application extends React.Component {
         if (elements.nodeSets.length === 0){
             stateCopy.inputs.push(<NodeSet nodes={elements.nodes} position={position} />);
         } else {
-            let childNodes = [];
+            let childNodes = elements.nodes;
 
             // dodaj do tablicy wszystkie nody nalezace do nodesetow
             for (let i = 0; i < elements.nodeSets.length; i++){

@@ -50,6 +50,7 @@ class SaveGatePopup extends Popup {
                     type="text"
                     className={styles.MainNameText}
                     placeHolder="NowaBramka"
+                    maxLength="12"
                     onChange={this.handleOnChangeName}
                 />
                 <input

@@ -80,6 +80,7 @@ class ProjectPopup extends Popup {
                     type="text"
                     className={styles.MainNewText}
                     placeHolder="Nowy projekt"
+                    maxLength="24"
                     onChange={this.handleOnChange}
                 />
                 <input

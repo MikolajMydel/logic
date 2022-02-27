@@ -32,8 +32,11 @@ class Application extends React.Component {
             outputs: [],
         },
         wires: [],
-        grid: 40, // ile pikseli na siatkę
-        showGrid: true, // czy siatka ma byc widoczna
+        settings: {
+            grid: 40, // ile pikseli na siatkę
+            showGrid: true, // czy siatka ma byc widoczna
+            showNodeNames: true, // czy pokazywać nazwy nodów
+        }
     }
 
     boardRef   = React.createRef()
@@ -157,7 +160,7 @@ class Application extends React.Component {
             element.style.zIndex = 2;
             this.setState({heldElement: element});
 
-            const grid = this.state.grid
+            const grid = this.state.settings.grid
             // obliczenie różnicy koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
             // uwzględnia szerokość siatki
             const xo = e.clientX - element.offsetLeft - grid/2;
@@ -178,7 +181,7 @@ class Application extends React.Component {
             let x = e.clientX - this.state.heldElementOffset[0] - board.offsetLeft; // różnica x
             let y = e.clientY - this.state.heldElementOffset[1]; // różnica y
 
-            const grid = this.state.grid;
+            const grid = this.state.settings.grid;
             x = x - (x % grid) + board.offsetLeft;
             y = y - (y % grid);
 
@@ -271,20 +274,32 @@ class Application extends React.Component {
     }
 
     adjustSettings = (settings) => {
-        this.setState(settings);
+        this.setState({settings: settings});
     }
 
     showPopup = (name) => {
         var popup;
         switch(name) {
             case 'project':
-                popup = (<ProjectPopup getCurrentProjectName={this.getCurrentProjectName} killPopup={this.killPopup} loadProject={this.loadProject}/>);
+                popup = (
+                    <ProjectPopup
+                        getCurrentProjectName={this.getCurrentProjectName}
+                        loadProject={this.loadProject}
+                        killPopup={this.killPopup}
+                    />
+                );
                 break;
             case 'save':
                 popup = null; // TODO
                 break;
             case 'settings':
-                popup = (<SettingsPopup killPopup={this.killPopup} adjustSettings={this.adjustSettings} settings={{grid: this.state.grid, showGrid: this.state.showGrid}}/>);
+                popup = (
+                    <SettingsPopup
+                        adjustSettings={this.adjustSettings}
+                        settings={this.state.settings}
+                        killPopup={this.killPopup}
+                    />
+                 );
                 break;
             default:
                 return;
@@ -303,9 +318,8 @@ class Application extends React.Component {
     }
 
     render() {
-        console.log(this.state.showGrid)
-        if(this.state.showGrid)
-            var gridStyle = {backgroundSize: this.state.grid + 'px ' + this.state.grid + 'px'};
+        if(this.state.settings.showGrid)
+            var gridStyle = {backgroundSize: this.state.settings.grid + 'px ' + this.state.settings.grid + 'px'};
 
         return (
             <div className={ styles.Application }

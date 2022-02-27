@@ -8,32 +8,33 @@ class SettingsPopup extends Popup {
     }
 
     state = {
-        gridSlider: this.props.settings['grid'],
-        showGrid:   this.props.settings['showGrid'],
+        settings: {
+            ...this.props.settings,
+        }
     }
 
     handleOnChangeSlider = (e) => {
         this.setState({
-            gridSlider: e.target.value
+            settings: {
+                ...this.state.settings,
+                grid: e.target.value
+            }
         });
     }
 
-    handleOnChangeCheckbox = (e) => {
-        this.setState({
-            showGrid: e.target.checked
-        });
+    handleOnChangeCheckbox = (e, setting) => {
+        let settings = {...this.state.settings};
+        settings[setting] = e.target.checked;
+        this.setState({settings: settings});
     }
 
     selfDestruct = () => {
-        this.props.adjustSettings({
-            grid:     this.state.gridSlider,
-            showGrid: this.state.showGrid,
-        })
+        this.props.adjustSettings(this.state.settings);
         this.props.killPopup();
     }
 
     getGridSliderValue = () => {
-        var val = this.state.gridSlider;
+        var val = this.state.settings.grid;
         if(val === '1') val = "off";
         return val;
     }
@@ -48,7 +49,7 @@ class SettingsPopup extends Popup {
                         type="range"
                         min="1"
                         max="60"
-                        value={this.state.gridSlider}
+                        value={this.state.settings.grid}
                         onChange={this.handleOnChangeSlider}
                         className={styles.MainSectionGridSlider}
                     />
@@ -57,8 +58,17 @@ class SettingsPopup extends Popup {
                     <span>show grid</span>
                     <input
                         type="checkbox"
-                        checked={this.state.showGrid}
-                        onChange={this.handleOnChangeCheckbox}
+                        checked={this.state.settings.showGrid}
+                        onChange={(e) => this.handleOnChangeCheckbox(e, 'showGrid')}
+                    />
+                </div>
+                <p>Nodes</p>
+                <div className={styles.MainSection}>
+                    <span>show names</span>
+                    <input
+                        type="checkbox"
+                        checked={this.state.settings.showNodeNames}
+                        onChange={(e) => this.handleOnChangeCheckbox(e, 'showNodeNames')}
                     />
                 </div>
             </div>

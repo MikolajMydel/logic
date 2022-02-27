@@ -221,50 +221,62 @@ class Application extends React.Component {
         const canvas  = e.currentTarget;
         const board   = this.boardRef.current;
 
-        if(element.classList.contains("LogicGate")){
-            let x = e.clientX - this.state.heldElementOffset[0]; // różnica x
-            let y = e.clientY - this.state.heldElementOffset[1]; // różnica y
+        switch (element.getAttribute("data-element")){
+            case "LogicGate": {
+                let x = e.clientX - this.state.heldElementOffset[0]; // różnica x
+                let y = e.clientY - this.state.heldElementOffset[1]; // różnica y
 
-            if (x < board.offsetLeft)
-                // za daleko w lewo
-                x = board.offsetLeft;
-            else if (x + element.offsetWidth > board.offsetWidth + board.offsetLeft)
-                // za daleko w prawo
-                x = board.offsetWidth + board.offsetLeft - element.offsetWidth;
-            if (y < canvas.offsetTop)
-                // za daleko w górę
-                y = canvas.offsetTop;
-            else if (y + element.offsetHeight > canvas.offsetHeight + canvas.offsetTop)
-                // za daleko w dół
-                y = canvas.offsetHeight + canvas.offsetTop - element.offsetHeight;
+                if (x < board.offsetLeft)
+                    // za daleko w lewo
+                    x = board.offsetLeft;
+                else if (x + element.offsetWidth > board.offsetWidth + board.offsetLeft)
+                    // za daleko w prawo
+                    x = board.offsetWidth + board.offsetLeft - element.offsetWidth;
+                if (y < canvas.offsetTop)
+                    // za daleko w górę
+                    y = canvas.offsetTop;
+                else if (y + element.offsetHeight > canvas.offsetHeight + canvas.offsetTop)
+                    // za daleko w dół
+                    y = canvas.offsetHeight + canvas.offsetTop - element.offsetHeight;
 
-            element.style.left = x + 'px';
-            element.style.top = y + 'px';
-            element.dispatchEvent(move);
-        } else if (element.classList.contains("NodeSetHandle")){
-            const nodeSet = element.parentElement;
-            let y = e.clientY;
+                element.style.left = x + 'px';
+                element.style.top = y + 'px';
+                element.dispatchEvent(move);
+            }
+            break;
 
-            if (y > nodeSet.parentElement.offsetHeight - 20)
-                y = nodeSet.parentElement.offsetHeight - 20;
+            case "NodeSetHandle": {
+                const nodeSet = element.parentElement;
+                let y = e.clientY;
 
-            if (y < nodeSet.parentElement.offsetTop + 40)
-                y = nodeSet.parentElement.offsetTop + 40;
+                if (y > nodeSet.parentElement.offsetHeight - 20)
+                    y = nodeSet.parentElement.offsetHeight - 20;
 
-            nodeSet.style.top = y - 10 + 'px';
-            nodeSet.dispatchEvent(move);
-        } else if (element.classList.contains("NodeHandle")){
-            const node = element.parentElement;
-            let y = e.clientY;
+                if (y < nodeSet.parentElement.offsetTop + 40)
+                    y = nodeSet.parentElement.offsetTop + 40;
 
-            if (y > node.parentElement.offsetHeight - 20)
-                y = node.parentElement.offsetHeight - 20;
+                nodeSet.style.top = y - 10 + 'px';
+                nodeSet.dispatchEvent(move);
+            }
 
-            if (y < node.parentElement.offsetTop + 40)
-                y = node.parentElement.offsetTop + 40;
+            break;
 
-            node.style.top = y - 10 + 'px';
-            node.dispatchEvent(move);
+            case "NodeHandle": {
+                const node = element.parentElement;
+                let y = e.clientY;
+
+                if (y > node.parentElement.offsetHeight - 20)
+                    y = node.parentElement.offsetHeight - 20;
+
+                if (y < node.parentElement.offsetTop + 40)
+                    y = node.parentElement.offsetTop + 40;
+
+                node.style.top = y - 10 + 'px';
+                node.dispatchEvent(move);
+            }
+            break;
+
+            default: return;
         }
     }
 

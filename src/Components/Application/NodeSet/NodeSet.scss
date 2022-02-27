@@ -15,9 +15,15 @@ $handle-color: #000000;
 
     &Handle {
         width: 100%;
-        padding-bottom: 100%;
+        padding: 15px 0;
+        user-select: none;
 
         background-color: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: #fff;
 
     }
 }

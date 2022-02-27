@@ -8,18 +8,27 @@ class NodeSet extends React.Component {
         this.state = {
             ref: React.createRef(),
             render: true,
-
+            value: this.calculateValue(),
             position: this.props.position,
 
         }
+
     }
 
     calculateValue = () => {
         const nodes = this.props.nodes;
+        let value = 0;
+
         for (let i = 0; i < nodes.length; i++){
-            console.log(nodes[i]);
+            if (nodes[i].getAttribute("value") === "true") value += Math.pow(2, i);
         }
+
+        return value;
     }
+
+    updateValue = () => this.setState({
+        'value': this.calculateValue(),
+    });
 
     hideNodeSet = () => {
         this.setState({
@@ -37,7 +46,7 @@ class NodeSet extends React.Component {
     }
 
     componentDidMount(){
-        this.state.ref.current.addEventListener('signalChange', this.calculateValue);
+        this.state.ref.current.addEventListener('signalChange', this.updateValue);
         this.state.ref.current.addEventListener('merge', this.hideNodeSet);
         this.state.ref.current.addEventListener('move', this.spreadMoveEvent);
 
@@ -51,8 +60,9 @@ class NodeSet extends React.Component {
     }
 
     detachEventListeners = () => {
-        this.state.ref.current.removeEventListener('signalChange', this.calculateValue);
+        this.state.ref.current.removeEventListener('signalChange', this.updateValue);
         this.state.ref.current.removeEventListener('merge', this.hideNodeSet);
+        this.state.ref.current.removeEventListener('move', this.spreadMoveEvent);
     }
 
     render(){
@@ -65,9 +75,10 @@ class NodeSet extends React.Component {
                 onClick={this.show}
             >
 
-                <div className={`NodeSetHandle`}
+                <div className="NodeSetHandle"
                     data-element="NodeSetHandle"
                 >
+                    {this.state.value}
                 </div>
             </div>
         )

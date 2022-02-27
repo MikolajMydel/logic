@@ -59,8 +59,15 @@ class NodeSet extends React.Component {
         if (!this.state.render) return null;
 
         return (
-            <div ref={this.state.ref} style={{top: this.state.position}} className={'NodeSet'} onClick={this.show}>
-                <div className={`NodeSetHandle`}>
+            <div ref={this.state.ref}
+                style={{top: this.state.position}}
+                className={'NodeSet'}
+                onClick={this.show}
+            >
+
+                <div className={`NodeSetHandle`}
+                    data-element="NodeSetHandle"
+                >
                 </div>
             </div>
         )

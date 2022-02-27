@@ -74,6 +74,7 @@ class Node extends React.Component {
                 <div
                     className={`NodeHandle`}
                     onMouseUp={this.handleHandleMouseUp}
+                    data-element="NodeHandle"
                 ></div>
 
                 <div

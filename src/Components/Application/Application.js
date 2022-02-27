@@ -241,9 +241,19 @@ class Application extends React.Component {
             element.style.left = x + 'px';
             element.style.top = y + 'px';
             element.dispatchEvent(move);
-        } else if (element.classList.contains("NodeSetHandle")
-            || element.classList.contains("NodeHandle")
-        ){
+        } else if (element.classList.contains("NodeSetHandle")){
+            const nodeSet = element.parentElement;
+            let y = e.clientY;
+
+            if (y > nodeSet.parentElement.offsetHeight - 20)
+                y = nodeSet.parentElement.offsetHeight - 20;
+
+            if (y < nodeSet.parentElement.offsetTop + 40)
+                y = nodeSet.parentElement.offsetTop + 40;
+
+            nodeSet.style.top = y - 10 + 'px';
+            nodeSet.dispatchEvent(move);
+        } else if (element.classList.contains("NodeHandle")){
             const node = element.parentElement;
             let y = e.clientY;
 
@@ -255,7 +265,7 @@ class Application extends React.Component {
 
             node.style.top = y - 10 + 'px';
             node.dispatchEvent(move);
-        };
+        }
     }
 
     drop(e) {

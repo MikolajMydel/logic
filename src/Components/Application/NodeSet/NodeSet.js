@@ -7,7 +7,6 @@ class NodeSet extends React.Component {
 
         this.state = {
             ref: React.createRef(),
-            nodes: this.props.nodes,
             render: true,
 
             position: this.props.position,
@@ -16,7 +15,7 @@ class NodeSet extends React.Component {
     }
 
     calculateValue = () => {
-        const nodes = this.state.nodes;
+        const nodes = this.props.nodes;
         for (let i = 0; i < nodes.length; i++){
             console.log(nodes[i]);
         }
@@ -30,15 +29,25 @@ class NodeSet extends React.Component {
         );
     }
 
+    spreadMoveEvent = () => {
+        const move = new Event("move");
+        for (let node of this.props.nodes){
+            node.dispatchEvent(move);
+        }
+    }
+
     componentDidMount(){
         this.state.ref.current.addEventListener('signalChange', this.calculateValue);
         this.state.ref.current.addEventListener('merge', this.hideNodeSet);
+        this.state.ref.current.addEventListener('move', this.spreadMoveEvent);
 
-        const children = this.state.nodes;
+        const children = this.props.nodes;
         for (let i = 0; i < children.length; i++){
             children[i].style.top = "";
             this.state.ref.current.appendChild(children[i]);
         }
+
+        this.spreadMoveEvent();
     }
 
     detachEventListeners = () => {

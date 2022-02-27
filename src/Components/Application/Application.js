@@ -96,7 +96,11 @@ class Application extends React.Component {
         const elementsUnderCursor = document.elementsFromPoint(e.clientX, e.clientY).filter(
             (element) => {
                 const elementType = element.getAttribute("data-element");
-                return elementType === "Node" || elementType === "NodeSet";
+                return (
+                // jezeli element jest nodem nalezacym do nodesetu, to go zostawiamy
+                // (zapobiegniecie powtarzaniu node'ow)
+                elementType === "Node" && element.parentElement.getAttribute("data-element") !== "NodeSet")
+                        || elementType === "NodeSet";
             }
         );
 

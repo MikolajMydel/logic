@@ -3,20 +3,20 @@ import styles from './SaveGatePopup.module.scss';
 
 function validateGateName(name) {
     // nazwa może składać się wyłącznie z liter i cyfr
-    var regex = /^f_[A-Za-z0-9]*$/;
+    var regex = /^f_[A-Za-z0-9]+$/;
     return regex.test(name);
 }
 
 const getRandomColor = () => '#' + Math.floor(Math.random()*16777215).toString(16)
 
-class ProjectPopup extends Popup {
+class SaveGatePopup extends Popup {
     style = {
         maxWidth: '440px',
         height: '160px',
     }
 
     state = {
-        givenName: undefined,
+        givenName: '',
         givenColor: getRandomColor(),
     }
 
@@ -69,4 +69,4 @@ class ProjectPopup extends Popup {
     }
 }
 
-export default ProjectPopup;
+export default SaveGatePopup;

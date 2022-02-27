@@ -24,6 +24,9 @@ body {
 .Board {
     height: 100%;
     flex-grow: 1;
+    background-image:
+        linear-gradient(to right, #ddd 1px, transparent 1px),
+        linear-gradient(to bottom, #ddd 1px, transparent 1px);
 }
 
 .InputArea, .OutputArea {

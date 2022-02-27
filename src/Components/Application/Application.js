@@ -6,6 +6,7 @@ import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
 import Menu from "../Menu/Menu";
 import ProjectPopup from "../Popup/ProjectPopup";
+import SettingsPopup from "../Popup/SettingsPopup";
 import {findReact, makeNewGate} from "../../functions";
 import {AND, NOT, OR, FALSE, TRUE} from "../../logicalFunctions";
 import Wire from '../WiresBoard/Wire/Wire.js';
@@ -48,6 +49,8 @@ class Application extends React.Component {
     getFocusedElement = () => this.state.focusedElement;
 
     getCurrentProjectName = () => this.currentProjectName;
+
+    getGrid = () => this.state.grid;
 
     // tylko raz po wyrenderowaniu tego komponentu
     componentDidMount(){
@@ -265,6 +268,12 @@ class Application extends React.Component {
         this.controlPanelObject.addDummy(newGateObject);
     }
 
+    adjustSettings = (settings) => {
+        this.setState({
+            grid: settings.grid,
+        });
+    }
+
     showPopup = (name) => {
         var popup;
         switch(name) {
@@ -275,7 +284,7 @@ class Application extends React.Component {
                 popup = null; // TODO
                 break;
             case 'settings':
-                popup = null; // TODO
+                popup = (<SettingsPopup killPopup={this.killPopup} adjustSettings={this.adjustSettings} getGrid={this.getGrid}/>);
                 break;
             default:
                 return;
@@ -313,6 +322,10 @@ class Application extends React.Component {
                     {
                         name: "projekt",
                         function: () => this.showPopup('project'),
+                    },
+                    {
+                        name: "ustawienia",
+                        function: () => this.showPopup('settings'),
                     },
                 ]}/>
                 <WiresBoard wires={this.state.wires} />

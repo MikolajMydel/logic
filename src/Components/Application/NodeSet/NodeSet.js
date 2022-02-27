@@ -73,6 +73,7 @@ class NodeSet extends React.Component {
                 style={{top: this.state.position}}
                 className={'NodeSet'}
                 onClick={this.show}
+                data-element="NodeSet"
             >
 
                 <div className="NodeSetHandle"

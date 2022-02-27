@@ -94,8 +94,10 @@ class Application extends React.Component {
     sideAreaModification = (e, focusedElement) => {
         // node'y i nodesety znajdujace sie pod kursorem
         const elementsUnderCursor = document.elementsFromPoint(e.clientX, e.clientY).filter(
-            (element) => element.classList.contains("Node")
-                || element.classList.contains("NodeSet")
+            (element) => {
+                const elementType = element.getAttribute("data-element");
+                return elementType === "Node" || elementType === "NodeSet";
+            }
         );
 
         // sa elementy do scalenia
@@ -114,10 +116,10 @@ class Application extends React.Component {
                 'nodes': [],
                 'nodeSets': [],
             };
-
             elementsUnderCursor.forEach((element) => {
-                if (element.classList.contains("Node")) interactiveElements["nodes"].push(element);
-                else if (element.classList.contains("NodeSet")) interactiveElements["nodeSets"].push(element);
+                const elementType = element.getAttribute("data-element");
+                if (elementType === "Node") interactiveElements["nodes"].push(element);
+                else interactiveElements["nodeSets"].push(element);
             });
 
             this.mergeNodes(interactiveElements, position);
@@ -130,7 +132,7 @@ class Application extends React.Component {
         if (elements.nodeSets.length === 0){
             stateCopy.inputs.push(<NodeSet nodes={elements.nodes} position={position} />);
         } else {
-            let childNodes = elements.nodes;
+            let childNodes = [];
 
             // dodaj do tablicy wszystkie nody nalezace do nodesetow
             for (let i = 0; i < elements.nodeSets.length; i++){
@@ -139,9 +141,12 @@ class Application extends React.Component {
                 );
             };
 
+            childNodes.push( ...elements.nodes );
+
             // zostawiamy tylko node'y
             childNodes = childNodes.filter(
-                (node) => node.classList.contains("Node"));
+                (node) => node.getAttribute("data-element") === "Node"
+            );
 
             // stworz nowy nodeset i podaj jako nody pobrane wczesniej
             // dzieci

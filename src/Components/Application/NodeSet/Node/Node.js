@@ -71,6 +71,7 @@ class Node extends React.Component {
                 className={`Node ${this instanceof StartNode ? 'NodeStart':'NodeEnd' }`}
                 style={{ top: position }}
                 value={this.state.value}
+                data-element="Node"
             >
                 <div
                     className={`NodeHandle`}

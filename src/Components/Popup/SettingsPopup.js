@@ -65,7 +65,7 @@ class SettingsPopup extends Popup {
                 <p>Nodes</p>
                 <div className={styles.MainSection}>
                     <span>show names</span>
-                    <input
+                    <input // na razie nie ma zastosowania TODO
                         type="checkbox"
                         checked={this.state.settings.showNodeNames}
                         onChange={(e) => this.handleOnChangeCheckbox(e, 'showNodeNames')}

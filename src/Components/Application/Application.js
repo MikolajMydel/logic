@@ -35,7 +35,7 @@ class Application extends React.Component {
         settings: {
             grid: 40, // ile pikseli na siatkę
             showGrid: true, // czy siatka ma byc widoczna
-            showNodeNames: true, // czy pokazywać nazwy nodów
+            showNodeNames: true, // czy pokazywać nazwy nodów TODO
         }
     }
 

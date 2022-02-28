@@ -6,6 +6,7 @@ import EndNode from "../Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
 import Menu from "../Menu/Menu";
 import ProjectPopup from "../Popup/ProjectPopup";
+import SettingsPopup from "../Popup/SettingsPopup";
 import SaveGatePopup from "../Popup/SaveGatePopup";
 import {findReact, makeNewGate} from "../../functions";
 import {AND, NOT, OR, FALSE, TRUE} from "../../logicalFunctions";
@@ -26,11 +27,15 @@ class Application extends React.Component {
             outputs: [],
         },
         wires: [],
-        grid: 40, // ile pikseli na siatkę
+        settings: {
+            grid: 40, // ile pikseli na siatkę
+            showGrid: true, // czy siatka ma byc widoczna
+            showNodeNames: true, // czy pokazywać nazwy nodów TODO
+        }
     }
 
-    boardRef = React.createRef()
-    canvasRef = React.createRef()
+    boardRef   = React.createRef()
+    canvasRef  = React.createRef()
     controlRef = React.createRef()
     controlPanelObject
 
@@ -44,12 +49,14 @@ class Application extends React.Component {
 
     getCurrentProjectName = () => this.currentProjectName;
 
+    getGrid = () => this.state.grid;
+
     // tylko raz po wyrenderowaniu tego komponentu
     componentDidMount(){
-        global.NOT = NOT;
-        global.AND = AND;
-        global.OR = OR;
-        global.TRUE = TRUE;
+        global.NOT   = NOT;
+        global.AND   = AND;
+        global.OR    = OR;
+        global.TRUE  = TRUE;
         global.FALSE = FALSE;
 
         // bez contextmenu
@@ -139,6 +146,7 @@ class Application extends React.Component {
         if(e.button === 0)
             this.grab(e);
     }
+
     // funkcja podnosząca element
     grab(e) {
         const element = e.target;
@@ -147,7 +155,7 @@ class Application extends React.Component {
             element.style.zIndex = 2;
             this.setState({heldElement: element});
 
-            const grid = this.state.grid
+            const grid = this.state.settings.grid
             // obliczenie różnicy koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
             // uwzględnia szerokość siatki
             const xo = e.clientX - element.offsetLeft - grid/2;
@@ -168,7 +176,7 @@ class Application extends React.Component {
             let x = e.clientX - this.state.heldElementOffset[0] - board.offsetLeft; // różnica x
             let y = e.clientY - this.state.heldElementOffset[1]; // różnica y
 
-            const grid = this.state.grid;
+            const grid = this.state.settings.grid;
             x = x - (x % grid) + board.offsetLeft;
             y = y - (y % grid);
 
@@ -251,17 +259,33 @@ class Application extends React.Component {
         this.clearCanvas();
     }
 
+    adjustSettings = (settings) => {
+        this.setState({settings: settings});
+    }
+
     showPopup = (name) => {
         var popup;
         switch(name) {
             case 'project':
-                popup = (<ProjectPopup getCurrentProjectName={this.getCurrentProjectName} killPopup={this.killPopup} loadProject={this.loadProject}/>);
+                popup = (
+                    <ProjectPopup
+                        getCurrentProjectName={this.getCurrentProjectName}
+                        loadProject={this.loadProject}
+                        killPopup={this.killPopup}
+                    />
+                );
                 break;
             case 'save':
                 popup = (<SaveGatePopup saveGate={this.saveGate} killPopup={this.killPopup}/>);
                 break;
             case 'settings':
-                popup = null; // TODO
+                popup = (
+                    <SettingsPopup
+                        adjustSettings={this.adjustSettings}
+                        settings={this.state.settings}
+                        killPopup={this.killPopup}
+                    />
+                 );
                 break;
             default:
                 return;
@@ -280,6 +304,9 @@ class Application extends React.Component {
     }
 
     render() {
+        if(this.state.settings.showGrid)
+            var gridStyle = {backgroundSize: this.state.settings.grid + 'px ' + this.state.settings.grid + 'px'};
+
         return (
             <div className={ styles.Application }
                 onMouseDown={ this.handleMouseDown }
@@ -300,6 +327,10 @@ class Application extends React.Component {
                         name: "projekt",
                         function: () => this.showPopup('project'),
                     },
+                    {
+                        name: "ustawienia",
+                        function: () => this.showPopup('settings'),
+                    },
                 ]}/>
                 <WiresBoard wires={this.state.wires} />
                 <div
@@ -316,7 +347,7 @@ class Application extends React.Component {
                         className={ styles.Board }
                         ref={this.boardRef}
                         // rysuje siatkę o odpowiednim rozmiarze na tle
-                        style={{backgroundSize: this.state.grid + 'px ' + this.state.grid + 'px'}}
+                        style={gridStyle}
                     >
 
                         { this.state.elements.board }

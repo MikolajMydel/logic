@@ -4,9 +4,12 @@ import LogicGate from "../LogicGate/LogicGate";
 import StartNode from "./NodeSet/Node/StartNode";
 import EndNode from "./NodeSet/Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
-import Menu from "../Menu/Menu"
+import Menu from "../Menu/Menu";
+import ProjectPopup from "../Popup/ProjectPopup";
+import SettingsPopup from "../Popup/SettingsPopup";
+import SaveGatePopup from "../Popup/SaveGatePopup";
 import {findReact, makeNewGate} from "../../functions";
-import {AND, NOT, OR, FALSE, TRUE} from "../../logicalFunctions"
+import {AND, NOT, OR, FALSE, TRUE} from "../../logicalFunctions";
 import Wire from '../WiresBoard/Wire/Wire.js';
 import WiresBoard from "../WiresBoard/WiresBoard";
 import remove from "../../Events/remove";
@@ -14,27 +17,27 @@ import move from "../../Events/move";
 import NodeSet from "./NodeSet/NodeSet";
 import merge from "../../Events/merge";
 
-function validateGateName(name) {
-    // nazwa może składać się wyłącznie z liter i cyfr
-    // oraz musi zaczynać się od litery
-    var regex = /^f_[A-Za-z0-9]*$/;
-    return regex.test(name);
-}
 class Application extends React.Component {
     state = {
         focusedElement: undefined,    // aktualnie wybrane wyjście
         heldElement: undefined,       // aktualnie trzymana bramka
         heldElementOffset: [0, 0],    // różnica koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
+        popup: null,
 
         inputs: [],
         board: [],
         outputs: [],
 
         wires: [],
+        settings: {
+            grid: 40, // ile pikseli na siatkę
+            showGrid: true, // czy siatka ma byc widoczna
+            showNodeNames: true, // czy pokazywać nazwy nodów TODO
+        }
     }
 
-    boardRef = React.createRef()
-    canvasRef = React.createRef()
+    boardRef   = React.createRef()
+    canvasRef  = React.createRef()
     controlRef = React.createRef()
     controlPanelObject
 
@@ -46,12 +49,16 @@ class Application extends React.Component {
     // funkcja zwracajaca aktualnie wybrane wyjscie - umozliwia kliknietej bramce logicznej zmiane wejscia na wczesniej klikniete wyjscie
     getFocusedElement = () => this.state.focusedElement;
 
+    getCurrentProjectName = () => this.currentProjectName;
+
+    getGrid = () => this.state.grid;
+
     // tylko raz po wyrenderowaniu tego komponentu
     componentDidMount(){
-        global.NOT = NOT;
-        global.AND = AND;
-        global.OR = OR;
-        global.TRUE = TRUE;
+        global.NOT   = NOT;
+        global.AND   = AND;
+        global.OR    = OR;
+        global.TRUE  = TRUE;
         global.FALSE = FALSE;
 
         // bez contextmenu
@@ -59,16 +66,31 @@ class Application extends React.Component {
 
         this.controlPanelObject = findReact(this.controlRef.current);
 
-        // wczytaj zapisane bramki z localstorage
-        let saved;
-        if(localStorage.getItem("savedGates") !== null)
-            saved = JSON.parse(localStorage.getItem("savedGates"));
-        else
-            saved = [];
+        this.showPopup('project')
+    }
 
-        for(const savedGate of saved){
-            this.controlPanelObject.addDummy(savedGate);
+    // wczytaj zapisany projekt z localstorage
+    loadProject = (projectName) => {
+        let saved = [];
+        let projects = {};
+        if(localStorage.getItem('projects') !== null){
+            projects = JSON.parse(localStorage.getItem('projects'));
+
+            // usuwa z globalnego kontekstu customowe funkcje poprzedniego projektu
+            if(projects[this.currentProjectName] !== undefined)
+                for (const saved of projects[this.currentProjectName]){
+                    global[saved['name']] = undefined;
+                }
+
+            // wpisuje do 'saved' zapisane bramki
+            if(projects[projectName] !== undefined)
+                saved = projects[projectName];
         }
+
+        this.currentProjectName = projectName;
+
+        this.controlPanelObject.reset(saved);
+        this.clearCanvas();
     }
 
     addNode = (e, type) => {
@@ -208,6 +230,7 @@ class Application extends React.Component {
         if(e.button === 0)
             this.grab(e);
     }
+
     // funkcja podnosząca element
     grab(e) {
         const element = e.target;
@@ -218,9 +241,12 @@ class Application extends React.Component {
             ) {
             element.style.zIndex = 2;
             this.setState({heldElement: element});
+
+            const grid = this.state.settings.grid
             // obliczenie różnicy koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
-            const xo = e.clientX - element.offsetLeft;
-            const yo = e.clientY - element.offsetTop;
+            // uwzględnia szerokość siatki
+            const xo = e.clientX - element.offsetLeft - grid/2;
+            const yo = e.clientY - element.offsetTop - grid/2;
             this.setState({heldElementOffset: [xo, yo]});
         }
     }
@@ -235,8 +261,12 @@ class Application extends React.Component {
 
         switch (element.getAttribute("data-element")){
             case "LogicGate": {
-                let x = e.clientX - this.state.heldElementOffset[0]; // różnica x
+                let x = e.clientX - this.state.heldElementOffset[0] - board.offsetLeft; // różnica x
                 let y = e.clientY - this.state.heldElementOffset[1]; // różnica y
+
+                const grid = this.state.settings.grid;
+                x = x - (x % grid) + board.offsetLeft;
+                y = y - (y % grid);
 
                 if (x < board.offsetLeft)
                     // za daleko w lewo
@@ -326,30 +356,60 @@ class Application extends React.Component {
     }
 
     // zapisuje obszar roboczy jako nową bramkę do projektu
-    saveGate = () => {
-        do {
-            // tutaj będzie wywoływane okno zapisu bramki
-            // z wyborem koloru itd. na razie tylko prompt o nazwe
-            var name = 'f_' + prompt('podaj nazwę dla tej bramki');
-            // sprawdza poprawność nazwy i czy nie jest już taka zdefiniowana
-        } while(!validateGateName(name) || global[name] !== undefined);
-        do {
-            var color = prompt('podaj kolor');
-        } while(color === "");
-
+    saveGate = (name, color) => {
         const newGateObject = makeNewGate(this.canvasRef, name, color);
 
         // zapisywanie w localStorage
-        let saved;
-        if(localStorage.getItem("savedGates") !== null)
-            saved = JSON.parse(localStorage.getItem("savedGates"));
-        else
-            saved = [];
-        saved.push(newGateObject);
-        localStorage.setItem("savedGates", JSON.stringify(saved));
+        let projects = {};
+        if(localStorage.getItem('projects') !== null)
+            projects = JSON.parse(localStorage.getItem('projects'));
+        if(projects[this.currentProjectName] === undefined)
+            projects[this.currentProjectName] = [];
+
+        projects[this.currentProjectName].push(newGateObject);
+        localStorage.setItem("projects", JSON.stringify(projects));
 
         // dodaj nową bramkę do zasobnika
         this.controlPanelObject.addDummy(newGateObject);
+        this.clearCanvas();
+    }
+
+    adjustSettings = (settings) => {
+        this.setState({settings: settings});
+    }
+
+    showPopup = (name) => {
+        var popup;
+        switch(name) {
+            case 'project':
+                popup = (
+                    <ProjectPopup
+                        getCurrentProjectName={this.getCurrentProjectName}
+                        loadProject={this.loadProject}
+                        killPopup={this.killPopup}
+                    />
+                );
+                break;
+            case 'save':
+                popup = (<SaveGatePopup saveGate={this.saveGate} killPopup={this.killPopup}/>);
+                break;
+            case 'settings':
+                popup = (
+                    <SettingsPopup
+                        adjustSettings={this.adjustSettings}
+                        settings={this.state.settings}
+                        killPopup={this.killPopup}
+                    />
+                 );
+                break;
+            default:
+                return;
+        }
+        this.setState({'popup': popup});
+    }
+
+    killPopup = () => {
+        this.setState({popup: null})
     }
 
     // wyczyść obszar roboczy
@@ -358,39 +418,57 @@ class Application extends React.Component {
     }
 
     render() {
+        if(this.state.settings.showGrid)
+            var gridStyle = {backgroundSize: this.state.settings.grid + 'px ' + this.state.settings.grid + 'px'};
+
         return (
             <div className={ styles.Application }
                 onMouseDown={ this.handleMouseDown }
                 onMouseMove={ (e) => this.move(e) }
                 onMouseUp={ (e) => this.drop(e) }
             >
+                {this.state.popup}
                 <Menu functions={[
                     {
                         name: "zapisz bramkę",
-                        function: this.saveGate,
+                        function: () => this.showPopup('save'),
                     },
                     {
                         name: "wyczyść",
                         function: this.clearCanvas,
                     },
+                    {
+                        name: "projekt",
+                        function: () => this.showPopup('project'),
+                    },
+                    {
+                        name: "ustawienia",
+                        function: () => this.showPopup('settings'),
+                    },
                 ]}/>
                 <WiresBoard wires={this.state.wires} />
-                <div className={ styles.Canvas }
+                <div
+                    className={ styles.Canvas }
                     ref={el => this.canvasRef = el}
                 >
-                    <div className={ `Area ${styles.InputArea}` }
+                    <div
+                        className={ `Area ${styles.InputArea}` }
                         onClick={ (e) => this.addNode(e, 'startNode')}
                     >
                         { this.state.inputs }
                     </div>
-                    <div className={ styles.Board }
+                    <div
+                        className={ styles.Board }
                         ref={this.boardRef}
+                        // rysuje siatkę o odpowiednim rozmiarze na tle
+                        style={gridStyle}
                     >
 
                         { this.state.board }
 
                     </div>
-                    <div className={ `Area ${styles.OutputArea}` }
+                    <div
+                        className={ `Area ${styles.OutputArea}` }
                         onClick={ (e) => this.addNode(e, 'endNode')}
                     >
                         { this.state.outputs }

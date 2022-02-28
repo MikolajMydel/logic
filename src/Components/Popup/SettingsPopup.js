@@ -13,13 +13,10 @@ class SettingsPopup extends Popup {
         }
     }
 
-    handleOnChangeSlider = (e) => {
-        this.setState({
-            settings: {
-                ...this.state.settings,
-                grid: e.target.value
-            }
-        });
+    handleOnChangeSlider = (e, setting) => {
+        let settings = {...this.state.settings};
+        settings[setting] = e.target.value;
+        this.setState({settings: settings});
     }
 
     handleOnChangeCheckbox = (e, setting) => {
@@ -39,6 +36,12 @@ class SettingsPopup extends Popup {
         return val;
     }
 
+    getClockSliderValue = () => {
+        var val = this.state.settings.clock;
+        if(val === '1') val = "off";
+        return val;
+    }
+
     render(){
         return super.render((
             <div className={styles.Main}>
@@ -50,8 +53,8 @@ class SettingsPopup extends Popup {
                         min="1"
                         max="60"
                         value={this.state.settings.grid}
-                        onChange={this.handleOnChangeSlider}
-                        className={styles.MainSectionGridSlider}
+                        onChange={(e) => this.handleOnChangeSlider(e, 'grid')}
+                        className={styles.MainSectionSlider}
                     />
                     <br/>
                     <br/>
@@ -60,6 +63,18 @@ class SettingsPopup extends Popup {
                         type="checkbox"
                         checked={this.state.settings.showGrid}
                         onChange={(e) => this.handleOnChangeCheckbox(e, 'showGrid')}
+                    />
+                </div>
+                <p>Gates</p>
+                <div className={styles.MainSection}>
+                    <span>{'interval: ' + this.getClockSliderValue() + 'ms'}</span>
+                    <input
+                        type="range"
+                        min="0"
+                        max="2000"
+                        value={this.state.settings.clock}
+                        onChange={(e) => this.handleOnChangeSlider(e, 'clock')}
+                        className={styles.MainSectionSlider}
                     />
                 </div>
                 <p>Nodes</p>

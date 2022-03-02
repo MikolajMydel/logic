@@ -5,16 +5,17 @@ import Pin from "./Pin";
 class InputPin extends Pin {
     constructor(props) {
         super(props);
-        this.state = {
-            parentPin: undefined,
-            value: undefined,
-            ref: React.createRef(),
-        };
 
         this.setStateClass();
     }
 
-    handleOnClick = (e) => {
+    state = {
+        parentPin: undefined,
+        value: undefined,
+        ref: React.createRef(),
+    }
+
+    handleOnClick = () => {
         const newParent = this.props.getFocusedElement();
         if (newParent) this.changeParentPin(newParent);
     };
@@ -63,9 +64,9 @@ class InputPin extends Pin {
             <button
                 ref={this.state.ref}
                 className={`
-        ${this.style.Pin}
-        ${this.state.stateClass}
-        `}
+                    ${this.style.Pin}
+                    ${this.state.stateClass}
+                `}
                 onClick={this.handleOnClick}
             ></button>
         );

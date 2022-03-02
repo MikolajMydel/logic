@@ -9,7 +9,6 @@ class LogicGate extends React.Component {
         this.name = props.gateName;
         this.func = props.function;
         this.state = {
-            value: undefined, // tymczasowo
             render: true,
         };
         this.inputs = [];
@@ -41,11 +40,12 @@ class LogicGate extends React.Component {
 
     processOutput() {
         let inputs = Array.from(this.inputs.map((input) => input.state.value));
-
         let output = this.func(inputs);
-        for (let i = 0; i < output.length; i++)
-            this.outputs[i].receiveSignal(output[i]);
-        this.setState({ value: output[0] });
+
+        setTimeout(() => {
+            for (let i = 0; i < output.length; i++)
+                this.outputs[i].receiveSignal(output[i]);
+        }, this.props.getClock());
     }
 
     render() {

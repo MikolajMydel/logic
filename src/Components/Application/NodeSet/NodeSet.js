@@ -11,8 +11,45 @@ class NodeSet extends React.Component {
             value: this.calculateValue(),
             position: this.props.position,
 
-        }
+            name: "",
+            renderNameBox: false,
 
+        }
+    }
+
+    getNameBox = () => (
+        <div
+                className={'NodeSetNameBox'}
+        >
+            <input
+                onChange={this.onInputChange}
+                value={this.state.name}
+                onKeyDown={
+                    (e) => {if(e.key === "Enter") this.toggleNameBox()}
+                }
+            />
+            <div onClick={this.selfDestruct}>delete</div>
+        </div>
+    )
+
+    toggleNameBox = () => {
+        this.setState({renderNameBox: !this.state.renderNameBox})
+    }
+
+    selfDestruct = () => {
+        console.log("usun");
+    }
+
+    onInputChange = (e) => {
+        this.setState({
+            name: e.target.value
+        });
+    }
+
+    handleHandleMouseUp = (e) => {
+        if(e.button === 2) { // tylko PPM
+            this.toggleNameBox();
+        }
     }
 
     calculateValue = () => {
@@ -78,13 +115,14 @@ class NodeSet extends React.Component {
 
                 <div className="NodeSetHandle"
                     data-element="NodeSetHandle"
+                    onMouseUp={this.handleHandleMouseUp}
                 >
                     {this.state.value}
+                    {this.state.renderNameBox ? this.getNameBox() : ""}
                 </div>
             </div>
         )
     }
-
 }
 
 export default NodeSet;

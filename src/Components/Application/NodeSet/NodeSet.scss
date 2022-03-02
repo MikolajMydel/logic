@@ -1,3 +1,30 @@
+@mixin namebox(){
+    position: absolute;
+    font-size: 16px;
+    border: 2px solid #222;
+
+    input {
+        padding: 5px;
+        outline: none;
+        border: none;
+        user-select: none;
+    }
+    div {
+        font-size: 14px;
+        color: white;
+        font-weight: bold;
+
+        border-top: 2px solid #222;
+        padding: 4px;
+
+        cursor: pointer;
+        user-select: none;
+        text-align: center;
+        background-color: red;
+        width: 100%;
+    }
+}
+
 .NodeSet {
     position: absolute;
     left: 0;
@@ -7,6 +34,23 @@
         // nodeSet jest ruchomym elementem
         position: relative;
         top: initial;
+    }
+
+    &NameBox {
+        @include namebox();
+        left: 110%;
+    }
+
+    &Start {
+        .NodeNameBox {
+            left: 110%;
+        }
+    }
+
+    &End {
+        .NodeNameBox {
+            right: 110%;
+        }
     }
 
     &Handle {
@@ -85,9 +129,7 @@
         }
     }
     &Handle {
-
         $handle-color: #000000;
-
         cursor: move;
 
         width: 0;
@@ -98,41 +140,8 @@
         line-height: 0px;
         _border-color: #ffffff #ffffff #ffffff $handle-color;
         _filter: progid:DXImageTransform.Microsoft.Chroma(color=$handle-color);
-
     }
     &NameBox {
-        // abs zeby nie wplywalo na ulozenie handle i button
-        position: absolute;
-        top: -55%;
-
-        font-size: 16px;
-
-        border: 2px solid #222;
-
-        input {
-
-            padding: 5px;
-            outline: none;
-            border: none;
-            user-select: none;
-
-        }
-        div {
-
-            font-size: 14px;
-            color: white;
-            font-weight: bold;
-
-            border-top: 2px solid #222;
-            padding: 4px;
-
-            cursor: pointer;
-            user-select: none;
-            text-align: center;
-            background-color: red;
-            width: 100%;
-
-
-        }
+        @include namebox();
     }
 }

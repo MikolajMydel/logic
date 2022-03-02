@@ -36,6 +36,21 @@ class Node extends React.Component {
         findParentNode(this.state.ref.current).dispatchEvent(remove);
     }
 
+    getNameBox = () => (
+        <div
+            className={'NodeNameBox'}
+        >
+            <input
+                onChange={this.onInputChange}
+                value={this.name}
+                onKeyDown={
+                    (e) => {if(e.key === "Enter") this.toggleNameBox()}
+                }
+            />
+            <div onClick={this.selfDestruct}>delete</div>
+        </div>
+    );
+
     render() {
         if(this.state.render === false) return null;
         let style;
@@ -50,21 +65,6 @@ class Node extends React.Component {
             style = 'NodeButtonFalse';
 
         const position = this.props.position + 'px';
-        if(this.state.renderNameBox)
-            var nameBox = (
-                <div
-                    className={'NodeNameBox'}
-                >
-                    <input
-                        onChange={this.onInputChange}
-                        value={this.name}
-                        onKeyDown={
-                            (e) => {if(e.key === "Enter") this.toggleNameBox()}
-                        }
-                    />
-                    <div onClick={this.selfDestruct}>delete</div>
-                </div>
-            );
 
         return (
             <div
@@ -85,7 +85,7 @@ class Node extends React.Component {
                     onMouseDown={ this.handleOnMouseDown }
                 ></div>
 
-                {nameBox}
+                {this.state.renderNameBox ? this.getNameBox(): ""}
             </div>
         )
     }

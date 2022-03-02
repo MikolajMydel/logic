@@ -1,4 +1,5 @@
 import React from "react";
+import remove from "../../../Events/remove";
 import './NodeSet.scss';
 
 class NodeSet extends React.Component {
@@ -39,7 +40,14 @@ class NodeSet extends React.Component {
     }
 
     selfDestruct = () => {
-        console.log("usun");
+        this.detachEventListeners();
+        this.setState({
+            "render": false,
+        });
+
+        for (let node of this.props.nodes){
+            node.dispatchEvent(remove);
+        }
     }
 
     onInputChange = (e) => {

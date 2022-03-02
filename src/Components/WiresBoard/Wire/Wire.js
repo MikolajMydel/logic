@@ -73,7 +73,7 @@ class Wire extends React.Component {
 
             gate.addEventListener(
                 "remove",
-                this.onGateRemoval
+                this.removeConnection
             );
         }
 
@@ -104,7 +104,7 @@ class Wire extends React.Component {
 
             gate.removeEventListener(
                 "remove",
-                this.onGateRemoval
+                this.removeConnection
             );
         }
 
@@ -124,7 +124,7 @@ class Wire extends React.Component {
         "render": false,
     });
 
-    handleOnClick = () => {
+    removeConnection = () => {
         this.detachEventListeners();
 
         // usuwam polaczenie z perspektywy dziecka i rodzica
@@ -140,11 +140,6 @@ class Wire extends React.Component {
             this.detachEventListeners();
         }
     };
-
-    onGateRemoval = () => {
-        this.detachEventListeners();
-        this.hideWire();
-    }
 
     getStateClass = () => stateClasses[this.firstPin.state.value];
 
@@ -182,7 +177,7 @@ class Wire extends React.Component {
                 <path
                     d={dAttribute}
                     className={styles.ClickableArea}
-                    onClick={this.handleOnClick}
+                    onClick={this.removeConnection}
                 />
             </g>
         );

@@ -34,21 +34,27 @@
         // nodeSet jest ruchomym elementem
         position: relative;
         top: initial;
+
+        // zastapienie miejsca ukrytego handle
+        padding: 9px 0;
+
+        &Handle {
+            display: none;
+        }
     }
 
     &NameBox {
         @include namebox();
-        left: 110%;
     }
 
     &Start {
-        .NodeNameBox {
+        .NodeSetNameBox {
             left: 110%;
         }
     }
 
     &End {
-        .NodeNameBox {
+        .NodeSetNameBox {
             right: 110%;
         }
     }
@@ -64,7 +70,6 @@
         justify-content: center;
 
         color: #fff;
-
     }
 }
 

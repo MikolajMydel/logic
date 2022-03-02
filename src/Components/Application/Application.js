@@ -154,13 +154,11 @@ class Application extends React.Component {
     }
 
     mergeNodes = (elements, position, isInputArea) => {
-        let stateCopy = Object.assign({}, this.state);
-        let newNodeSet;
+        let stateCopy = Object.assign({}, this.state),
+        childNodes = [];
         if (elements.nodeSets.length === 0){
-            newNodeSet = <NodeSet nodes={elements.nodes} position={position} />;
+            childNodes = elements.nodes;
         } else {
-            let childNodes = [];
-
             // dodaj do tablicy wszystkie nody nalezace do nodesetow
             for (let i = 0; i < elements.nodeSets.length; i++){
                 childNodes.push(
@@ -175,21 +173,24 @@ class Application extends React.Component {
                 (node) => node.getAttribute("data-element") === "Node"
             );
 
-            // stworz nowy nodeset i podaj jako nody pobrane wczesniej
-            // dzieci
-            newNodeSet = <NodeSet
-                nodes={childNodes}
-                position={position}
-            />;
-
             // powiadom nodesety o scaleniu
             for (let nodeSet of elements.nodeSets){
                 nodeSet.dispatchEvent(merge);
             }
         }
 
-        if (isInputArea) stateCopy.inputs.push(newNodeSet);
-        else stateCopy.outputs.push(newNodeSet);
+        if (isInputArea) {
+            stateCopy.inputs.push(<NodeSet
+            nodes={childNodes}
+            position={position}
+            isInputArea = {isInputArea}
+        />)} else {
+            stateCopy.outputs.push(<NodeSet
+                nodes={childNodes}
+                position={position}
+                isInputArea = {isInputArea}
+            />);
+        }
 
         this.setState(stateCopy);
     }

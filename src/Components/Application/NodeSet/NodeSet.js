@@ -13,8 +13,9 @@ class NodeSet extends React.Component {
 
             name: "",
             renderNameBox: false,
-
         }
+
+        this.style = this.props.isInputArea ? "NodeSetStart" : "NodeSetEnd";
     }
 
     getNameBox = () => (
@@ -27,6 +28,7 @@ class NodeSet extends React.Component {
                 onKeyDown={
                     (e) => {if(e.key === "Enter") this.toggleNameBox()}
                 }
+                onBlur={this.spreadNodeSetName}
             />
             <div onClick={this.selfDestruct}>delete</div>
         </div>
@@ -108,7 +110,7 @@ class NodeSet extends React.Component {
         return (
             <div ref={this.state.ref}
                 style={{top: this.state.position}}
-                className={'NodeSet'}
+                className={`NodeSet ${this.style}`}
                 onClick={this.show}
                 data-element="NodeSet"
             >

@@ -176,11 +176,11 @@ class Application extends React.Component {
 
         if(element.classList.contains("LogicGate")){
             let x = e.clientX - this.state.heldElementOffset[0] - board.offsetLeft; // różnica x
-            let y = e.clientY - this.state.heldElementOffset[1]; // różnica y
+            let y = e.clientY - this.state.heldElementOffset[1] - board.offsetTop; // różnica y
 
             const grid = this.state.settings.grid;
             x = x - (x % grid) + board.offsetLeft;
-            y = y - (y % grid);
+            y = y - (y % grid) + board.offsetTop;
 
             if (x < board.offsetLeft)
                 // za daleko w lewo
@@ -201,15 +201,15 @@ class Application extends React.Component {
 
         } else if(element.classList.contains("NodeHandle")){
             const node = element.parentElement;
-            let y = e.clientY;
+            let y = e.clientY - node.parentElement.offsetTop;
 
-            if (y > node.parentElement.offsetHeight - 20)
-                y = node.parentElement.offsetHeight - 20;
+            if (y > node.parentElement.offsetHeight)
+                y = node.parentElement.offsetHeight;
 
-            if (y < node.parentElement.offsetTop + 40)
-                y = node.parentElement.offsetTop + 40;
+            if (y < node.parentElement.offsetTop)
+                y = node.parentElement.offsetTop;
 
-            node.style.top = y - 10 + 'px';
+            node.style.top = y - 20 + 'px';
             node.dispatchEvent(move);
         }
     }

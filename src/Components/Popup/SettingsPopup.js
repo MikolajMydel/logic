@@ -67,7 +67,7 @@ class SettingsPopup extends Popup {
                 </div>
                 <p>Bramki</p>
                 <div className={styles.MainSection}>
-                    <span>{'interwał czasowy: ' + this.getClockSliderValue() + 'ms'}</span>
+                    <span>{'interwał: ' + this.getClockSliderValue() + 'ms'}</span>
                     <input
                         type="range"
                         min="0"

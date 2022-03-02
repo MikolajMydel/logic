@@ -1,5 +1,5 @@
 import React from 'react';
-import '../NodeSet.scss';
+import styles from '../NodeSet.module.scss';
 import remove from '../../../../Events/remove';
 import StartNode from './StartNode';
 import { findParentNode } from '../../../../findingFunctions';
@@ -38,7 +38,7 @@ class Node extends React.Component {
 
     getNameBox = () => (
         <div
-            className={'NodeNameBox'}
+            className={styles.NodeNameBox}
         >
             <input
                 onChange={this.onInputChange}
@@ -58,30 +58,30 @@ class Node extends React.Component {
 
         // zwróć styl na podstawie wartosci
         if ( value === undefined )
-            style = 'NodeButtonUndefined';
+            style = styles.NodeButtonUndefined;
         else if ( value )
-            style = 'NodeButtonTrue';
+            style = styles.NodeButtonTrue;
         else
-            style = 'NodeButtonFalse';
+            style = styles.NodeButtonFalse;
 
         const position = this.props.position + 'px';
 
         return (
             <div
-                className={`Node ${this instanceof StartNode ? 'NodeStart':'NodeEnd' }`}
+                className={`${styles.Node} ${this instanceof StartNode ? styles.NodeStart : styles.NodeEnd }`}
                 style={{ top: position }}
                 value={this.state.value}
                 data-element="Node"
             >
                 <div
-                    className={`NodeHandle`}
+                    className={styles.NodeHandle}
                     onMouseUp={this.handleHandleMouseUp}
                     data-element="NodeHandle"
                 ></div>
 
                 <div
                     ref={this.state.ref}
-                    className={ `NodeButton ${style}` }
+                    className={ `${styles.NodeButton} ${style}` }
                     onMouseDown={ this.handleOnMouseDown }
                 ></div>
 

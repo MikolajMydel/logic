@@ -1,6 +1,6 @@
 import React from "react";
 import remove from "../../../Events/remove";
-import './NodeSet.scss';
+import styles from './NodeSet.module.scss';
 
 class NodeSet extends React.Component {
     constructor(props){
@@ -18,12 +18,12 @@ class NodeSet extends React.Component {
 
         }
 
-        this.style = this.props.isInputArea ? "NodeSetStart" : "NodeSetEnd";
+        this.style = this.props.isInputArea ? styles.NodeSetStart : styles.NodeSetEnd;
     }
 
     getNameBox = () => (
         <div
-                className={'NodeSetNameBox'}
+                className={styles.NodeSetNameBox}
         >
             <input
                 onChange={this.onInputChange}
@@ -31,7 +31,6 @@ class NodeSet extends React.Component {
                 onKeyDown={
                     (e) => {if(e.key === "Enter") this.toggleNameBox()}
                 }
-                onBlur={this.spreadNodeSetName}
             />
             <div onClick={this.selfDestruct}>delete</div>
         </div>
@@ -143,12 +142,12 @@ class NodeSet extends React.Component {
         return (
             <div ref={this.state.ref}
                 style={{top: this.state.position}}
-                className={`NodeSet ${this.style}`}
+                className={`${styles.NodeSet} ${this.style}`}
                 onClick={this.show}
                 data-element="NodeSet"
             >
 
-                <div className="NodeSetHandle"
+                <div className={styles.NodeSetHandle}
                     data-element="NodeSetHandle"
                     onMouseUp={this.handleHandleMouseUp}
                 >

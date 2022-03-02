@@ -237,10 +237,11 @@ class Application extends React.Component {
     // funkcja podnosząca element
     grab(e) {
         const element = e.target;
+        const elementType = element.getAttribute("data-element");
 
-        if (element.classList.contains("LogicGate")
-            || element.classList.contains("NodeHandle")
-            || element.classList.contains("NodeSetHandle")
+        if (elementType === "LogicGate"
+            || elementType === "NodeHandle"
+            || elementType === "NodeSetHandle"
             ) {
             element.style.zIndex = 2;
             this.setState({heldElement: element});
@@ -329,7 +330,8 @@ class Application extends React.Component {
         const element = this.state.heldElement;
 
         if (element){
-            if (element.classList.contains("NodeSetHandle") || element.classList.contains("NodeHandle")){
+            const elementType = element.getAttribute("data-element");
+            if (elementType === "NodeSetHandle" || elementType === "NodeHandle"){
                 this.sideAreaModification(e, element);
             }
 

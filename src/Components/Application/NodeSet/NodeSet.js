@@ -9,11 +9,13 @@ class NodeSet extends React.Component {
         this.state = {
             ref: React.createRef(),
             render: true,
-            value: this.calculateValue(),
             position: this.props.position,
 
             name: "",
             renderNameBox: false,
+
+            nodes: this.props.nodes,
+
         }
 
         this.style = this.props.isInputArea ? "NodeSetStart" : "NodeSetEnd";
@@ -45,7 +47,7 @@ class NodeSet extends React.Component {
             "render": false,
         });
 
-        for (let node of this.props.nodes){
+        for (let node of this.state.nodes){
             node.dispatchEvent(remove);
         }
     }
@@ -63,7 +65,7 @@ class NodeSet extends React.Component {
     }
 
     calculateValue = () => {
-        const nodes = this.props.nodes;
+        const nodes = this.state.nodes;
         let value = 0;
 
         for (let i = 0; i < nodes.length; i++){
@@ -77,7 +79,27 @@ class NodeSet extends React.Component {
         'value': this.calculateValue(),
     });
 
-    hideNodeSet = () => {
+    removeNode = (e) => {
+        if (e.button === 2){
+            const nodeToRemove = e.target;
+            nodeToRemove.dispatchEvent(remove);
+
+            const newNodesArray = this.state.nodes.filter(
+                node => node !== nodeToRemove
+            );
+
+            if (newNodesArray.length === 0) this.removeNodeSet();
+            else {
+                this.state.ref.current.removeChild(nodeToRemove);
+
+                this.setState({
+                    "nodes": newNodesArray
+                }, this.updateValue);
+            }
+        };
+    }
+
+    removeNodeSet = () => {
         this.setState({
             'render': false,
         },
@@ -87,28 +109,31 @@ class NodeSet extends React.Component {
 
     spreadMoveEvent = () => {
         const move = new Event("move");
-        for (let node of this.props.nodes){
+        for (let node of this.state.nodes){
             node.dispatchEvent(move);
         }
     }
 
     componentDidMount(){
         this.state.ref.current.addEventListener('signalChange', this.updateValue);
-        this.state.ref.current.addEventListener('merge', this.hideNodeSet);
+        this.state.ref.current.addEventListener('merge', this.removeNodeSet);
         this.state.ref.current.addEventListener('move', this.spreadMoveEvent);
 
-        const children = this.props.nodes;
+        const children = this.state.nodes;
         for (let i = 0; i < children.length; i++){
             children[i].style.top = "";
+            children[i].addEventListener("mousedown", this.removeNode);
             this.state.ref.current.appendChild(children[i]);
         }
+
+        this.updateValue();
 
         this.spreadMoveEvent();
     }
 
     detachEventListeners = () => {
         this.state.ref.current.removeEventListener('signalChange', this.updateValue);
-        this.state.ref.current.removeEventListener('merge', this.hideNodeSet);
+        this.state.ref.current.removeEventListener('merge', this.removeNodeSet);
         this.state.ref.current.removeEventListener('move', this.spreadMoveEvent);
     }
 

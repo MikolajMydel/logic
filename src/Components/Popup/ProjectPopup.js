@@ -68,7 +68,7 @@ class ProjectPopup extends Popup {
                         className={styles.MainListProjectDelete}
                         onClick={() => this.deleteProject(proj)}
                     >
-                        <strong>X</strong>
+                        X
                     </div>
                 </div>
             );

@@ -18,13 +18,13 @@
         }
         .Button {
             height: 100%;
-            padding: 0 14px;
+            padding: 0 12px;
             margin-left: 6px;
 
-            border: 2px solid #e1f0ee;
+            border: 2px solid white;
             border-radius: 15px;
             background-color: transparent;
-            color: #f0edd9;
+            color: white;
             font-family: 'Ubuntu';
             font-size: 10pt;
             font-weight: bold;
@@ -34,9 +34,9 @@
             transition: 0.2s;
         }
         .Button:hover {
-            background-color: #e1f0ee;
-            border-color: black;
-            color: black;
+            background-color: #0099ff;
+            border-color: white;
+            color: white;
         }
     }
     img {

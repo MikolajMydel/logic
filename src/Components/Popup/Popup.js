@@ -15,8 +15,8 @@ class Popup extends React.Component {
         return(
             <>
                 <div
-                className={styles.Popup}
-                style={this.style}
+                    className={styles.Popup}
+                    style={this.style}
                 >
                     <strong onClick={this.selfDestruct}>X</strong>
                     {contents}

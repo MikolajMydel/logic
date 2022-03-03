@@ -8,7 +8,7 @@ $animation-timing-function: cubic-bezier(0.165, 0.840, 0.440, 1.000);
     }
 }
 
-@keyframes show-popup-content {
+@keyframes show-popup-cover {
     from {
         opacity: 0;
     } to {
@@ -24,7 +24,7 @@ $animation-timing-function: cubic-bezier(0.165, 0.840, 0.440, 1.000);
     background-color: rgba(0, 0, 0, 0.6);
 
     opacity: 0;
-    animation: show-popup-content .3s $animation-timing-function forwards;
+    animation: show-popup-cover .3s $animation-timing-function forwards;
 }
 .Popup {
     box-sizing: border-box;
@@ -36,16 +36,12 @@ $animation-timing-function: cubic-bezier(0.165, 0.840, 0.440, 1.000);
     z-index: 6;
     margin: auto;
 
-    border: 3px solid darkred;
+    border: 3px solid #333;
     border-radius: 15px;
     background-color: white;
 
-    animation: show-popup .3s $animation-timing-function forwards;
+    animation: show-popup .4s $animation-timing-function forwards;
 
-    * {
-        opacity: 0;
-        animation: show-popup-content 1s $animation-timing-function forwards;
-    }
 
     strong {
         position: absolute;

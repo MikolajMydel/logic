@@ -29,7 +29,7 @@ $animation-timing-function: cubic-bezier(0.165, 0.840, 0.440, 1.000);
 .Popup {
     box-sizing: border-box;
     position: absolute;
-    padding: 15px;
+    padding: 30px 15px;
 
     left: 0; right: 0;
     top: 0; bottom: 0;
@@ -48,6 +48,10 @@ $animation-timing-function: cubic-bezier(0.165, 0.840, 0.440, 1.000);
     }
 
     strong {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+
         cursor: pointer;
         padding: 5px;
     }

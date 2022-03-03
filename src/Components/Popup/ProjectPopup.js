@@ -68,7 +68,7 @@ class ProjectPopup extends Popup {
                         className={styles.MainListProjectDelete}
                         onClick={() => this.deleteProject(proj)}
                     >
-                        <strong>X</strong>
+                        X
                     </div>
                 </div>
             );
@@ -79,7 +79,7 @@ class ProjectPopup extends Popup {
                 <input
                     type="text"
                     className={styles.MainNewText}
-                    placeHolder="Nowy projekt"
+                    placeholder="Nowy projekt"
                     maxLength="24"
                     onChange={this.handleOnChange}
                 />

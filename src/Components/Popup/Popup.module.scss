@@ -1,26 +1,55 @@
+$animation-timing-function: cubic-bezier(0.165, 0.840, 0.440, 1.000);
+
+@keyframes show-popup {
+    from {
+        transform: scale(0);
+    } to {
+        transform: scale(1);
+    }
+}
+
+@keyframes show-popup-cover {
+    from {
+        opacity: 0;
+    } to {
+        opacity: 1;
+    }
+}
+
 .Cover {
     position: absolute;
+    z-index: 5;
     height: 100vh;
     width: 100vw;
-    z-index: 100;
     background-color: rgba(0, 0, 0, 0.6);
+
+    opacity: 0;
+    animation: show-popup-cover .3s $animation-timing-function forwards;
 }
 .Popup {
     box-sizing: border-box;
     position: absolute;
-    padding: 15px;
+    padding: 30px 15px;
 
     left: 0; right: 0;
     top: 0; bottom: 0;
+    z-index: 6;
     margin: auto;
 
-    border: 3px solid darkred;
+    border: 3px solid #333;
     border-radius: 15px;
     background-color: white;
 
+    animation: show-popup .4s $animation-timing-function forwards;
+
+
     strong {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+
         cursor: pointer;
-        padding: 5px;
+        padding: 5px 10px;
     }
     strong:hover {
         color: gray;

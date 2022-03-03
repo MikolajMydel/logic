@@ -1,3 +1,21 @@
+$animation-timing-function: cubic-bezier(0.165, 0.840, 0.440, 1.000);
+
+@keyframes show-popup {
+    from {
+        transform: scale(0);
+    } to {
+        transform: scale(1);
+    }
+}
+
+@keyframes show-popup-content {
+    from {
+        opacity: 0;
+    } to {
+        opacity: 1;
+    }
+}
+
 .Cover {
     position: absolute;
     z-index: 5;
@@ -18,6 +36,13 @@
     border: 3px solid darkred;
     border-radius: 15px;
     background-color: white;
+
+    animation: show-popup .3s $animation-timing-function forwards;
+
+    * {
+        opacity: 0;
+        animation: show-popup-content 1s $animation-timing-function forwards;
+    }
 
     strong {
         cursor: pointer;

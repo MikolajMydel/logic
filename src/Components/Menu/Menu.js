@@ -14,7 +14,13 @@ const Menu = (props) => {
             <ul>
                 {buttons}
             </ul>
-            <a href="https://github.com/isayni/logic"><img src={github}/></a>
+            <a 
+                href="https://github.com/isayni/logic"
+                target="_blank"
+                rel="noreferrer"
+            >
+                <img src={github} alt="GitHub repository" />
+            </a>
         </div>
     )
 }

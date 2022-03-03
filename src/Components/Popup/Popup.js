@@ -13,15 +13,17 @@ class Popup extends React.Component {
 
     render(contents){
         return(
-            <div className={styles.Cover}>
+            <>
                 <div
-                    className={styles.Popup}
-                    style={this.style}
+                className={styles.Popup}
+                style={this.style}
                 >
                     <strong onClick={this.selfDestruct}>X</strong>
                     {contents}
                 </div>
-            </div>
+                <div className={styles.Cover} onClick={this.selfDestruct}>
+                </div>
+            </>
         );
     }
 }

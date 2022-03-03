@@ -14,7 +14,7 @@ const Menu = (props) => {
             <ul>
                 {buttons}
             </ul>
-            <a 
+            <a
                 href="https://github.com/isayni/logic"
                 target="_blank"
                 rel="noreferrer"

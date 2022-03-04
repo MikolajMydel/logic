@@ -45,9 +45,9 @@ class SettingsPopup extends Popup {
     render(){
         return super.render((
             <div className={styles.Main}>
-                <p>Grid</p>
+                <p>Siatka</p>
                 <div className={styles.MainSection}>
-                    <span>{"width: " + this.getGridSliderValue()}</span>
+                    <span>{"rozmiar: " + this.getGridSliderValue()}</span>
                     <input
                         type="range"
                         min="1"
@@ -58,16 +58,16 @@ class SettingsPopup extends Popup {
                     />
                     <br/>
                     <br/>
-                    <span>show grid</span>
+                    <span>pokaż siatkę</span>
                     <input
                         type="checkbox"
                         checked={this.state.settings.showGrid}
                         onChange={(e) => this.handleOnChangeCheckbox(e, 'showGrid')}
                     />
                 </div>
-                <p>Gates</p>
+                <p>Bramki</p>
                 <div className={styles.MainSection}>
-                    <span>{'interval: ' + this.getClockSliderValue() + 'ms'}</span>
+                    <span>{'interwał: ' + this.getClockSliderValue() + 'ms'}</span>
                     <input
                         type="range"
                         min="0"
@@ -77,9 +77,9 @@ class SettingsPopup extends Popup {
                         className={styles.MainSectionSlider}
                     />
                 </div>
-                <p>Nodes</p>
+                <p>Pola wejścia/wyjścia</p>
                 <div className={styles.MainSection}>
-                    <span>show names</span>
+                    <span>pokaż nazwy</span>
                     <input // na razie nie ma zastosowania TODO
                         type="checkbox"
                         checked={this.state.settings.showNodeNames}

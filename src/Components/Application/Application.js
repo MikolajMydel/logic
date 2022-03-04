@@ -274,11 +274,11 @@ class Application extends React.Component {
         switch (element.getAttribute("data-element")){
             case "LogicGate": {
                 let x = e.clientX - this.state.heldElementOffset[0] - board.offsetLeft; // różnica x
-                let y = e.clientY - this.state.heldElementOffset[1]; // różnica y
+                let y = e.clientY - this.state.heldElementOffset[1] - board.offsetTop; // różnica y
 
                 const grid = this.state.settings.grid;
                 x = x - (x % grid) + board.offsetLeft;
-                y = y - (y % grid);
+                y = y - (y % grid) + board.offsetTop;
 
                 if (x < board.offsetLeft)
                     // za daleko w lewo
@@ -309,7 +309,7 @@ class Application extends React.Component {
                 if (y < nodeSet.parentElement.offsetTop + 40)
                     y = nodeSet.parentElement.offsetTop + 40;
 
-                nodeSet.style.top = y - 10 + 'px';
+                nodeSet.style.top = y - 60 + 'px';
                 nodeSet.dispatchEvent(move);
             }
 
@@ -325,7 +325,7 @@ class Application extends React.Component {
                 if (y < node.parentElement.offsetTop + 40)
                     y = node.parentElement.offsetTop + 40;
 
-                node.style.top = y - 10 + 'px';
+                node.style.top = y - 65 + 'px';
                 node.dispatchEvent(move);
             }
             break;

@@ -2,11 +2,20 @@
     &NewText {
         width: 80%;
         height: 36px;
+        padding-left: 10px;
     }
     &NewButton {
         margin: 10px 0 10px 0;
         width: 20%;
         height: 36px;
+        border: 3px solid #129c00;
+        background-color: #6ad45c;
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    &NewButton:hover {
+        color: #129c00;
     }
     &List {
         overflow-y: scroll;
@@ -36,9 +45,10 @@
                 border-radius: 14px;
 
                 cursor: pointer;
+                transition: 0.2s;
             }
             &Body:hover {
-                background-color: lightgray;
+                background-color: #88bfe9;
             }
             &Delete {
                 display: flex;
@@ -53,13 +63,18 @@
 
                 border: 3px solid darkred;
                 background-color: white;
-                background-color: red;
+                background-color: rgb(253, 106, 106);
                 border-radius: 14px;
                 color: white;
 
                 cursor: pointer;
+                transition: 0.2s;
 
                 text-align: center;
+                font-weight: bold;
+            }
+            &Delete:hover {
+                color: darkred;
             }
         }
     }

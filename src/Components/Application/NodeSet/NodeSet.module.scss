@@ -31,7 +31,7 @@
         right: 0;
         bottom: 0;
         padding: 10px;
-        background-color: transparent;
+        background-color: yellow;
         border: none;
         outline: none;
     }
@@ -67,6 +67,7 @@
     }
 
     .Node {
+        background-color: rgb(129, 129, 129);
         // im wyzszy jest pin tym szybciej
         transition: calc(var(--node-number) * 0.2s) ease-in-out;
 
@@ -126,16 +127,18 @@
 }
 
 .Node {
+    border: 1px solid #000;
     position: absolute;
     left: 0;
     right: 0;
+
     display: flex;
     align-items: center;
     // style aplikacji to zmieniają
     flex-direction: row;
 
-    border-top: 1px solid #000;
-    border-bottom: 1px solid #000;
+    // zeby latwiej sie scalalo node'y
+    padding: 10px 0;
 
     &Start {
         .NodeButton {
@@ -147,28 +150,18 @@
         }
     }
     &End {
-
         flex-direction: row-reverse;
 
         .NodeNameBox {
             right: 110%;
         }
-
         .NodeButton {
             margin-right: auto;
             margin-left: 0;
         }
-
         .NodeHandle {
             transform: rotate(180deg);
         }
-    }
-
-    &Index {
-        // index jest uzywany tylko wtedy, gdy node jest w nodeset
-        display: none;
-        user-select: none;
-        pointer-events: none;
     }
 
     &Button {
@@ -178,7 +171,7 @@
         cursor: pointer;
 
         border-radius: 100%;
-        border: 1px solid #000;
+        border: 2px solid #000;
 
         &Undefined {
             background-color: lighten(gray, 20%);
@@ -193,7 +186,8 @@
         }
     }
     &Handle {
-        $handle-color: #000000;
+        $handle-color: #212121;
+
         cursor: move;
 
         width: 0;
@@ -208,4 +202,9 @@
     &NameBox {
         @include namebox();
     }
+
+    &Index {
+        display: none;
+    }
 }
+

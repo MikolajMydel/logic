@@ -20,6 +20,8 @@ class NodeSet extends React.Component {
         }
 
         this.style = this.props.isInputArea ? styles.NodeSetStart : styles.NodeSetEnd;
+
+        this.spreadMoveEvent();
     }
 
     getNameBox = () => (
@@ -103,16 +105,16 @@ class NodeSet extends React.Component {
                 node => node !== nodeToRemove
             );
 
-            if (newNodesArray.length === 0) this.removeNodeSet();
-            else {
-                this.state.ref.current.removeChild(nodeToRemove);
+            this.state.ref.current.removeChild(nodeToRemove);
+            this.setState({
+                "nodes": newNodesArray
+            }, () => {
+                if (this.state.nodes.length === 0) this.removeNodeSet();
+                this.updateValue();
+            });
 
-                this.setState({
-                    "nodes": newNodesArray
-                }, this.updateValue);
-            }
-        };
-    }
+        }
+    };
 
     removeNodeSet = () => {
         this.setState({
@@ -142,8 +144,6 @@ class NodeSet extends React.Component {
         }
 
         this.updateValue();
-
-        this.spreadMoveEvent();
     }
 
     detachEventListeners = () => {

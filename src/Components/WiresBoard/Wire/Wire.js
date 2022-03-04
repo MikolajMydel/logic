@@ -62,7 +62,8 @@ class Wire extends React.Component {
     attachEventListeners = () => {
         window.addEventListener(
             "resize",
-            this.updatePosition
+            this.updatePosition,
+            false
         );
 
         for (let gate of this.gates) {
@@ -92,7 +93,8 @@ class Wire extends React.Component {
 
         window.removeEventListener(
             "resize",
-            this.updatePosition
+            this.updatePosition,
+            false
         );
 
         // usuwam event listenery z obu pinow

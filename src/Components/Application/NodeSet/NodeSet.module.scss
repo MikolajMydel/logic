@@ -1,3 +1,31 @@
+.Button {
+    font-size: 14px;
+    color: white;
+    font-weight: bold;
+
+    text-transform: capitalize;
+
+    border: none;
+    border-top: 2px solid #222;
+    padding: 4px;
+
+    cursor: pointer;
+    user-select: none;
+    text-align: center;
+
+    width: 50%;
+
+    &Destruct {
+        background-color: red;
+        border-right: 2px solid #222;
+    }
+
+    &SignBit {
+        background-color: aqua;
+        color: #333;
+    }
+}
+
 @mixin namebox(){
     position: absolute;
     font-size: 16px;
@@ -8,20 +36,6 @@
         outline: none;
         border: none;
         user-select: none;
-    }
-    div {
-        font-size: 14px;
-        color: white;
-        font-weight: bold;
-
-        border-top: 2px solid #222;
-        padding: 4px;
-
-        cursor: pointer;
-        user-select: none;
-        text-align: center;
-        background-color: red;
-        width: 100%;
     }
 }
 
@@ -45,6 +59,10 @@
 
     &NameBox {
         @include namebox();
+
+        &Buttons {
+            width: 100%;
+        }
     }
 
     &Start {

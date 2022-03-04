@@ -15,6 +15,7 @@ class NodeSet extends React.Component {
             renderNameBox: false,
 
             nodes: this.props.nodes,
+            signed: this.props.isSigned,
 
         }
 
@@ -32,9 +33,18 @@ class NodeSet extends React.Component {
                     (e) => {if(e.key === "Enter") this.toggleNameBox()}
                 }
             />
-            <div onClick={this.selfDestruct}>delete</div>
+            <div className={styles.NodeSetNameBoxButtons}>
+                <button className={`${styles.Button} ${styles.ButtonDestruct}`} onClick={this.selfDestruct}>delete</button>
+                <button className={`${styles.Button} ${styles.ButtonSignBit}`} onClick={this.toggleSignBit} >ZM</button>
+            </div>
         </div>
     )
+
+    toggleSignBit = () => {
+        this.setState({
+        "signed": !this.state.signed,
+        }, this.updateValue);
+    };
 
     toggleNameBox = () => {
         this.setState({renderNameBox: !this.state.renderNameBox})
@@ -65,13 +75,19 @@ class NodeSet extends React.Component {
 
     calculateValue = () => {
         const nodes = this.state.nodes;
-        let value = 0;
-
-        for (let i = 0; i < nodes.length; i++){
-            if (nodes[i].getAttribute("value") === "true") value += Math.pow(2, i);
+        let value = 0, range = 0, sign = 1;
+        if (this.state.signed) {
+            // aby najstarszy bit zostal pominiety przy obliczaniu wartosci
+            range = 1;
+            // pierwszy bit (najstarszy) decyduje o znaku
+            sign = (nodes[0].getAttribute("value") === "true" ? -1 : 1);
         }
 
-        return value;
+        for (let i = nodes.length - 1; i >= range; i--){
+            if (nodes[i].getAttribute("value") === "true") value += Math.pow(2, nodes.length - i - 1);
+        }
+
+        return value * sign;
     }
 
     updateValue = () => this.setState({
@@ -145,6 +161,7 @@ class NodeSet extends React.Component {
                 className={`${styles.NodeSet} ${this.style}`}
                 onClick={this.show}
                 data-element="NodeSet"
+                data-signed={this.state.signed}
             >
 
                 <div className={styles.NodeSetHandle}

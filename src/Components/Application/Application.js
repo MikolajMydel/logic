@@ -155,12 +155,18 @@ class Application extends React.Component {
 
     mergeNodes = (elements, position, isInputArea) => {
         let stateCopy = Object.assign({}, this.state),
-        childNodes = [];
+        childNodes = [],
+        isSigned = false;
+
         if (elements.nodeSets.length === 0){
             childNodes = elements.nodes;
         } else {
             // dodaj do tablicy wszystkie nody nalezace do nodesetow
             for (let i = 0; i < elements.nodeSets.length; i++){
+                // jezeli chociaz jeden nodeset byl z bitem znaku, to
+                // nowy tez bedzie mial bit znaku
+                if (elements.nodeSets[i].getAttribute("data-signed") === "true") isSigned = true;
+
                 childNodes.push(
                     ...elements.nodeSets[i].childNodes
                 );
@@ -184,11 +190,13 @@ class Application extends React.Component {
             nodes={childNodes}
             position={position}
             isInputArea = {isInputArea}
+            isSigned={isSigned}
         />)} else {
             stateCopy.outputs.push(<NodeSet
                 nodes={childNodes}
                 position={position}
-                isInputArea = {isInputArea}
+                isInputArea={isInputArea}
+                isSigned={isSigned}
             />);
         }
 

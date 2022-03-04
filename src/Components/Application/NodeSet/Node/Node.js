@@ -10,10 +10,17 @@ class Node extends React.Component {
         renderNameBox: false,
         ref: React.createRef(),
         value: undefined,
+
+        index: undefined,
     }
 
     get value() { return this.state.value }
     get name() { return this.state.name }
+
+    componentDidMount(){
+        // event uruchamiany z poziomu NodeSet
+        findParentNode(this.state.ref.current).addEventListener("attributeChange", this.updateAttributes);
+    }
 
     toggleNameBox = () => {
         this.setState({renderNameBox: !this.state.renderNameBox})
@@ -32,8 +39,10 @@ class Node extends React.Component {
     }
 
     fireRemoveEvent = () => {
+        const HTMLParentNode = findParentNode(this.state.ref.current);
+        HTMLParentNode.removeEventListener("attributeChange", this.updateAttributes);
         // event sygnalizujacy usuniecie polaczenia dla Wire
-        findParentNode(this.state.ref.current).dispatchEvent(remove);
+        HTMLParentNode.dispatchEvent(remove);
     }
 
     getNameBox = () => (
@@ -50,6 +59,17 @@ class Node extends React.Component {
             <div onClick={this.selfDestruct}>delete</div>
         </div>
     );
+
+    // funkcja pozwalajaca na zmiane stanu poprzez zmiane
+    // atrybutu elementu HTML (z poziomu NodeSetu)
+    // jest uruchamiana podczas eventu attributeChange
+    updateAttributes = () => {
+        const HTMLParentNode = findParentNode(this.state.ref.current);
+        this.setState({
+            "index": HTMLParentNode.getAttribute("data-index"),
+            "name": HTMLParentNode.getAttribute("data-name"),
+        })
+    }
 
     render() {
         if(this.state.render === false) return null;
@@ -78,6 +98,11 @@ class Node extends React.Component {
                     onMouseUp={this.handleHandleMouseUp}
                     data-element="NodeHandle"
                 ></div>
+                <div
+                    className={styles.NodeIndex}
+                >
+                    {this.state.index}
+                </div>
 
                 <div
                     ref={this.state.ref}

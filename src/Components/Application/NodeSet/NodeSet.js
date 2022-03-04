@@ -1,6 +1,7 @@
 import React from "react";
 import remove from "../../../Events/remove";
 import styles from './NodeSet.module.scss';
+import attributeChange from "../../../Events/attributeChange";
 class NodeSet extends React.Component {
     constructor(props){
         super(props);
@@ -137,6 +138,11 @@ class NodeSet extends React.Component {
         for (let i = 0; i < children.length; i++){
             children[i].style.top = "";
             children[i].addEventListener("mousedown", this.removeNode);
+
+            // przydzielenie node'owi indexu
+            children[i].setAttribute("data-index", children.length - i - 1);
+            children[i].dispatchEvent(attributeChange);
+
             this.state.ref.current.appendChild(children[i]);
         };
 

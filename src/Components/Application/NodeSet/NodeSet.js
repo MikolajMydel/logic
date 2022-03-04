@@ -226,7 +226,11 @@ class NodeSet extends React.Component {
                 >
                     {this.state.value}
                     {this.state.renderNameBox ? this.getNameBox() : ""}
-                    <button className={styles.ButtonFold} onClick={this.toggleFold} ></button>
+                    <button
+                        className={styles.ButtonFold}
+                        data-element="NodeSetFoldButton"
+                        onClick={this.toggleFold}>
+                    </button>
                 </div>
             </div>
         )

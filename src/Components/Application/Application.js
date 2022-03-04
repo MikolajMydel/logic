@@ -244,13 +244,14 @@ class Application extends React.Component {
 
     // funkcja podnosząca element
     grab(e) {
-        const element = e.target;
+        let element = e.target;
         const elementType = element.getAttribute("data-element");
 
-        if (elementType === "LogicGate"
-            || elementType === "NodeHandle"
-            || elementType === "NodeSetHandle"
-            ) {
+        if (["LogicGate", "NodeHandle", "NodeSetHandle", "NodeSetFoldButton"].includes(elementType)) {
+
+            if (elementType === "NodeSetFoldButton")
+                element = element.parentElement;
+
             element.style.zIndex = 2;
             this.setState({heldElement: element});
 
@@ -261,6 +262,7 @@ class Application extends React.Component {
             const yo = e.clientY - element.offsetTop - grid/2;
             this.setState({heldElementOffset: [xo, yo]});
         }
+
     }
 
     // przenieś trzymany element

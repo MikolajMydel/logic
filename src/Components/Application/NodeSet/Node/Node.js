@@ -108,6 +108,7 @@ class Node extends React.Component {
                     ref={this.state.ref}
                     className={ `${styles.NodeButton} ${style}` }
                     onMouseDown={ this.handleOnMouseDown }
+                    data-element="NodeButton"
                 ></div>
 
                 {this.state.renderNameBox ? this.getNameBox(): ""}

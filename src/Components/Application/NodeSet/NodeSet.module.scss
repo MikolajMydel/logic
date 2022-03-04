@@ -140,6 +140,7 @@
         // index jest uzywany tylko wtedy, gdy node jest w nodeset
         display: none;
         user-select: none;
+        pointer-events: none;
     }
 
     &Button {

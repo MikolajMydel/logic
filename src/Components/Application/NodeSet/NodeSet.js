@@ -2,6 +2,7 @@ import React from "react";
 import remove from "../../../Events/remove";
 import styles from './NodeSet.module.scss';
 import attributeChange from "../../../Events/attributeChange";
+import { findParentNode } from "../../../findingFunctions";
 class NodeSet extends React.Component {
     constructor(props){
         super(props);
@@ -57,14 +58,14 @@ class NodeSet extends React.Component {
     }
 
     selfDestruct = () => {
-        this.detachEventListeners();
-        this.setState({
-            "render": false,
-        });
-
         for (let node of this.state.nodes){
             node.dispatchEvent(remove);
         }
+
+        this.detachEventListeners();
+        this.setState({
+            'render': false,
+        });
     }
 
     onInputChange = (e) => {
@@ -100,33 +101,34 @@ class NodeSet extends React.Component {
         'value': this.calculateValue(),
     });
 
-    removeNode = (e) => {
-        if (e.button === 2){
-            const nodeToRemove = e.target;
-            nodeToRemove.dispatchEvent(remove);
+    handleMouseDown = (e) => {
+        if (e.button === 2) {
+            this.removeNode(e.target);
+        }
+    }
+
+    removeNode = (element) => {
+        const targetType = element.getAttribute("data-element");
+        if (targetType === "Node"){
+            element.dispatchEvent(remove);
 
             const newNodesArray = this.state.nodes.filter(
-                node => node !== nodeToRemove
+                node => node !== element
             );
 
-            this.state.ref.current.removeChild(nodeToRemove);
-            this.setState({
+            element.removeEventListener("mousedown", this.handleMouseDown);
+            if (this.state.ref.current) this.state.ref.current.removeChild(element);
+
+            if (newNodesArray.length === 0 && this.state.render) this.selfDestruct();
+            else this.setState({
                 "nodes": newNodesArray
-            }, () => {
-                if (this.state.nodes.length === 0) this.removeNodeSet();
-                this.updateValue();
             });
 
+        } else {
+            // jezeli zostal klikniety przycisk, to rozprzestrzen event na rodzica
+            if (targetType === "NodeButton") this.removeNode (findParentNode(element));
         }
     };
-
-    removeNodeSet = () => {
-        this.setState({
-            'render': false,
-        },
-        this.detachEventListeners()
-        );
-    }
 
     spreadMoveEvent = () => {
         const move = new Event("move");
@@ -147,13 +149,13 @@ class NodeSet extends React.Component {
 
     componentDidMount(){
         this.state.ref.current.addEventListener('signalChange', this.updateValue);
-        this.state.ref.current.addEventListener('merge', this.removeNodeSet);
+        this.state.ref.current.addEventListener('merge', this.selfDestruct);
         this.state.ref.current.addEventListener('move', this.spreadMoveEvent);
 
         const children = this.state.nodes;
         for (let i = 0; i < children.length; i++){
             children[i].style.top = "";
-            children[i].addEventListener("mousedown", this.removeNode);
+            children[i].addEventListener("mousedown", this.handleMouseDown);
 
             // przydzielenie node'owi indexu
             children[i].setAttribute("data-index", children.length - i - 1);
@@ -169,7 +171,7 @@ class NodeSet extends React.Component {
 
     detachEventListeners = () => {
         this.state.ref.current.removeEventListener('signalChange', this.updateValue);
-        this.state.ref.current.removeEventListener('merge', this.removeNodeSet);
+        this.state.ref.current.removeEventListener('merge', this.selfDestruct);
         this.state.ref.current.removeEventListener('move', this.spreadMoveEvent);
     }
 

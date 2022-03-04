@@ -134,6 +134,8 @@ class NodeSet extends React.Component {
             // jezeli zostal klikniety przycisk, to rozprzestrzen event na rodzica
             if (targetType === "NodeButton") this.removeNode (findParentNode(element));
         }
+
+        this.assignIndexes();
     };
 
     spreadMoveEvent = () => {
@@ -153,6 +155,16 @@ class NodeSet extends React.Component {
         }
     }
 
+    assignIndexes = () => {
+        const children = this.state.nodes;
+        for (let i = 0; i < children.length; i++){
+            children[i].setAttribute("data-index", children.length - i - 1);
+            children[i].dispatchEvent(attributeChange);
+        };
+
+        this.spreadNameChange();
+    }
+
     componentDidMount(){
         const HTMLElement = this.state.ref.current;
         HTMLElement.addEventListener('signalChange', this.updateValue);
@@ -163,16 +175,13 @@ class NodeSet extends React.Component {
         for (let i = 0; i < children.length; i++){
             children[i].style.top = "";
             children[i].addEventListener("mousedown", this.handleMouseDown);
-
-            // przydzielenie node'owi indexu
-            children[i].setAttribute("data-index", children.length - i - 1);
-            children[i].dispatchEvent(attributeChange);
-
             // wartosc potrzebna dla css do skladania nodesetu
             children[i].style.setProperty("--node-number", i + 1);
 
             HTMLElement.appendChild(children[i]);
         };
+
+        this.assignIndexes();
 
         setTimeout(this.spreadMoveEvent, 50);
 

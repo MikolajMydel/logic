@@ -54,6 +54,7 @@
     position: absolute;
     left: 0;
     right: 0;
+    user-select: none;
 
     &Folded {
         overflow: hidden;
@@ -129,6 +130,8 @@
 }
 
 .Node {
+    user-select: none;
+
     border: 1px solid #000;
     position: absolute;
     left: 0;

@@ -34,6 +34,8 @@ class Application extends React.Component {
             showGrid: true, // czy siatka ma byc widoczna
             showNodeNames: true, // czy pokazywać nazwy nodów TODO
             clock: 100, // z jakim interwałem odświeżane stany bramek
+            nodesPerClick: 2, // ilosc node'ow dodawanych z kazdym kliknieciem
+            isSignedDefault: false, // czy nowe nodesety maja postac zm
         }
     }
 
@@ -99,22 +101,33 @@ class Application extends React.Component {
         if ( !e.target.classList.contains('Area') )
             return;
 
-        const pos = e.clientY - e.target.offsetTop - 10; // 10 - połowa wysokości
+        const pos = e.clientY - e.target.offsetTop - 25;
         let stateCopy = Object.assign({}, this.state);
 
+        const nodesPerClick = this.state.settings.nodesPerClick;
+
         if (type === "startNode")
-            stateCopy.inputs.push(
-                <StartNode position={pos} setFocusedElement={ this.setFocusedElement }/>,
-            );
+            for (let i = 0; i < nodesPerClick; i++){
+                stateCopy.inputs.push(<StartNode
+                    position={pos}
+                    setFocusedElement={ this.setFocusedElement }/>)
+            }
         else // endNode
-            stateCopy.outputs.push(
-                <EndNode drawWire={ this.drawWire } removeWire={ this.removeWire }
-                getFocusedElement={ this.getFocusedElement } position={ pos }/>
-            );
-        this.setState (stateCopy);
+            for (let i = 0; i < nodesPerClick; i++){
+                stateCopy.outputs.push(<EndNode
+                    drawWire={this.drawWire}
+                    position={pos}
+                    setFocusedElement={ this.setFocusedElement }
+                />)
+            };
+
+        this.setState (stateCopy, () => {
+            this.sideAreaModification(e, undefined, pos)
+        });
     }
 
-    sideAreaModification = (e, focusedElement) => {
+    // albo podajemy pozycje, albo focused element
+    sideAreaModification = (e, focusedElement, position = undefined) => {
         // node'y i nodesety znajdujace sie pod kursorem
         const elementsUnderCursor = document.elementsFromPoint(e.clientX, e.clientY).filter(
             (element) => {
@@ -129,13 +142,13 @@ class Application extends React.Component {
 
         // sa elementy do scalenia
         if (elementsUnderCursor.length > 1){
-            let position;
-
             // szukamy elementu, od ktorego pobierzemy pozycje
             // (tego, ktory nie byl trzymany)
-            for (let sideAreaElement of elementsUnderCursor){
-                if (sideAreaElement !== focusedElement.parentElement){
-                    position = sideAreaElement.style.top;
+            if (typeof focusedElement !== "undefined"){
+                for (let sideAreaElement of elementsUnderCursor){
+                    if (sideAreaElement !== focusedElement.parentElement){
+                        position = sideAreaElement.style.top;
+                    }
                 }
             }
             // posegregowanie elementow

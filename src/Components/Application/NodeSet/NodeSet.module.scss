@@ -31,9 +31,11 @@
         right: 0;
         bottom: 0;
         padding: 10px;
-        background-color: yellow;
         border: none;
+        border-top: 1px solid #fff;
+        background-color: transparent;
         outline: none;
+        cursor: pointer;
     }
 }
 
@@ -79,6 +81,10 @@
         // zastapienie miejsca ukrytego handle
         padding: 9px 0;
 
+        &:last-of-type{
+            border-bottom: 2px solid #000;
+        }
+
         &Handle {
             display: none;
         }
@@ -112,6 +118,8 @@
     }
 
     &Handle {
+        font-family: 'Orbitron', sans-serif;
+
         position: relative;
         z-index: 1;
 
@@ -132,7 +140,6 @@
 .Node {
     user-select: none;
 
-    border: 1px solid #000;
     position: absolute;
     left: 0;
     right: 0;

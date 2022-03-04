@@ -150,9 +150,10 @@ class NodeSet extends React.Component {
     }
 
     componentDidMount(){
-        this.state.ref.current.addEventListener('signalChange', this.updateValue);
-        this.state.ref.current.addEventListener('merge', this.selfDestruct);
-        this.state.ref.current.addEventListener('move', this.spreadMoveEvent);
+        const HTMLElement = this.state.ref.current;
+        HTMLElement.addEventListener('signalChange', this.updateValue);
+        HTMLElement.addEventListener('merge', this.selfDestruct);
+        HTMLElement.addEventListener('move', this.spreadMoveEvent);
 
         const children = this.state.nodes;
         for (let i = 0; i < children.length; i++){
@@ -166,7 +167,7 @@ class NodeSet extends React.Component {
             // wartosc potrzebna dla css do skladania nodesetu
             children[i].style.setProperty("--node-number", i + 1);
 
-            this.state.ref.current.appendChild(children[i]);
+            HTMLElement.appendChild(children[i]);
         };
 
         setTimeout(this.spreadMoveEvent, 50);
@@ -175,13 +176,28 @@ class NodeSet extends React.Component {
     }
 
     detachEventListeners = () => {
-        this.state.ref.current.removeEventListener('signalChange', this.updateValue);
-        this.state.ref.current.removeEventListener('merge', this.selfDestruct);
-        this.state.ref.current.removeEventListener('move', this.spreadMoveEvent);
+        const HTMLElement = this.state.ref.current;
+        HTMLElement.removeEventListener('signalChange', this.updateValue);
+        HTMLElement.removeEventListener('merge', this.selfDestruct);
+        HTMLElement.removeEventListener('move', this.spreadMoveEvent);
     }
 
     toggleFold = () => this.setState({
         "folded": !this.state.folded,
+    }, () => {
+        const nodes = this.state.nodes;
+        let animationDuration = 0;
+        // 0.2s * numer node'a dla kazdego node'a
+        for (let i = 0; i < nodes.length; i++){
+            animationDuration += (i + 1) * 200;
+        }
+
+        const delay = animationDuration / 60;
+        const interval = setInterval(this.spreadMoveEvent, delay);
+
+        setTimeout(() => {
+            window.clearInterval(interval)
+        }, animationDuration);
     })
 
     fold = () => this.setState({

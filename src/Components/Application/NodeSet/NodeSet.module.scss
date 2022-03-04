@@ -59,8 +59,6 @@
         overflow: hidden;
 
         .Node {
-            transition: calc(var(--node-number) * 0.2s) ease-in-out;
-
             // wartosc ustawiana w trakcie tworzenia NodeSetu i
             // przypisywania atrybutu index dla Node
             transform: translateY((calc(var(--node-number) * -100%)));
@@ -69,6 +67,9 @@
     }
 
     .Node {
+        // im wyzszy jest pin tym szybciej
+        transition: calc(var(--node-number) * 0.2s) ease-in-out;
+
         // nodeSet jest ruchomym elementem
         position: relative;
         top: initial;

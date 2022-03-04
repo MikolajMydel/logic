@@ -59,9 +59,13 @@ class NodeSet extends React.Component {
         this.setState({renderNameBox: !this.state.renderNameBox})
     }
 
-    selfDestruct = () => {
-        for (let node of this.state.nodes){
-            node.dispatchEvent(remove);
+    selfDestruct = (merge = true) => {
+        // jezeli nodeset znika z powodu scalenia, to nie
+        // usuwamy node'ow
+        if (!merge){
+            for (let node of this.state.nodes){
+                node.dispatchEvent(remove);
+            }
         }
 
         this.detachEventListeners();
@@ -121,7 +125,7 @@ class NodeSet extends React.Component {
             element.removeEventListener("mousedown", this.handleMouseDown);
             if (this.state.ref.current) this.state.ref.current.removeChild(element);
 
-            if (newNodesArray.length === 0 && this.state.render) this.selfDestruct();
+            if (newNodesArray.length === 0 && this.state.render) this.selfDestruct(false);
             else this.setState({
                 "nodes": newNodesArray
             });

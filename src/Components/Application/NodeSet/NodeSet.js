@@ -18,6 +18,8 @@ class NodeSet extends React.Component {
             nodes: this.props.nodes,
             signed: this.props.isSigned,
 
+            folded: false,
+
         }
 
         this.style = this.props.isInputArea ? styles.NodeSetStart : styles.NodeSetEnd;
@@ -161,6 +163,9 @@ class NodeSet extends React.Component {
             children[i].setAttribute("data-index", children.length - i - 1);
             children[i].dispatchEvent(attributeChange);
 
+            // wartosc potrzebna dla css do skladania nodesetu
+            children[i].style.setProperty("--node-number", i + 1);
+
             this.state.ref.current.appendChild(children[i]);
         };
 
@@ -175,13 +180,25 @@ class NodeSet extends React.Component {
         this.state.ref.current.removeEventListener('move', this.spreadMoveEvent);
     }
 
+    toggleFold = () => this.setState({
+        "folded": !this.state.folded,
+    })
+
+    fold = () => this.setState({
+        "folded": true,
+    });
+
+    unfold = () => this.setState({
+        "folded": false,
+    });
+
     render(){
         if (!this.state.render) return null;
 
         return (
             <div ref={this.state.ref}
                 style={{top: this.state.position}}
-                className={`${styles.NodeSet} ${this.style}`}
+                className={`${styles.NodeSet} ${this.style} ${this.state.folded ? styles.NodeSetFolded : ""}`}
                 onClick={this.show}
                 data-element="NodeSet"
                 data-signed={this.state.signed}
@@ -193,6 +210,7 @@ class NodeSet extends React.Component {
                 >
                     {this.state.value}
                     {this.state.renderNameBox ? this.getNameBox() : ""}
+                    <button className={styles.ButtonFold} onClick={this.toggleFold} ></button>
                 </div>
             </div>
         )

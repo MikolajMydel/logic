@@ -24,6 +24,17 @@
         background-color: aqua;
         color: #333;
     }
+
+    &Fold {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 10px;
+        background-color: transparent;
+        border: none;
+        outline: none;
+    }
 }
 
 @mixin namebox(){
@@ -43,6 +54,19 @@
     position: absolute;
     left: 0;
     right: 0;
+
+    &Folded {
+        overflow: hidden;
+
+        .Node {
+            transition: calc(var(--node-number) * 0.2s) ease-in-out;
+
+            // wartosc ustawiana w trakcie tworzenia NodeSetu i
+            // przypisywania atrybutu index dla Node
+            transform: translateY((calc(var(--node-number) * -100%)));
+            overflow: hidden;
+        }
+    }
 
     .Node {
         // nodeSet jest ruchomym elementem
@@ -83,6 +107,9 @@
     }
 
     &Handle {
+        position: relative;
+        z-index: 1;
+
         width: 100%;
         padding: 15px 0;
         user-select: none;

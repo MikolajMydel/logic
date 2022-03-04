@@ -1,7 +1,6 @@
 import React from "react";
 import remove from "../../../Events/remove";
 import styles from './NodeSet.module.scss';
-
 class NodeSet extends React.Component {
     constructor(props){
         super(props);
@@ -20,8 +19,6 @@ class NodeSet extends React.Component {
         }
 
         this.style = this.props.isInputArea ? styles.NodeSetStart : styles.NodeSetEnd;
-
-        this.spreadMoveEvent();
     }
 
     getNameBox = () => (
@@ -141,7 +138,9 @@ class NodeSet extends React.Component {
             children[i].style.top = "";
             children[i].addEventListener("mousedown", this.removeNode);
             this.state.ref.current.appendChild(children[i]);
-        }
+        };
+
+        setTimeout(this.spreadMoveEvent, 50);
 
         this.updateValue();
     }

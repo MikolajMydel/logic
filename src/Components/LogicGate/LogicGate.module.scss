@@ -4,6 +4,10 @@
 
     width: 100px;
 
+
+    display:flex;
+    justify-content: space-between;
+
     height: max-content;
     min-height: $min-gate-height;
 
@@ -25,31 +29,24 @@
         .LogicGateInputs, .LogicGateOutputs {
             pointer-events: none;
         }
-
     }
 
     &Inputs,
     &Outputs {
-        min-height: $min-gate-height;
-        width: $input-size;
+        position: relative;
 
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: space-evenly;
-
-        position: relative;
-
     }
 
     &Inputs {
-        float: left;
-        left: calc($input-size / -2);
+        left: calc(($input-size + 2px) / -2);
     }
 
     &Outputs {
-        float: right;
-        right: calc($input-size / -2);
+        right: calc(($input-size + 2px) / -2);
     }
 
     &Value {

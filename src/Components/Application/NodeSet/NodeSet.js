@@ -27,10 +27,16 @@ class NodeSet extends React.Component {
                 className={styles.NodeSetNameBox}
         >
             <input
+                onBlur={this.spreadNameChange}
                 onChange={this.onInputChange}
                 value={this.state.name}
                 onKeyDown={
-                    (e) => {if(e.key === "Enter") this.toggleNameBox()}
+                    (e) => {
+                        if(e.key === "Enter"){
+                            this.toggleNameBox();
+                            this.spreadNameChange();
+                        };
+                    }
                 }
             />
             <div className={styles.NodeSetNameBoxButtons}>
@@ -126,6 +132,16 @@ class NodeSet extends React.Component {
         const move = new Event("move");
         for (let node of this.state.nodes){
             node.dispatchEvent(move);
+        }
+    }
+
+    spreadNameChange = () => {
+        const nodeSetName = this.state.name;
+
+        for (let node of this.state.nodes){
+            const nodeIndex = node.getAttribute("data-index");
+            node.setAttribute("data-name", `${nodeSetName}_${nodeIndex}`);
+            node.dispatchEvent(attributeChange);
         }
     }
 

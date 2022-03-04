@@ -68,7 +68,7 @@ class Node extends React.Component {
         this.setState({
             "index": HTMLParentNode.getAttribute("data-index"),
             "name": HTMLParentNode.getAttribute("data-name"),
-        })
+        });
     }
 
     render() {

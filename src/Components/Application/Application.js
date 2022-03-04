@@ -306,7 +306,7 @@ class Application extends React.Component {
     }
 
     render() {
-        if(this.state.settings.showGrid)
+        if(this.state.settings.showGrid && this.state.settings.grid > 1)
             var gridStyle = {backgroundSize: this.state.settings.grid + 'px ' + this.state.settings.grid + 'px'};
 
         return (

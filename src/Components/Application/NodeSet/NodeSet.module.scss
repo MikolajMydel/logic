@@ -30,11 +30,13 @@
         left: 0;
         right: 0;
         bottom: 0;
-        padding: 10px;
+        height: 16px;
         border: none;
 
-        background-color: white;
-        outline: none;
+        font-weight: bold;
+        color: white;
+        background-color: #333;
+        vertical-align: middle;
         cursor: pointer;
     }
 }

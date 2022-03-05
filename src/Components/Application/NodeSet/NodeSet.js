@@ -244,7 +244,9 @@ class NodeSet extends React.Component {
                     <button
                         className={styles.ButtonFold}
                         data-element="NodeSetFoldButton"
-                        onClick={this.toggleFold}>
+                        onClick={this.toggleFold}
+                    >
+                        {this.state.folded && 'v' || '^'}
                     </button>
                 </div>
             </div>

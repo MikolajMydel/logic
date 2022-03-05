@@ -22,30 +22,28 @@ export function makeNewGate(canvas, name, color) {
     const outputArea = canvas.childNodes[2];
 
     // posortowane od najwyżej położonego do najniżej
-    const endNodes  = [...outputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
-    const startNodes = [...inputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
+    let endNodes  = [...outputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
+    let startNodes = [...inputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
 
     // dodawanie nodeow znajdujacych sie w nodesetach
-    const newStartNodes = [];
-    for (let i = 0 ; i < startNodes.length; i++){
-        const startNode = startNodes[i];
+    const startNodesCopy = [];
+    for (let startNode of startNodes){
         if (startNode instanceof NodeSet){
-            newStartNodes.push(...startNode.state.nodes.map(DOM => findReact(DOM)));
-            startNodes.splice(i, 1);
-        }
+            startNodesCopy.push(...startNode.state.nodes.map(DOM => findReact(DOM)));
+        } else
+            if (startNode instanceof StartNode) startNodesCopy.push(startNode);
     }
 
-    const newEndNodes = [];
-    for (let i = 0; i < endNodes.length; i++){
-        const endNode = endNodes[i];
+    const endNodesCopy = [];
+    for (let endNode of endNodes){
         if (endNode instanceof NodeSet){
-            newEndNodes.push(...endNode.state.nodes.map(DOM => findReact(DOM)))
-            endNodes.splice(i, 1);
-        }
+            endNodesCopy.push(...endNode.state.nodes.map(DOM => findReact(DOM)))
+        } else
+            if (endNode instanceof EndNode) endNodesCopy.push(endNode);
     }
 
-    startNodes.push(...newStartNodes);
-    endNodes.push(...newEndNodes);
+    startNodes = startNodesCopy;
+    endNodes = endNodesCopy;
 
     const solve = (input, alreadyVisited) => {
         const output = input.state.parentPin;

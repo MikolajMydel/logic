@@ -1,8 +1,8 @@
 import React from "react";
 import styles from './Application.module.scss';
 import LogicGate from "../LogicGate/LogicGate";
-import StartNode from "../Node/StartNode";
-import EndNode from "../Node/EndNode";
+import StartNode from "./NodeSet/Node/StartNode";
+import EndNode from "./NodeSet/Node/EndNode";
 import ControlPanel from "../ControlPanel/ControlPanel";
 import Menu from "../Menu/Menu";
 import ProjectPopup from "../Popup/ProjectPopup";
@@ -14,6 +14,8 @@ import Wire from '../WiresBoard/Wire/Wire.js';
 import WiresBoard from "../WiresBoard/WiresBoard";
 import remove from "../../Events/remove";
 import move from "../../Events/move";
+import NodeSet from "./NodeSet/NodeSet";
+import merge from "../../Events/merge";
 
 class Application extends React.Component {
     state = {
@@ -21,17 +23,19 @@ class Application extends React.Component {
         heldElement: undefined,       // aktualnie trzymana bramka
         heldElementOffset: [0, 0],    // różnica koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
         popup: null,
-        elements: {
-            inputs: [],
-            board: [],
-            outputs: [],
-        },
+
+        inputs: [],
+        board: [],
+        outputs: [],
+
         wires: [],
         settings: {
             grid: 40, // ile pikseli na siatkę
             showGrid: true, // czy siatka ma byc widoczna
             showNodeNames: true, // czy pokazywać nazwy nodów TODO
             clock: 100, // z jakim interwałem odświeżane stany bramek
+            nodesPerClick: 1, // ilosc node'ow dodawanych z kazdym kliknieciem
+            isSignedDefault: false, // czy nowe nodesety maja postac zm
         }
     }
 
@@ -97,24 +101,132 @@ class Application extends React.Component {
         if ( !e.target.classList.contains('Area') )
             return;
 
-        const pos = e.clientY - e.target.offsetTop - 10; // 10 - połowa wysokości
-        let elements = this.state.elements;
+        const pos = e.clientY - e.target.offsetTop - 25;
+        let stateCopy = Object.assign({}, this.state);
+
+        const nodesPerClick = this.state.settings.nodesPerClick;
+
         if (type === "startNode")
-            elements.inputs.push(
-                <StartNode setFocusedElement={ this.setFocusedElement } position={ pos }/>
-            );
+            for (let i = 0; i < nodesPerClick; i++){
+                stateCopy.inputs.push(<StartNode
+                    position={pos}
+                    setFocusedElement={ this.setFocusedElement }/>)
+            }
         else // endNode
-            elements.outputs.push(
-                <EndNode drawWire={ this.drawWire } removeWire={ this.removeWire }
-                getFocusedElement={ this.getFocusedElement } position={ pos }/>
+            for (let i = 0; i < nodesPerClick; i++){
+                stateCopy.outputs.push(<EndNode
+                    drawWire={this.drawWire}
+                    position={pos}
+                    getFocusedElement={this.getFocusedElement}
+                />)
+            };
+
+        this.setState (stateCopy, () => {
+            this.sideAreaModification(e, undefined, pos)
+        });
+    }
+
+    // albo podajemy pozycje, albo focused element
+    sideAreaModification = (e, focusedElement, position = undefined) => {
+        // node'y i nodesety znajdujace sie pod kursorem
+        const elementsUnderCursor = document.elementsFromPoint(e.clientX, e.clientY).filter(
+            (element) => {
+                const elementType = element.getAttribute("data-element");
+                return (
+                // jezeli element jest nodem nalezacym do nodesetu, to go zostawiamy
+                // (zapobiegniecie powtarzaniu node'ow)
+                elementType === "Node" && element.parentElement.getAttribute("data-element") !== "NodeSet")
+                        || elementType === "NodeSet";
+            }
+        );
+
+        // sa elementy do scalenia
+        if (elementsUnderCursor.length > 1){
+            // szukamy elementu, od ktorego pobierzemy pozycje
+            // (tego, ktory nie byl trzymany)
+            if (typeof focusedElement !== "undefined"){
+                for (let sideAreaElement of elementsUnderCursor){
+                    if (sideAreaElement !== focusedElement.parentElement){
+                        position = sideAreaElement.style.top;
+                    }
+                }
+            }
+            // posegregowanie elementow
+            const interactiveElements = {
+                'nodes': [],
+                'nodeSets': [],
+            };
+            elementsUnderCursor.forEach((element) => {
+                const elementType = element.getAttribute("data-element");
+                if (elementType === "Node") interactiveElements["nodes"].push(element);
+                else interactiveElements["nodeSets"].push(element);
+            });
+
+            this.mergeNodes(interactiveElements, position, e.clientX <= 50);
+        }
+    }
+
+    mergeNodes = (elements, position, isInputArea) => {
+        let stateCopy = Object.assign({}, this.state),
+        childNodes = [],
+        isSigned = false;
+
+        if (elements.nodeSets.length === 0){
+            childNodes = elements.nodes;
+        } else {
+            // dodaj do tablicy wszystkie nody nalezace do nodesetow
+            for (let i = 0; i < elements.nodeSets.length; i++){
+                // jezeli chociaz jeden nodeset byl z bitem znaku, to
+                // nowy tez bedzie mial bit znaku
+                if (elements.nodeSets[i].getAttribute("data-signed") === "true") isSigned = true;
+
+                childNodes.push(
+                    ...elements.nodeSets[i].childNodes
+                );
+            };
+
+            childNodes.push( ...elements.nodes );
+
+            // zostawiamy tylko node'y
+            childNodes = childNodes.filter(
+                (node) => node.getAttribute("data-element") === "Node"
             );
-        this.setState ({'elements': elements});
+        }
+
+        // powiadom nodesety i node'y o scaleniu
+        for (let nodeSet of elements.nodeSets){
+            nodeSet.dispatchEvent(merge);
+        }
+
+        for (let node of childNodes){
+            node.dispatchEvent(merge);
+        }
+
+        if (isInputArea) {
+            stateCopy.inputs.push(<NodeSet
+            nodes={childNodes}
+            position={position}
+            isInputArea = {isInputArea}
+            isSigned={isSigned}
+            unmountNode={this.unmountNode}
+        />)} else {
+            stateCopy.outputs.push(<NodeSet
+                nodes={childNodes}
+                position={position}
+                isInputArea={isInputArea}
+                isSigned={isSigned}
+                unmountNode={this.unmountNode}
+            />);
+        }
+
+        this.setState(stateCopy);
     }
 
     addGate = (e, args) => {
-        let elements = this.state.elements;
+        const boardCopy = [...this.state.board];
+
         let newGate;
-        elements.board.push(
+        boardCopy.push(
             <LogicGate
                 gateName={ args.gateName }
                 inputs={ args.inputCount }
@@ -128,7 +240,7 @@ class Application extends React.Component {
                 reference={el => newGate = el}
             />
         );
-        this.setState ({'elements': elements}, function(){
+        this.setState ({'board': boardCopy}, function(){
             // 'e.target' odnosi się teraz do komponentu DummyGate
             const xo = e.clientX - e.target.offsetLeft + this.controlRef.current.scrollLeft;
             const yo = e.clientY - e.target.offsetTop + (e.target.offsetHeight/2);
@@ -151,9 +263,14 @@ class Application extends React.Component {
 
     // funkcja podnosząca element
     grab(e) {
-        const element = e.target;
-        if (element.classList.contains("LogicGate") ||
-            element.classList.contains("NodeHandle")) {
+        let element = e.target;
+        const elementType = element.getAttribute("data-element");
+
+        if (["LogicGate", "NodeHandle", "NodeSetHandle", "NodeSetFoldButton"].includes(elementType)) {
+
+            if (elementType === "NodeSetFoldButton")
+                element = element.parentElement;
+
             element.style.zIndex = 2;
             this.setState({heldElement: element});
 
@@ -164,6 +281,7 @@ class Application extends React.Component {
             const yo = e.clientY - element.offsetTop - grid/2;
             this.setState({heldElementOffset: [xo, yo]});
         }
+
     }
 
     // przenieś trzymany element
@@ -174,50 +292,79 @@ class Application extends React.Component {
         const canvas  = e.currentTarget;
         const board   = this.boardRef.current;
 
-        if(element.classList.contains("LogicGate")){
-            let x = e.clientX - this.state.heldElementOffset[0] - board.offsetLeft; // różnica x
-            let y = e.clientY - this.state.heldElementOffset[1] - board.offsetTop; // różnica y
+        switch (element.getAttribute("data-element")){
+            case "LogicGate": {
+                let x = e.clientX - this.state.heldElementOffset[0] - board.offsetLeft; // różnica x
+                let y = e.clientY - this.state.heldElementOffset[1] - board.offsetTop; // różnica y
 
-            const grid = this.state.settings.grid;
-            x = x - (x % grid) + board.offsetLeft;
-            y = y - (y % grid) + board.offsetTop;
+                const grid = this.state.settings.grid;
+                x = x - (x % grid) + board.offsetLeft;
+                y = y - (y % grid) + board.offsetTop;
 
-            if (x < board.offsetLeft)
-                // za daleko w lewo
-                x = board.offsetLeft;
-            else if (x + element.offsetWidth > board.offsetWidth + board.offsetLeft)
-                // za daleko w prawo
-                x = board.offsetWidth + board.offsetLeft - element.offsetWidth;
-            if (y < board.offsetTop)
-                // za daleko w górę
-                y = board.offsetTop;
-            else if (y + element.offsetHeight > canvas.offsetHeight)
-                // za daleko w dół
-                y = canvas.offsetHeight + canvas.offsetTop - element.offsetHeight;
+                if (x < board.offsetLeft)
+                    // za daleko w lewo
+                    x = board.offsetLeft;
+                else if (x + element.offsetWidth > board.offsetWidth + board.offsetLeft)
+                    // za daleko w prawo
+                    x = board.offsetWidth + board.offsetLeft - element.offsetWidth;
+                if (y < canvas.offsetTop)
+                    // za daleko w górę
+                    y = canvas.offsetTop;
+                else if (y + element.offsetHeight > canvas.offsetHeight + canvas.offsetTop)
+                    // za daleko w dół
+                    y = canvas.offsetHeight + canvas.offsetTop - element.offsetHeight;
 
-            element.style.left = x + 'px';
-            element.style.top = y + 'px';
-            element.dispatchEvent(move);
+                element.style.left = x + 'px';
+                element.style.top = y + 'px';
+                element.dispatchEvent(move);
+            }
+            break;
 
-        } else if(element.classList.contains("NodeHandle")){
-            const node = element.parentElement;
-            let y = e.clientY - node.parentElement.offsetTop;
+            case "NodeSetHandle": {
+                const nodeSet = element.parentElement;
+                let y = e.clientY;
 
-            if (y > node.parentElement.offsetHeight)
-                y = node.parentElement.offsetHeight;
+                if (y > nodeSet.parentElement.offsetHeight - 20)
+                    y = nodeSet.parentElement.offsetHeight - 20;
 
-            if (y < node.parentElement.offsetTop)
-                y = node.parentElement.offsetTop;
+                if (y < nodeSet.parentElement.offsetTop + 40)
+                    y = nodeSet.parentElement.offsetTop + 40;
 
-            node.style.top = y - 20 + 'px';
-            node.dispatchEvent(move);
+                nodeSet.style.top = y - 60 + 'px';
+                nodeSet.dispatchEvent(move);
+            }
+
+            break;
+
+            case "NodeHandle": {
+                const node = element.parentElement;
+                let y = e.clientY;
+
+                if (y > node.parentElement.offsetHeight - 20)
+                    y = node.parentElement.offsetHeight - 20;
+
+                if (y < node.parentElement.offsetTop + 40)
+                    y = node.parentElement.offsetTop + 40;
+
+                node.style.top = y - 65 + 'px';
+                node.dispatchEvent(move);
+            }
+            break;
+
+            default: return;
         }
     }
 
-    drop() {
-        // upuść trzymany element
+    drop(e) {
         const element = this.state.heldElement;
-        if(element){
+
+        if (element){
+            const elementType = element.getAttribute("data-element");
+            if (elementType === "NodeSetHandle" || elementType === "NodeHandle"){
+                this.sideAreaModification(e, element);
+            }
+
+            // upuść trzymany element
             this.setState({heldElement: undefined});
             const board = this.boardRef.current;
             const y = parseInt(element.style.top.split('px')[0])
@@ -299,10 +446,23 @@ class Application extends React.Component {
         this.setState({popup: null})
     }
 
+    clearSideAreas = () => {
+        const canvasElements = [...this.canvasRef.childNodes.values()];
+        const sideAreas = canvasElements.filter(
+            (element) => element !== this.boardRef.current
+        )
+
+        for (let sideArea of sideAreas){
+            for (let childNode of sideArea.childNodes){
+                childNode.dispatchEvent(remove);
+            }
+        }
+    }
+
     // wyczyść obszar roboczy
     clearCanvas = () => {
-        this.setState({focusedElement: undefined, elements: {inputs: [], board: [], outputs: []}, wires: []})
-
+        this.clearSideAreas();
+        this.setState({focusedElement: undefined, board: [], wires: []});
     }
 
     render() {
@@ -313,7 +473,7 @@ class Application extends React.Component {
             <div className={ styles.Application }
                 onMouseDown={ this.handleMouseDown }
                 onMouseMove={ (e) => this.move(e) }
-                onMouseUp={ () => this.drop() }
+                onMouseUp={ (e) => this.drop(e) }
             >
                 {this.state.popup}
                 <Menu functions={[
@@ -343,7 +503,7 @@ class Application extends React.Component {
                         className={ `Area ${styles.InputArea}` }
                         onClick={ (e) => this.addNode(e, 'startNode')}
                     >
-                        { this.state.elements.inputs }
+                        { this.state.inputs }
                     </div>
                     <div
                         className={ styles.Board }
@@ -352,14 +512,14 @@ class Application extends React.Component {
                         style={gridStyle}
                     >
 
-                        { this.state.elements.board }
+                        { this.state.board }
 
                     </div>
                     <div
                         className={ `Area ${styles.OutputArea}` }
                         onClick={ (e) => this.addNode(e, 'endNode')}
                     >
-                        { this.state.elements.outputs }
+                        { this.state.outputs }
                     </div>
                 </div>
                 <ControlPanel addGate={this.addGate} reference={this.controlRef}/>

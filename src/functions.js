@@ -1,5 +1,6 @@
-import EndNode from "./Components/Node/EndNode";
-import StartNode from "./Components/Node/StartNode";
+import EndNode from "./Components/Application/NodeSet/Node/EndNode";
+import StartNode from "./Components/Application/NodeSet/Node/StartNode";
+import NodeSet from "./Components/Application/NodeSet/NodeSet";
 
 //zwraca gotową funkcję na podstawie tablicy stringów z funkcjami
 export function retrieveFunction(functions){
@@ -21,8 +22,28 @@ export function makeNewGate(canvas, name, color) {
     const outputArea = canvas.childNodes[2];
 
     // posortowane od najwyżej położonego do najniżej
-    const endNodes  = [...outputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
-    const startNodes = [...inputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
+    let endNodes  = [...outputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
+    let startNodes = [...inputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
+
+    // dodawanie nodeow znajdujacych sie w nodesetach
+    const startNodesCopy = [];
+    for (let startNode of startNodes){
+        if (startNode instanceof NodeSet){
+            startNodesCopy.push(...startNode.state.nodes.map(DOM => findReact(DOM)));
+        } else
+            startNodesCopy.push(startNode);
+    }
+
+    const endNodesCopy = [];
+    for (let endNode of endNodes){
+        if (endNode instanceof NodeSet){
+            endNodesCopy.push(...endNode.state.nodes.map(DOM => findReact(DOM)))
+        } else
+            endNodesCopy.push(endNode);
+    }
+
+    startNodes = startNodesCopy;
+    endNodes = endNodesCopy;
 
     const solve = (input, alreadyVisited) => {
         const output = input.state.parentPin;

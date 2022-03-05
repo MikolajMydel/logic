@@ -1,5 +1,5 @@
 import Node from './Node';
-import signalChange from '../../Events/signalChange';
+import signalChange from '../../../../Events/signalChange';
 class StartNode extends Node {
     state = {
         ...this.state,
@@ -35,7 +35,10 @@ class StartNode extends Node {
 
     selfDestruct = () => {
         this.fireRemoveEvent();
+        this.removeNode();
+    }
 
+    removeNode = () => {
         this.setState({render: false});
         for(const child of this.state.childPins){
             child.disconnect(this);

@@ -62,7 +62,8 @@ class Wire extends React.Component {
     attachEventListeners = () => {
         window.addEventListener(
             "resize",
-            this.updatePosition
+            this.updatePosition,
+            false
         );
 
         for (let gate of this.gates) {
@@ -73,7 +74,7 @@ class Wire extends React.Component {
 
             gate.addEventListener(
                 "remove",
-                this.onGateRemoval
+                this.removeConnection
             );
         }
 
@@ -92,7 +93,8 @@ class Wire extends React.Component {
 
         window.removeEventListener(
             "resize",
-            this.updatePosition
+            this.updatePosition,
+            false
         );
 
         // usuwam event listenery z obu pinow
@@ -104,7 +106,7 @@ class Wire extends React.Component {
 
             gate.removeEventListener(
                 "remove",
-                this.onGateRemoval
+                this.removeConnection
             );
         }
 
@@ -124,7 +126,7 @@ class Wire extends React.Component {
         "render": false,
     });
 
-    handleOnClick = () => {
+    removeConnection = () => {
         this.detachEventListeners();
 
         // usuwam polaczenie z perspektywy dziecka i rodzica
@@ -141,11 +143,6 @@ class Wire extends React.Component {
         }
     };
 
-    onGateRemoval = () => {
-        this.detachEventListeners();
-        this.hideWire();
-    }
-
     getStateClass = () => stateClasses[this.firstPin.state.value];
 
     updateStateClass = () => {
@@ -156,12 +153,16 @@ class Wire extends React.Component {
 
     // funkcja powodujaca aktualizacje pozycji pinow w stanie
     updatePosition = () => {
-        this.setState({
-            firstPinPosition:
-                this.firstPin.state.ref.current.getBoundingClientRect(),
-            secondPinPosition:
-                this.secondPin.state.ref.current.getBoundingClientRect(),
-        });
+
+        const newPosition = {...this.state};
+
+        if (this.firstPin.state.ref.current)
+            newPosition.firstPinPosition = this.firstPin.state.ref.current.getBoundingClientRect();
+
+        if (this.secondPin.state.ref.current)
+            newPosition.secondPinPosition = this.secondPin.state.ref.current.getBoundingClientRect();
+
+        this.setState(newPosition);
     };
 
     render() {
@@ -182,7 +183,7 @@ class Wire extends React.Component {
                 <path
                     d={dAttribute}
                     className={styles.ClickableArea}
-                    onClick={this.handleOnClick}
+                    onClick={this.removeConnection}
                 />
             </g>
         );

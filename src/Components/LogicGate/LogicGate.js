@@ -82,6 +82,7 @@ class LogicGate extends React.Component {
                 className={`LogicGate ${styles.LogicGate}`}
                 style={this.props.style}
                 ref={this.props.reference}
+                data-element="LogicGate"
             >
                 <div className={styles.LogicGateInputs}>{inputFields}</div>
                 <h5 className={styles.LogicGateValue}> {this.name.replace('f_', '')} </h5>

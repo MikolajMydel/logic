@@ -1,4 +1,5 @@
-import parentChange from "../../Events/parentChange";
+import parentChange from "../../../../Events/parentChange";
+import signalChange from "../../../../Events/signalChange";
 import Node from "./Node";
 
 class EndNode extends Node {
@@ -40,13 +41,22 @@ class EndNode extends Node {
 
   selfDestruct = () => {
     this.fireRemoveEvent();
+    this.removeNode();
+  }
 
+  removeNode = () => {
     this.disconnect();
     this.setState({render: false});
   }
 
   receiveSignal(signal) {
-    this.setState({ value: signal });
+    this.setState({ value: signal },
+      () => {
+        if (this.state.render && this.state.ref.current)
+          this.state.ref.current.dispatchEvent(signalChange);
+      }
+    );
+
   }
 }
 

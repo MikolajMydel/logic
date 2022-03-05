@@ -59,6 +59,7 @@
     left: 0;
     right: 0;
     user-select: none;
+    z-index: 3;
 
     .Button {
         &Destruct {
@@ -86,7 +87,7 @@
     }
 
     .Node {
-        background-color: rgb(129, 129, 129);
+        background-color: transparent;
         // im wyzszy jest pin tym szybciej
         transition: calc(var(--node-number) * 0.2s) ease-in-out;
 

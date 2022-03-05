@@ -101,7 +101,7 @@ class Application extends React.Component {
         if ( !e.target.classList.contains('Area') )
             return;
 
-        const pos = e.clientY - e.target.offsetTop - 25;
+        const pos = e.clientY - e.target.offsetTop - 10;
         let stateCopy = Object.assign({}, this.state);
 
         const nodesPerClick = this.state.settings.nodesPerClick;
@@ -346,7 +346,7 @@ class Application extends React.Component {
                 if (y < node.parentElement.offsetTop + 40)
                     y = node.parentElement.offsetTop + 40;
 
-                node.style.top = y - 65 + 'px';
+                node.style.top = y - 50 + 'px';
                 node.dispatchEvent(move);
             }
             break;

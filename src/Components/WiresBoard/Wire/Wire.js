@@ -59,7 +59,7 @@ class Wire extends React.Component {
         }
     }
 
-    attachEventListeners = () => {
+    componentDidMount() {
         window.addEventListener(
             "resize",
             this.updatePosition,

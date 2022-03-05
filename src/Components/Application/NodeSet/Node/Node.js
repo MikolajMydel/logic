@@ -42,7 +42,6 @@ class Node extends React.Component {
     }
 
     onMerge = () => {
-        console.log("merge");
         findParentNode(this.state.ref.current).removeEventListener("remove", this.removeNode);
     }
 

@@ -146,6 +146,7 @@ class NodeSet extends React.Component {
         HTMLElement.addEventListener('signalChange', this.updateValue);
         HTMLElement.addEventListener('merge', this.removeNodeSet);
         HTMLElement.addEventListener('move', this.spreadMoveEvent);
+        HTMLElement.addEventListener('remove', this.removeNodeSet);
 
         const children = this.state.nodes;
         for (let i = 0; i < children.length; i++){
@@ -169,6 +170,7 @@ class NodeSet extends React.Component {
         HTMLElement.removeEventListener('signalChange', this.updateValue);
         HTMLElement.removeEventListener('merge', this.removeNodeSet);
         HTMLElement.removeEventListener('move', this.spreadMoveEvent);
+        HTMLElement.removeEventListener('remove', this.removeNodeSet);
     }
 
     toggleFold = () => this.setState({

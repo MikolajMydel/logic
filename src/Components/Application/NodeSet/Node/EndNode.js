@@ -11,7 +11,6 @@ class EndNode extends Node {
 
   handleOnMouseDown = (e) => {
     if (e.button === 0) {
-      console.log(this.props.getFocusedElement);
       const newParent = this.props.getFocusedElement();
       if (newParent) this.changeParentPin(newParent);
     }

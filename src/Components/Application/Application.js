@@ -204,12 +204,14 @@ class Application extends React.Component {
             position={position}
             isInputArea = {isInputArea}
             isSigned={isSigned}
+            unmountNode={this.unmountNode}
         />)} else {
             stateCopy.outputs.push(<NodeSet
                 nodes={childNodes}
                 position={position}
                 isInputArea={isInputArea}
                 isSigned={isSigned}
+                unmountNode={this.unmountNode}
             />);
         }
 
@@ -440,9 +442,23 @@ class Application extends React.Component {
         this.setState({popup: null})
     }
 
+    clearSideAreas = () => {
+        const canvasElements = [...this.canvasRef.childNodes.values()];
+        const sideAreas = canvasElements.filter(
+            (element) => element !== this.boardRef.current
+        )
+
+        for (let sideArea of sideAreas){
+            for (let childNode of sideArea.childNodes){
+                childNode.dispatchEvent(remove);
+            }
+        }
+    }
+
     // wyczyść obszar roboczy
     clearCanvas = () => {
-        this.setState({focusedElement: undefined, inputs: [], board: [], outputs: [], wires: []});
+        this.clearSideAreas();
+        this.setState({focusedElement: undefined, board: [], wires: []});
     }
 
     render() {

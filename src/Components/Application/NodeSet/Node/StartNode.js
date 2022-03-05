@@ -15,7 +15,6 @@ class StartNode extends Node {
     }
 
     disconnect(target) {
-        console.log("disconnect");
         const oldChildren = this.state.childPins;
         const pinIndex = oldChildren.indexOf(target);
 

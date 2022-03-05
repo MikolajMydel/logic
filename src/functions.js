@@ -31,7 +31,7 @@ export function makeNewGate(canvas, name, color) {
         if (startNode instanceof NodeSet){
             startNodesCopy.push(...startNode.state.nodes.map(DOM => findReact(DOM)));
         } else
-            if (startNode instanceof StartNode) startNodesCopy.push(startNode);
+            startNodesCopy.push(startNode);
     }
 
     const endNodesCopy = [];
@@ -39,7 +39,7 @@ export function makeNewGate(canvas, name, color) {
         if (endNode instanceof NodeSet){
             endNodesCopy.push(...endNode.state.nodes.map(DOM => findReact(DOM)))
         } else
-            if (endNode instanceof EndNode) endNodesCopy.push(endNode);
+            endNodesCopy.push(endNode);
     }
 
     startNodes = startNodesCopy;

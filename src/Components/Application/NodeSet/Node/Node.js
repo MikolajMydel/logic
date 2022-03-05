@@ -54,6 +54,17 @@ class Node extends React.Component {
         HTMLParentNode.dispatchEvent(remove);
     }
 
+    // funkcja pozwalajaca na zmiane stanu poprzez zmiane
+    // atrybutu elementu HTML (z poziomu NodeSetu)
+    // jest uruchamiana podczas eventu attributeChange
+    updateAttributes = () => {
+        const HTMLParentNode = findParentNode(this.state.ref.current);
+        this.setState({
+            "index": HTMLParentNode.getAttribute("data-index"),
+            "name": HTMLParentNode.getAttribute("data-name"),
+        });
+    }
+
     getNameBox = () => (
         <div
             className={styles.NodeNameBox}
@@ -65,20 +76,10 @@ class Node extends React.Component {
                     (e) => {if(e.key === "Enter") this.toggleNameBox()}
                 }
             />
-            <div onClick={this.selfDestruct}>delete</div>
+            <button className={`${styles.Button} ${styles.ButtonDestruct}`}
+            onClick={this.selfDestruct}>delete</button>
         </div>
     );
-
-    // funkcja pozwalajaca na zmiane stanu poprzez zmiane
-    // atrybutu elementu HTML (z poziomu NodeSetu)
-    // jest uruchamiana podczas eventu attributeChange
-    updateAttributes = () => {
-        const HTMLParentNode = findParentNode(this.state.ref.current);
-        this.setState({
-            "index": HTMLParentNode.getAttribute("data-index"),
-            "name": HTMLParentNode.getAttribute("data-name"),
-        });
-    }
 
     render() {
         if(this.state.render === false) return null;

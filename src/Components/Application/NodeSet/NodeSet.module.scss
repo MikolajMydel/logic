@@ -6,18 +6,18 @@
     text-transform: capitalize;
 
     border: none;
+    outline: none;
+
     border-top: 2px solid #222;
     padding: 4px;
 
     cursor: pointer;
     user-select: none;
     text-align: center;
-
-    width: 50%;
+    width: 100%;
 
     &Destruct {
         background-color: red;
-        border-right: 2px solid #222;
     }
 
     &SignBit {
@@ -58,8 +58,15 @@
     right: 0;
     user-select: none;
 
+    .Button {
+        width: 50%;
+
+        &Destruct {
+            border-right: 2px solid #222;
+        }
+    }
+
     &Folded {
-        overflow: hidden;
 
         .Node {
             // wartosc ustawiana w trakcie tworzenia NodeSetu i
@@ -94,6 +101,10 @@
             padding-left: 5px;
             user-select: none;
             pointer-events: none;
+        }
+
+        &NameBox {
+            display: none;
         }
     }
 

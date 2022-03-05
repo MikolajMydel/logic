@@ -59,10 +59,17 @@
     user-select: none;
 
     .Button {
-        width: 50%;
-
         &Destruct {
             border-right: 2px solid #222;
+            width: 50%;
+        }
+
+        &SignBit {
+            width: 50%;
+        }
+
+        &Fold {
+            width: 100%;
         }
     }
 

@@ -21,8 +21,12 @@ export function makeNewGate(canvas, name, color) {
     const outputArea = canvas.childNodes[2];
 
     // posortowane od najwyżej położonego do najniżej
-    const endNodes  = [...outputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
-    const startNodes = [...inputArea.childNodes].sort(compareTop).map(DOM => findReact(DOM));
+    let endNodes  = [...outputArea.childNodes];
+    console.log(endNodes);
+    endNodes = endNodes.sort(compareTop).map(DOM => findReact(DOM));
+
+    let startNodes = [...inputArea.childNodes];
+    startNodes = startNodes.sort(compareTop).map(DOM => findReact(DOM));
 
     const solve = (input, alreadyVisited) => {
         const output = input.state.parentPin;

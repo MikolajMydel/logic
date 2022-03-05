@@ -34,7 +34,7 @@ class Application extends React.Component {
             showGrid: true, // czy siatka ma byc widoczna
             showNodeNames: true, // czy pokazywać nazwy nodów TODO
             clock: 100, // z jakim interwałem odświeżane stany bramek
-            nodesPerClick: 2, // ilosc node'ow dodawanych z kazdym kliknieciem
+            nodesPerClick: 1, // ilosc node'ow dodawanych z kazdym kliknieciem
             isSignedDefault: false, // czy nowe nodesety maja postac zm
         }
     }

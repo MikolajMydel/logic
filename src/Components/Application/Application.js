@@ -117,7 +117,7 @@ class Application extends React.Component {
                 stateCopy.outputs.push(<EndNode
                     drawWire={this.drawWire}
                     position={pos}
-                    setFocusedElement={ this.setFocusedElement }
+                    getFocusedElement={this.getFocusedElement}
                 />)
             };
 

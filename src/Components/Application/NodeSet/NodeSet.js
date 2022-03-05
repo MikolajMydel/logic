@@ -25,30 +25,6 @@ class NodeSet extends React.Component {
         this.style = this.props.isInputArea ? styles.NodeSetStart : styles.NodeSetEnd;
     }
 
-    getNameBox = () => (
-        <div
-                className={styles.NodeSetNameBox}
-        >
-            <input
-                onBlur={this.spreadNameChange}
-                onChange={this.onInputChange}
-                value={this.state.name}
-                onKeyDown={
-                    (e) => {
-                        if(e.key === "Enter"){
-                            this.toggleNameBox();
-                            this.spreadNameChange();
-                        };
-                    }
-                }
-            />
-            <div className={styles.NodeSetNameBoxButtons}>
-                <button className={`${styles.Button} ${styles.ButtonDestruct}`} onClick={this.selfDestruct}>delete</button>
-                <button className={`${styles.Button} ${styles.ButtonSignBit}`} onClick={this.toggleSignBit} >ZM</button>
-            </div>
-        </div>
-    )
-
     toggleSignBit = () => {
         this.setState({
         "signed": !this.state.signed,
@@ -59,15 +35,15 @@ class NodeSet extends React.Component {
         this.setState({renderNameBox: !this.state.renderNameBox})
     }
 
-    selfDestruct = (merge = true) => {
-        // jezeli nodeset znika z powodu scalenia, to nie
-        // usuwamy node'ow
-        if (!merge){
-            for (let node of this.state.nodes){
-                node.dispatchEvent(remove);
-            }
+    selfDestruct = () => {
+        for (let node of this.state.nodes){
+            node.dispatchEvent(remove);
         }
 
+        this.removeNodeSet();
+    }
+
+    removeNodeSet = () => {
         this.detachEventListeners();
         this.setState({
             'render': false,
@@ -125,7 +101,7 @@ class NodeSet extends React.Component {
             element.removeEventListener("mousedown", this.handleMouseDown);
             if (this.state.ref.current) this.state.ref.current.removeChild(element);
 
-            if (newNodesArray.length === 0 && this.state.render) this.selfDestruct(false);
+            if (newNodesArray.length === 0 && this.state.render) this.selfDestruct();
             else this.setState({
                 "nodes": newNodesArray
             });
@@ -168,7 +144,7 @@ class NodeSet extends React.Component {
     componentDidMount(){
         const HTMLElement = this.state.ref.current;
         HTMLElement.addEventListener('signalChange', this.updateValue);
-        HTMLElement.addEventListener('merge', this.selfDestruct);
+        HTMLElement.addEventListener('merge', this.removeNodeSet);
         HTMLElement.addEventListener('move', this.spreadMoveEvent);
 
         const children = this.state.nodes;
@@ -191,7 +167,7 @@ class NodeSet extends React.Component {
     detachEventListeners = () => {
         const HTMLElement = this.state.ref.current;
         HTMLElement.removeEventListener('signalChange', this.updateValue);
-        HTMLElement.removeEventListener('merge', this.selfDestruct);
+        HTMLElement.removeEventListener('merge', this.removeNodeSet);
         HTMLElement.removeEventListener('move', this.spreadMoveEvent);
     }
 
@@ -220,6 +196,30 @@ class NodeSet extends React.Component {
     unfold = () => this.setState({
         "folded": false,
     });
+
+    getNameBox = () => (
+        <div
+                className={styles.NodeSetNameBox}
+        >
+            <input
+                onBlur={this.spreadNameChange}
+                onChange={this.onInputChange}
+                value={this.state.name}
+                onKeyDown={
+                    (e) => {
+                        if(e.key === "Enter"){
+                            this.toggleNameBox();
+                            this.spreadNameChange();
+                        };
+                    }
+                }
+            />
+            <div className={styles.NodeSetNameBoxButtons}>
+                <button className={`${styles.Button} ${styles.ButtonDestruct}`} onClick={this.selfDestruct}>delete</button>
+                <button className={`${styles.Button} ${styles.ButtonSignBit}`} onClick={this.toggleSignBit} >ZM</button>
+            </div>
+        </div>
+    )
 
     render(){
         if (!this.state.render) return null;

@@ -16,7 +16,6 @@ import remove from "../../Events/remove";
 import move from "../../Events/move";
 import NodeSet from "./NodeSet/NodeSet";
 import merge from "../../Events/merge";
-import Node from "./NodeSet/Node/Node";
 
 class Application extends React.Component {
     state = {

@@ -51,7 +51,10 @@ class EndNode extends Node {
 
   receiveSignal(signal) {
     this.setState({ value: signal },
-      () => this.state.ref.current.dispatchEvent(signalChange)
+      () => {
+        if (this.state.render && this.state.ref.current)
+          this.state.ref.current.dispatchEvent(signalChange);
+      }
     );
 
   }

@@ -18,9 +18,11 @@ class Node extends React.Component {
     get name() { return this.state.name }
 
     componentDidMount(){
+        const HTMLElement = findParentNode(this.state.ref.current);
         // event uruchamiany z poziomu NodeSet
-        findParentNode(this.state.ref.current).addEventListener("attributeChange", this.updateAttributes);
-        findParentNode(this.state.ref.current).addEventListener("remove", this.removeNode);
+        HTMLElement.addEventListener("attributeChange", this.updateAttributes);
+        HTMLElement.addEventListener("remove", this.removeNode);
+        HTMLElement.addEventListener("merge", this.onMerge);
     }
 
     toggleNameBox = () => {
@@ -39,10 +41,16 @@ class Node extends React.Component {
         });
     }
 
+    onMerge = () => {
+        console.log("merge");
+        findParentNode(this.state.ref.current).removeEventListener("remove", this.removeNode);
+    }
+
     fireRemoveEvent = () => {
         const HTMLParentNode = findParentNode(this.state.ref.current);
         HTMLParentNode.removeEventListener("attributeChange", this.updateAttributes);
         HTMLParentNode.removeEventListener("remove", this.removeNode);
+        HTMLParentNode.removeEventListener("merge", this.onMerge);
         // event sygnalizujacy usuniecie polaczenia dla Wire
         HTMLParentNode.dispatchEvent(remove);
     }

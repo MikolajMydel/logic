@@ -192,11 +192,15 @@ class Application extends React.Component {
             childNodes = childNodes.filter(
                 (node) => node.getAttribute("data-element") === "Node"
             );
+        }
 
-            // powiadom nodesety o scaleniu
-            for (let nodeSet of elements.nodeSets){
-                nodeSet.dispatchEvent(merge);
-            }
+        // powiadom nodesety i node'y o scaleniu
+        for (let nodeSet of elements.nodeSets){
+            nodeSet.dispatchEvent(merge);
+        }
+
+        for (let node of childNodes){
+            node.dispatchEvent(merge);
         }
 
         if (isInputArea) {

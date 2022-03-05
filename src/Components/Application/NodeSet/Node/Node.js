@@ -20,6 +20,7 @@ class Node extends React.Component {
     componentDidMount(){
         // event uruchamiany z poziomu NodeSet
         findParentNode(this.state.ref.current).addEventListener("attributeChange", this.updateAttributes);
+        findParentNode(this.state.ref.current).addEventListener("remove", this.removeNode);
     }
 
     toggleNameBox = () => {
@@ -41,6 +42,7 @@ class Node extends React.Component {
     fireRemoveEvent = () => {
         const HTMLParentNode = findParentNode(this.state.ref.current);
         HTMLParentNode.removeEventListener("attributeChange", this.updateAttributes);
+        HTMLParentNode.removeEventListener("remove", this.removeNode);
         // event sygnalizujacy usuniecie polaczenia dla Wire
         HTMLParentNode.dispatchEvent(remove);
     }

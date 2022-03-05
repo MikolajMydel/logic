@@ -35,7 +35,10 @@ class StartNode extends Node {
 
     selfDestruct = () => {
         this.fireRemoveEvent();
+        this.removeNode();
+    }
 
+    removeNode = () => {
         this.setState({render: false});
         for(const child of this.state.childPins){
             child.disconnect(this);

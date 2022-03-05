@@ -4,7 +4,7 @@ import calculatePath from "./pathFunctions";
 import { findParentGate, findParentNode } from "../../../findingFunctions";
 
 // updatePosition throttling
-import _ from 'lodash';
+import { throttle } from 'lodash';
 const UPDATES_PER_SECOND = 60;
 
 const stateClasses = {
@@ -27,7 +27,7 @@ class Wire extends React.Component {
             : findParentNode(pin.state.ref.current); // node
         });
 
-        this.throttledUpdatePosition = _.throttle(this.updatePosition, 1000 / UPDATES_PER_SECOND);
+        this.throttledUpdatePosition = throttle(this.updatePosition, 1000 / UPDATES_PER_SECOND);
 
         this.state = {
             // pozycje pinow w momencie tworzenia polaczenia
@@ -94,7 +94,6 @@ class Wire extends React.Component {
     }
 
     detachEventListeners = () => {
-
         window.removeEventListener(
             "resize",
             this.updatePosition,

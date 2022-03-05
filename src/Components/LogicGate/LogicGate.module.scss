@@ -2,7 +2,12 @@
 
 .LogicGate {
 
-    width: 100px;
+    width: $gate-width;
+
+    box-shadow: 0px 0px 2.5px black inset;
+
+    display:flex;
+    justify-content: space-between;
 
     height: max-content;
     min-height: $min-gate-height;
@@ -25,35 +30,30 @@
         .LogicGateInputs, .LogicGateOutputs {
             pointer-events: none;
         }
-
     }
 
     &Inputs,
     &Outputs {
-        min-height: $min-gate-height;
-        width: $input-size;
+        position: relative;
 
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: space-evenly;
-
-        position: relative;
-
     }
 
     &Inputs {
-        float: left;
-        left: calc($input-size / -2);
+        left: calc(($input-size + 3px) / -2);
     }
 
     &Outputs {
-        float: right;
-        right: calc($input-size / -2);
+        right: calc(($input-size + 3px) / -2);
     }
 
     &Value {
-        font-size: 75%;
+        font-size: 85%;
+        font-weight: bold;
+        color: black;
         pointer-events: none;
         user-select: none;
 

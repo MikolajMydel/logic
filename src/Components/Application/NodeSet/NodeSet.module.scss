@@ -156,19 +156,13 @@
 }
 
 .Node {
-    user-select: none;
-
     position: absolute;
     left: 0;
     right: 0;
 
     display: flex;
-    align-items: center;
     // style aplikacji to zmieniają
     flex-direction: row;
-
-    // zeby latwiej sie scalalo node'y
-    padding: 10px 0;
 
     &Start {
         .NodeButton {
@@ -190,7 +184,7 @@
             margin-left: 0;
         }
         .NodeHandle {
-            transform: rotate(180deg);
+            transform: rotate(180deg) translateY(25%);
         }
     }
 
@@ -202,6 +196,7 @@
 
         border-radius: 100%;
         border: 2px solid #000;
+        box-shadow: 0px 0px 1px black inset;
 
         &Undefined {
             background-color: lighten(gray, 20%);
@@ -218,6 +213,7 @@
     &Handle {
         $handle-color: #212121;
 
+        transform: translateY(-25%);
         cursor: move;
 
         width: 0;
@@ -230,11 +226,35 @@
         _filter: progid:DXImageTransform.Microsoft.Chroma(color=$handle-color);
     }
     &NameBox {
-        @include namebox();
-    }
+        // abs zeby nie wplywalo na ulozenie handle i button
+        position: absolute;
+        top: -50%;
+        z-index: 3;
 
-    &Index {
-        display: none;
+        font-size: 16px;
+
+        border: 2px solid #222;
+
+        input {
+            padding: 5px;
+            outline: none;
+            border: none;
+            user-select: none;
+        }
+        div {
+            font-size: 14px;
+            color: white;
+            font-weight: bold;
+
+            width: 100%;
+            border-top: 2px solid #222;
+            padding: 4px;
+
+            cursor: pointer;
+            user-select: none;
+            text-align: center;
+            background-color: red;
+        }
     }
 }
 

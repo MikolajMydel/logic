@@ -3,6 +3,10 @@ import styles from "./Wire.module.scss";
 import calculatePath from "./pathFunctions";
 import { findParentGate, findParentNode } from "../../../findingFunctions";
 
+// updatePosition throttling
+import { throttle } from 'lodash';
+const UPDATES_PER_SECOND = 60;
+
 const stateClasses = {
     true: styles.WireHighState,
     false: styles.WireLowState,
@@ -23,7 +27,7 @@ class Wire extends React.Component {
             : findParentNode(pin.state.ref.current); // node
         });
 
-        this.attachEventListeners();
+        this.throttledUpdatePosition = throttle(this.updatePosition, 1000 / UPDATES_PER_SECOND);
 
         this.state = {
             // pozycje pinow w momencie tworzenia polaczenia
@@ -59,7 +63,7 @@ class Wire extends React.Component {
         }
     }
 
-    attachEventListeners = () => {
+    componentDidMount() {
         window.addEventListener(
             "resize",
             this.updatePosition,
@@ -69,7 +73,7 @@ class Wire extends React.Component {
         for (let gate of this.gates) {
             gate.addEventListener(
                 "move",    // zmiana na move
-                this.updatePosition
+                this.throttledUpdatePosition
             );
 
             gate.addEventListener(
@@ -90,7 +94,6 @@ class Wire extends React.Component {
     }
 
     detachEventListeners = () => {
-
         window.removeEventListener(
             "resize",
             this.updatePosition,
@@ -101,7 +104,7 @@ class Wire extends React.Component {
         for (let gate of this.gates) {
             gate.removeEventListener(
                 "move",
-                this.updatePosition
+                this.throttledUpdatePosition
             );
 
             gate.removeEventListener(
@@ -153,7 +156,6 @@ class Wire extends React.Component {
 
     // funkcja powodujaca aktualizacje pozycji pinow w stanie
     updatePosition = () => {
-
         const newPosition = {...this.state};
 
         if (this.firstPin.state.ref.current)

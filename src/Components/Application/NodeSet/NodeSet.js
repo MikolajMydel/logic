@@ -14,6 +14,7 @@ class NodeSet extends React.Component {
 
             name: "",
             renderNameBox: false,
+            showName: true,
 
             nodes: this.props.nodes,
             signed: this.props.isSigned,
@@ -199,29 +200,42 @@ class NodeSet extends React.Component {
         "folded": false,
     });
 
-    getNameBox = () => (
-        <div
-                className={styles.NodeSetNameBox}
-        >
-            <input
-                onBlur={this.spreadNameChange}
-                onChange={this.onInputChange}
-                value={this.state.name}
-                onKeyDown={
-                    (e) => {
-                        if(e.key === "Enter"){
-                            this.toggleNameBox();
-                            this.spreadNameChange();
-                        };
-                    }
-                }
-            />
-            <div className={styles.NodeSetNameBoxButtons}>
-                <button className={`${styles.Button} ${styles.ButtonDestruct}`} onClick={this.selfDestruct}>delete</button>
-                <button className={`${styles.Button} ${styles.ButtonSignBit}`} onClick={this.toggleSignBit} >ZM</button>
-            </div>
-        </div>
-    )
+    getNameBox = () => {
+        if(this.state.renderNameBox)
+            return (
+                <div
+                        className={styles.NodeSetNameBox}
+                >
+                    <input
+                        onBlur={this.spreadNameChange}
+                        onChange={this.onInputChange}
+                        value={this.state.name}
+                        onKeyDown={
+                            (e) => {
+                                if(e.key === "Enter"){
+                                    this.toggleNameBox();
+                                    this.spreadNameChange();
+                                };
+                            }
+                        }
+                    />
+                    <div className={styles.NodeSetNameBoxButtons}>
+                        <button className={`${styles.Button} ${styles.ButtonDestruct}`} onClick={this.selfDestruct}>delete</button>
+                        <button className={`${styles.Button} ${styles.ButtonSignBit}`} onClick={this.toggleSignBit} >ZM</button>
+                    </div>
+                </div>
+            )
+        else if (this.state.showName && this.state.name !== '')
+            return (
+                <div
+                    className={styles.NodeName}
+                >
+                    <p>{this.state.name}</p>
+                </div>
+            );
+        else
+            return '';
+    }
 
     render(){
         if (!this.state.render) return null;
@@ -240,7 +254,7 @@ class NodeSet extends React.Component {
                     onMouseUp={this.handleHandleMouseUp}
                 >
                     {this.state.value}
-                    {this.state.renderNameBox ? this.getNameBox() : ""}
+                    {this.getNameBox()}
                     <button
                         className={styles.ButtonFold}
                         data-element="NodeSetFoldButton"

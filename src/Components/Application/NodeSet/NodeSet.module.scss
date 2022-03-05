@@ -127,13 +127,13 @@
     }
 
     &Start {
-        .NodeSetNameBox {
+        .NodeSetNameBox, .NodeName {
             left: 110%;
         }
     }
 
     &End {
-        .NodeSetNameBox {
+        .NodeSetNameBox, .NodeName {
             right: 110%;
         }
     }
@@ -172,14 +172,14 @@
             margin-left: auto;
             margin-right: 0;
         }
-        .NodeNameBox {
+        .NodeNameBox, .NodeName {
             left: 110%;
         }
     }
     &End {
         flex-direction: row-reverse;
 
-        .NodeNameBox {
+        .NodeNameBox, .NodeName {
             right: 110%;
         }
         .NodeButton {
@@ -257,6 +257,21 @@
             user-select: none;
             text-align: center;
             background-color: red;
+        }
+    }
+    &Name {
+        position: absolute;
+        z-index: 3;
+        font-size: 12px;
+        background-color: #333;
+        height: 20px;
+        padding: 2px;
+        p {
+            font-family: Orbitron;
+            color: white;
+            font-weight: bold;
+            white-space: nowrap;
+            user-select: none;
         }
     }
 }

@@ -8,6 +8,7 @@ class Node extends React.Component {
         name: "",
         render: true,
         renderNameBox: false,
+        showName: true,
         ref: React.createRef(),
         value: undefined,
 
@@ -43,6 +44,7 @@ class Node extends React.Component {
 
     onMerge = () => {
         findParentNode(this.state.ref.current).removeEventListener("remove", this.removeNode);
+        this.setState({showName: false});
     }
 
     fireRemoveEvent = () => {
@@ -65,21 +67,34 @@ class Node extends React.Component {
         });
     }
 
-    getNameBox = () => (
-        <div
-            className={styles.NodeNameBox}
-        >
-            <input
-                onChange={this.onInputChange}
-                value={this.name}
-                onKeyDown={
-                    (e) => {if(e.key === "Enter") this.toggleNameBox()}
-                }
-            />
-            <button className={`${styles.Button} ${styles.ButtonDestruct}`}
-            onClick={this.selfDestruct}>delete</button>
-        </div>
-    );
+    getNameBox = () => {
+        if(this.state.renderNameBox)
+            return (
+                <div
+                    className={styles.NodeNameBox}
+                >
+                    <input
+                        onChange={this.onInputChange}
+                        value={this.name}
+                        onKeyDown={
+                            (e) => {if(e.key === "Enter") this.toggleNameBox()}
+                        }
+                    />
+                    <button className={`${styles.Button} ${styles.ButtonDestruct}`}
+                    onClick={this.selfDestruct}>delete</button>
+                </div>
+            );
+        else if(this.state.showName && this.state.name !== '')
+            return (
+                <div
+                    className={styles.NodeName}
+                >
+                    <p>{this.state.name}</p>
+                </div>
+            );
+        else
+            return '';
+    }
 
     render() {
         if(this.state.render === false) return null;
@@ -120,8 +135,7 @@ class Node extends React.Component {
                     onMouseDown={ this.handleOnMouseDown }
                     data-element="NodeButton"
                 ></div>
-
-                {this.state.renderNameBox ? this.getNameBox(): ""}
+                {this.getNameBox()}
             </div>
         )
     }

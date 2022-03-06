@@ -28,7 +28,7 @@ $secondary-color: #00C896;
                 border-radius: 15px;
                 outline: none;
 
-                &::-webkit-slider-runnable-track {
+                &::-webkit-slider-runnable-track, &::-moz-range-track, &::-ms-fill-upper {
                     appearance: none;
                     background-color: $primary-color;
                 }
@@ -36,7 +36,16 @@ $secondary-color: #00C896;
                 &::-webkit-slider-thumb {
                     width: 20px;
                     appearance: none;
-                    height: 10px;
+                    height: 15px;
+                    cursor: ew-resize;
+                    background-color: $secondary-color;
+                    border-radius: 15px;
+                }
+
+                &::-moz-range-thumb {
+                    height: 100%;
+                    width: 20px;
+                    appearance: none;
                     cursor: ew-resize;
                     background-color: $secondary-color;
                     border-radius: 15px;
@@ -47,16 +56,6 @@ $secondary-color: #00C896;
                     cursor: ew-resize;
                     background-color: $secondary-color;
                     border-radius: 15px;
-                }
-
-                &::-moz-range-track, &::-ms-fill-upper {
-                    background-color: $primary-color;
-                }
-
-                &::-moz-range-thumb {
-                    background-color: $secondary-color;
-                    outline: none;
-                    appearance: none;
                 }
             }
         }

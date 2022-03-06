@@ -119,7 +119,6 @@ class Application extends React.Component {
                     {
                         type: 'node',
                         position: pos,
-                        setFocusedElement: this.setFocusedElement,
                     }
                 )
             }
@@ -128,9 +127,7 @@ class Application extends React.Component {
                 stateCopy.outputs.push(
                     {
                         type: 'node',
-                        drawWire: this.drawWire,
                         position: pos,
-                        getFocusedElement: this.getFocusedElement,
                     }
                 )
             };
@@ -520,7 +517,8 @@ class Application extends React.Component {
                                     return (
                                         <StartNode
                                             position={item.position}
-                                            setFocusedElement={item.setFocusedElement}
+                                            setFocusedElement={this.setFocusedElement}
+                                            showNodeNames={this.state.settings.showNodeNames}
                                         />
                                     );
                                     else if(item.type === 'set')
@@ -531,6 +529,7 @@ class Application extends React.Component {
                                             isInputArea={item.isInputArea}
                                             isSigned={item.isSigned}
                                             unmountNode={item.unmountNode}
+                                            showNodeNames={this.state.settings.showNodeNames}
                                         />
                                     );
                                 }
@@ -558,8 +557,9 @@ class Application extends React.Component {
                                     return (
                                         <EndNode
                                             position={item.position}
-                                            getFocusedElement={item.getFocusedElement}
-                                            drawWire={item.drawWire}
+                                            getFocusedElement={this.getFocusedElement}
+                                            drawWire={this.drawWire}
+                                            showNodeNames={this.state.settings.showNodeNames}
                                         />
                                     );
                                     else if(item.type === 'set')
@@ -570,6 +570,7 @@ class Application extends React.Component {
                                             isInputArea={item.isInputArea}
                                             isSigned={item.isSigned}
                                             unmountNode={item.unmountNode}
+                                            showNodeNames={this.state.settings.showNodeNames}
                                         />
                                     );
                                 }

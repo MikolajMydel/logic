@@ -84,7 +84,7 @@ class Node extends React.Component {
                     onClick={this.selfDestruct}>delete</button>
                 </div>
             );
-        else if(this.state.showName && this.state.name !== '')
+        else if(this.props.showNodeNames && this.state.showName && this.state.name !== '')
             return (
                 <div
                     className={styles.NodeName}

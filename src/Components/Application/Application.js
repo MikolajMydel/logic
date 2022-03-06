@@ -347,11 +347,11 @@ class Application extends React.Component {
                 const node = element.parentElement;
                 let y = e.clientY;
 
-                if (y > node.parentElement.offsetHeight - 20)
-                    y = node.parentElement.offsetHeight - 20;
+                if (y > node.parentElement.offsetHeight + 22)
+                    y = node.parentElement.offsetHeight + 22;
 
-                if (y < node.parentElement.offsetTop + 40)
-                    y = node.parentElement.offsetTop + 40;
+                if (y < node.parentElement.offsetTop + 20)
+                    y = node.parentElement.offsetTop + 20;
 
                 node.style.top = y - 50 + 'px';
                 node.dispatchEvent(move);

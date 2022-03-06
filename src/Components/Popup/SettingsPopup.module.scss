@@ -18,6 +18,10 @@ $secondary-color: #00C896;
         border: 1px solid black;
         border-radius: 6px;
 
+        &Subdivision {
+            margin: 10px 0;
+        }
+
         input {
             float: right;
 

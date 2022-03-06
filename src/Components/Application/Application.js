@@ -100,6 +100,11 @@ class Application extends React.Component {
         // dodaj tylko jeżeli kliknięto na czysty obszar (nie np istniejący node)
         if ( !e.target.classList.contains('Area') )
             return;
+        // aby nie dodawac node'a podczas scalania nodesetow
+        if (["NodeSet", "NodeSetHandle", "Node"]
+            .includes(document.elementFromPoint(e.clientX, e.clientY)
+            .getAttribute("data-element"))) return;
+
 
         const pos = e.clientY - e.target.offsetTop - 10;
         let stateCopy = Object.assign({}, this.state);

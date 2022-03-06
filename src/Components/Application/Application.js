@@ -115,17 +115,21 @@ class Application extends React.Component {
 
         if (type === "startNode")
             for (let i = 0; i < nodesPerClick; i++){
-                stateCopy.inputs.push(<StartNode
-                    position={pos}
-                    setFocusedElement={ this.setFocusedElement }/>)
+                stateCopy.inputs.push(
+                    {
+                        type: 'node',
+                        position: pos,
+                    }
+                )
             }
         else // endNode
             for (let i = 0; i < nodesPerClick; i++){
-                stateCopy.outputs.push(<EndNode
-                    drawWire={this.drawWire}
-                    position={pos}
-                    getFocusedElement={this.getFocusedElement}
-                />)
+                stateCopy.outputs.push(
+                    {
+                        type: 'node',
+                        position: pos,
+                    }
+                )
             };
 
         this.setState (stateCopy, () => {
@@ -209,21 +213,18 @@ class Application extends React.Component {
             node.dispatchEvent(merge);
         }
 
+        const set = {
+            type: 'set',
+            nodes:childNodes,
+            position:position,
+            isInputArea: isInputArea,
+            isSigned:isSigned,
+            unmountNode: this.unmountNode,
+        }
         if (isInputArea) {
-            stateCopy.inputs.push(<NodeSet
-            nodes={childNodes}
-            position={position}
-            isInputArea = {isInputArea}
-            isSigned={isSigned}
-            unmountNode={this.unmountNode}
-        />)} else {
-            stateCopy.outputs.push(<NodeSet
-                nodes={childNodes}
-                position={position}
-                isInputArea={isInputArea}
-                isSigned={isSigned}
-                unmountNode={this.unmountNode}
-            />);
+            stateCopy.inputs.push(set);
+        } else {
+            stateCopy.outputs.push(set);
         }
 
         this.setState(stateCopy);
@@ -510,7 +511,31 @@ class Application extends React.Component {
                         className={ `Area ${styles.InputArea}` }
                         onClick={ (e) => this.addNode(e, 'startNode')}
                     >
-                        { this.state.inputs }
+                        {
+                            this.state.inputs.map((item) => {
+                                    if(item.type === 'node')
+                                    return (
+                                        <StartNode
+                                            position={item.position}
+                                            setFocusedElement={this.setFocusedElement}
+                                            showNodeNames={this.state.settings.showNodeNames}
+                                        />
+                                    );
+                                    else if(item.type === 'set')
+                                    return (
+                                        <NodeSet
+                                            nodes={item.nodes}
+                                            position={item.position}
+                                            isInputArea={item.isInputArea}
+                                            isSigned={item.isSigned}
+                                            unmountNode={item.unmountNode}
+                                            showNodeNames={this.state.settings.showNodeNames}
+                                        />
+                                    );
+                                }
+                            )
+                        }
+
                     </div>
                     <div
                         className={ styles.Board }
@@ -526,7 +551,31 @@ class Application extends React.Component {
                         className={ `Area ${styles.OutputArea}` }
                         onClick={ (e) => this.addNode(e, 'endNode')}
                     >
-                        { this.state.outputs }
+                        {
+                            this.state.outputs.map((item) => {
+                                    if(item.type === 'node')
+                                    return (
+                                        <EndNode
+                                            position={item.position}
+                                            getFocusedElement={this.getFocusedElement}
+                                            drawWire={this.drawWire}
+                                            showNodeNames={this.state.settings.showNodeNames}
+                                        />
+                                    );
+                                    else if(item.type === 'set')
+                                    return (
+                                        <NodeSet
+                                            nodes={item.nodes}
+                                            position={item.position}
+                                            isInputArea={item.isInputArea}
+                                            isSigned={item.isSigned}
+                                            unmountNode={item.unmountNode}
+                                            showNodeNames={this.state.settings.showNodeNames}
+                                        />
+                                    );
+                                }
+                            )
+                        }
                     </div>
                 </div>
                 <ControlPanel addGate={this.addGate} reference={this.controlRef}/>

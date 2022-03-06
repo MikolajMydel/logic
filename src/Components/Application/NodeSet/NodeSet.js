@@ -137,6 +137,9 @@ class NodeSet extends React.Component {
         for (let i = 0; i < children.length; i++){
             children[i].setAttribute("data-index", children.length - i - 1);
             children[i].dispatchEvent(attributeChange);
+
+            // wartosc potrzebna dla css do skladania nodesetu
+            children[i].style.setProperty("--node-number", i + 1);
         };
 
         this.spreadNameChange();
@@ -153,8 +156,6 @@ class NodeSet extends React.Component {
         for (let i = 0; i < children.length; i++){
             children[i].style.top = "";
             children[i].addEventListener("mousedown", this.handleMouseDown);
-            // wartosc potrzebna dla css do skladania nodesetu
-            children[i].style.setProperty("--node-number", i + 1);
 
             HTMLElement.appendChild(children[i]);
         };

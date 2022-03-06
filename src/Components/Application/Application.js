@@ -69,7 +69,9 @@ class Application extends React.Component {
 
         this.controlPanelObject = findReact(this.controlRef.current);
 
-        this.showPopup('project')
+        const recentProject = localStorage.getItem("recentProject");
+        if (recentProject !== null) this.loadProject(recentProject);
+        else this.showPopup('project');
     }
 
     // wczytaj zapisany projekt z localstorage
@@ -91,7 +93,7 @@ class Application extends React.Component {
         }
 
         this.currentProjectName = projectName;
-
+        localStorage.setItem("recentProject", projectName);
         this.controlPanelObject.reset(saved);
         this.clearCanvas();
     }
@@ -100,6 +102,11 @@ class Application extends React.Component {
         // dodaj tylko jeżeli kliknięto na czysty obszar (nie np istniejący node)
         if ( !e.target.classList.contains('Area') )
             return;
+        // aby nie dodawac node'a podczas scalania nodesetow
+        if (["NodeSet", "NodeSetHandle", "Node"]
+            .includes(document.elementFromPoint(e.clientX, e.clientY)
+            .getAttribute("data-element"))) return;
+
 
         const pos = e.clientY - e.target.offsetTop - 10;
         let stateCopy = Object.assign({}, this.state);

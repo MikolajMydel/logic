@@ -78,6 +78,12 @@
 
     &Folded {
 
+        pointer-events: none;
+
+        .NodeSetHandle {
+            pointer-events: all;
+        }
+
         .Node {
             // wartosc ustawiana w trakcie tworzenia NodeSetu i
             // przypisywania atrybutu index dla Node

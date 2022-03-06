@@ -97,9 +97,12 @@
         pointer-events: all;
         user-select: none;
 
-        background-color: transparent;
         // im wyzszy jest pin tym szybciej
         transition: calc(var(--node-number) * 0.2s) ease-in-out;
+
+        background-color: darken(#818181, 20%);
+        color: #fff;
+        font-weight: bold;
 
         // nodeSet jest ruchomym elementem
         position: relative;

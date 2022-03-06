@@ -1,6 +1,6 @@
 import Popup from './Popup';
 import styles from './SettingsPopup.module.scss';
-import './customCheckbox.scss';
+import customCheckbox from './customCheckbox.module.scss';
 
 class SettingsPopup extends Popup {
     style = {
@@ -66,13 +66,13 @@ class SettingsPopup extends Popup {
                     </div>
                     <div className={styles.MainSectionSubdivision}>
                         <label className={styles.MainLabel}>Pokaż siatkę</label>
-                        <label className="container">
+                        <label className={customCheckbox.container}>
                             <input
                                 type="checkbox"
                                 checked={this.state.settings.showGrid}
                                 onChange={(e) => this.handleOnChangeCheckbox(e, 'showGrid')}
                             />
-                            <span className="checkmark"></span>
+                            <span className={customCheckbox.checkmark}></span>
                         </label>
                     </div>
                 </div>
@@ -100,13 +100,13 @@ class SettingsPopup extends Popup {
                     <div className={styles.MainSectionSubdivision}>
                         <label className={styles.MainLabel}>Pokaż nazwy</label>
 
-                        <label className="container">
+                        <label className={customCheckbox.container}>
                             <input // na razie nie ma zastosowania TODO
                                 type="checkbox"
                                 checked={this.state.settings.showNodeNames}
                                 onChange={(e) => this.handleOnChangeCheckbox(e, 'showNodeNames')}
                             />
-                        <span className="checkmark"></span>
+                        <span className={customCheckbox.checkmark}></span>
                         </label>
 
                     </div>

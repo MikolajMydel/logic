@@ -71,7 +71,7 @@ class Application extends React.Component {
 
         const recentProject = localStorage.getItem("recentProject");
         if (recentProject !== null) this.loadProject(recentProject);
-        else this.showPopup('project')
+        else this.showPopup('project');
     }
 
     // wczytaj zapisany projekt z localstorage

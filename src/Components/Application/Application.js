@@ -331,11 +331,11 @@ class Application extends React.Component {
                 const nodeSet = element.parentElement;
                 let y = e.clientY;
 
-                if (y > nodeSet.parentElement.offsetHeight - 20)
-                    y = nodeSet.parentElement.offsetHeight - 20;
+                if (y > nodeSet.parentElement.offsetHeight + 10)
+                    y = nodeSet.parentElement.offsetHeight + 10;
 
-                if (y < nodeSet.parentElement.offsetTop + 40)
-                    y = nodeSet.parentElement.offsetTop + 40;
+                if (y < nodeSet.parentElement.offsetTop + 20)
+                    y = nodeSet.parentElement.offsetTop + 20;
 
                 nodeSet.style.top = y - 60 + 'px';
                 nodeSet.dispatchEvent(move);

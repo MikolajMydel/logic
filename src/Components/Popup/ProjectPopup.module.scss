@@ -27,6 +27,10 @@
 
 .Main {
 
+    font-family: 'Ubuntu', sans-serif;
+    height: 100%;
+    overflow: hidden;
+
     &NewProjectArea {
         display: flex;
         align-items: center;
@@ -76,7 +80,8 @@
         color: #129c00;
     }
     &List {
-        overflow-y: scroll;
+        height: 70%;
+        overflow-y: auto;
         margin-top: 10px;
 
         display: flex;

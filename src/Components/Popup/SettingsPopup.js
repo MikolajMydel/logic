@@ -1,5 +1,6 @@
 import Popup from './Popup';
 import styles from './SettingsPopup.module.scss';
+import './customCheckbox.scss';
 
 class SettingsPopup extends Popup {
     style = {
@@ -65,11 +66,14 @@ class SettingsPopup extends Popup {
                     </div>
                     <div className={styles.MainSectionSubdivision}>
                         <label className={styles.MainLabel}>Pokaż siatkę</label>
-                        <input
-                            type="checkbox"
-                            checked={this.state.settings.showGrid}
-                            onChange={(e) => this.handleOnChangeCheckbox(e, 'showGrid')}
-                        />
+                        <label className="container">
+                            <input
+                                type="checkbox"
+                                checked={this.state.settings.showGrid}
+                                onChange={(e) => this.handleOnChangeCheckbox(e, 'showGrid')}
+                            />
+                            <span className="checkmark"></span>
+                        </label>
                     </div>
                 </div>
                 <h2 className={styles.MainTitle}>Bramki</h2>
@@ -95,11 +99,16 @@ class SettingsPopup extends Popup {
                 <div className={styles.MainSection}>
                     <div className={styles.MainSectionSubdivision}>
                         <label className={styles.MainLabel}>Pokaż nazwy</label>
-                        <input // na razie nie ma zastosowania TODO
-                            type="checkbox"
-                            checked={this.state.settings.showNodeNames}
-                            onChange={(e) => this.handleOnChangeCheckbox(e, 'showNodeNames')}
-                        />
+
+                        <label className="container">
+                            <input // na razie nie ma zastosowania TODO
+                                type="checkbox"
+                                checked={this.state.settings.showNodeNames}
+                                onChange={(e) => this.handleOnChangeCheckbox(e, 'showNodeNames')}
+                            />
+                        <span className="checkmark"></span>
+                        </label>
+
                     </div>
                 </div>
             </div>

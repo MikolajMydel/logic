@@ -73,6 +73,11 @@ class ProjectPopup extends Popup {
                 </div>
             );
         }
+        let isEmpty = false;
+        if (projects.length === 0){
+            projects.push(<h2>Brak utworzonych projektów</h2>);
+            isEmpty = true;
+        }
 
         return super.render((
             <div className={styles.Main}>
@@ -97,7 +102,7 @@ class ProjectPopup extends Popup {
                         onClick={() => this.loadProject(this.state.givenName)}
                     />
                 </div>
-                <div className={styles.MainList}>
+                <div className={`${styles.MainList} ${ isEmpty ? styles.MainListEmpty : "" }`}>
                     {projects}
                 </div>
             </div>

@@ -1,10 +1,12 @@
 .Main {
-    p {
-        margin: 12px 0 6px 12px;
+
+    &Title {
         font-weight: bold;
+        font-size: 24px;
+        text-align: center;
     }
     &Section {
-        margin: 10px 0;
+        margin: 10px 0 40px;
 
         padding: 10px;
         border: 1px solid black;
@@ -13,8 +15,16 @@
         input {
             float: right;
         }
+
         &Slider {
             width: 50%;
+        }
+    }
+
+    &Label {
+        &Value {
+            font-weight: bold;
+            padding-left: 5px;
         }
     }
 }

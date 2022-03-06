@@ -45,9 +45,14 @@ class SettingsPopup extends Popup {
     render(){
         return super.render((
             <div className={styles.Main}>
-                <p>Siatka</p>
+                <h2 className={styles.MainTitle}>Siatka</h2>
                 <div className={styles.MainSection}>
-                    <span>{"rozmiar: " + this.getGridSliderValue()}</span>
+                    <label className={styles.MainLabel}>
+                        Rozmiar siatki:
+                        <span className={styles.MainLabelValue}>
+                            {this.getGridSliderValue()}
+                        </span>
+                    </label>
                     <input
                         type="range"
                         min="1"
@@ -58,16 +63,21 @@ class SettingsPopup extends Popup {
                     />
                     <br/>
                     <br/>
-                    <span>pokaż siatkę</span>
+                    <label className={styles.MainLabel}>Pokaż siatkę</label>
                     <input
                         type="checkbox"
                         checked={this.state.settings.showGrid}
                         onChange={(e) => this.handleOnChangeCheckbox(e, 'showGrid')}
                     />
                 </div>
-                <p>Bramki</p>
+                <h2 className={styles.MainTitle}>Bramki</h2>
                 <div className={styles.MainSection}>
-                    <span>{'interwał: ' + this.getClockSliderValue() + 'ms'}</span>
+                    <label className={styles.MainLabel}>
+                        Czas propagacji:
+                        <span className={styles.MainLabelValue}>
+                            {this.getClockSliderValue()}ms
+                        </span>
+                        </label>
                     <input
                         type="range"
                         min="0"
@@ -77,9 +87,9 @@ class SettingsPopup extends Popup {
                         className={styles.MainSectionSlider}
                     />
                 </div>
-                <p>Pola wejścia/wyjścia</p>
+                <h2 className={styles.MainTitle}> Pola wejścia/wyjścia</h2>
                 <div className={styles.MainSection}>
-                    <span>pokaż nazwy</span>
+                    <label className={styles.MainLabel}>Pokaż nazwy</label>
                     <input // na razie nie ma zastosowania TODO
                         type="checkbox"
                         checked={this.state.settings.showNodeNames}

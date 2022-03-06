@@ -21,7 +21,8 @@
         left: 5px;
         transform: translateY(25%);
         pointer-events: none;
-        transition: 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+        color: gray;
+        transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
 }
 
@@ -134,7 +135,7 @@
                 transition: 0.2s;
             }
             &Body:hover {
-                background-color: #88bfe9;
+                background-color: silver;
             }
             &Delete {
                 display: flex;

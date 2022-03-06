@@ -1,20 +1,82 @@
+$primary-color: #333;
+$secondary-color: #00C896;
+
+
 .Main {
-    p {
-        margin: 12px 0 6px 12px;
+
+    &Title {
         font-weight: bold;
+        font-size: 24px;
+        text-align: center;
     }
     &Section {
-        margin: 10px 0;
+        background-color: darken(#fff, 5%);
+
+        margin: 10px 0 40px;
 
         padding: 10px;
         border: 1px solid black;
         border-radius: 6px;
 
+        &Subdivision {
+            margin: 15px 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
         input {
             float: right;
+
+            &[type="range"]{
+                overflow: hidden;
+                background-color: $primary-color;
+                appearance: none;
+                border-radius: 15px;
+                outline: none;
+
+                &::-webkit-slider-runnable-track, &::-moz-range-track, &::-ms-fill-upper {
+                    appearance: none;
+                    background-color: $primary-color;
+                }
+
+                &::-webkit-slider-thumb {
+                    width: 20px;
+                    appearance: none;
+                    height: 15px;
+                    cursor: ew-resize;
+                    background-color: $secondary-color;
+                    border-radius: 15px;
+                }
+
+                &::-moz-range-thumb {
+                    height: 100%;
+                    width: 20px;
+                    appearance: none;
+                    cursor: ew-resize;
+                    background-color: $secondary-color;
+                    border-radius: 15px;
+                }
+
+                &::-moz-range-progress, &::-ms-fill-lower{
+                    width: 20px;
+                    cursor: ew-resize;
+                    background-color: $secondary-color;
+                    border-radius: 15px;
+                }
+            }
         }
+
         &Slider {
             width: 50%;
+        }
+    }
+
+    &Label {
+        &Value {
+            font-weight: bold;
+            padding-left: 5px;
         }
     }
 }

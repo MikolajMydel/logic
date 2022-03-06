@@ -1,10 +1,11 @@
 import Popup from './Popup';
 import styles from './SettingsPopup.module.scss';
+import customCheckbox from './customCheckbox.module.scss';
 
 class SettingsPopup extends Popup {
     style = {
         maxWidth: '440px',
-        height:   '440px',
+        height:   '500px',
     }
 
     state = {
@@ -32,7 +33,7 @@ class SettingsPopup extends Popup {
 
     getGridSliderValue = () => {
         var val = this.state.settings.grid;
-        if(val === '1') val = "off";
+        if(val === '1') val = "Wyłączona";
         return val;
     }
 
@@ -45,46 +46,70 @@ class SettingsPopup extends Popup {
     render(){
         return super.render((
             <div className={styles.Main}>
-                <p>Siatka</p>
+                <h2 className={styles.MainTitle}>Siatka</h2>
                 <div className={styles.MainSection}>
-                    <span>{"rozmiar: " + this.getGridSliderValue()}</span>
-                    <input
-                        type="range"
-                        min="1"
-                        max="60"
-                        value={this.state.settings.grid}
-                        onChange={(e) => this.handleOnChangeSlider(e, 'grid')}
-                        className={styles.MainSectionSlider}
-                    />
-                    <br/>
-                    <br/>
-                    <span>pokaż siatkę</span>
-                    <input
-                        type="checkbox"
-                        checked={this.state.settings.showGrid}
-                        onChange={(e) => this.handleOnChangeCheckbox(e, 'showGrid')}
-                    />
+                    <div className={styles.MainSectionSubdivision}>
+                        <label className={styles.MainLabel}>
+                            Rozmiar siatki:
+                            <span className={styles.MainLabelValue}>
+                                {this.getGridSliderValue()}
+                            </span>
+                        </label>
+                        <input
+                            type="range"
+                            min="1"
+                            max="60"
+                            value={this.state.settings.grid}
+                            onChange={(e) => this.handleOnChangeSlider(e, 'grid')}
+                            className={styles.MainSectionSlider}
+                        />
+                    </div>
+                    <div className={styles.MainSectionSubdivision}>
+                        <label className={styles.MainLabel}>Pokaż siatkę</label>
+                        <label className={customCheckbox.container}>
+                            <input
+                                type="checkbox"
+                                checked={this.state.settings.showGrid}
+                                onChange={(e) => this.handleOnChangeCheckbox(e, 'showGrid')}
+                            />
+                            <span className={customCheckbox.checkmark}></span>
+                        </label>
+                    </div>
                 </div>
-                <p>Bramki</p>
+                <h2 className={styles.MainTitle}>Bramki</h2>
                 <div className={styles.MainSection}>
-                    <span>{'interwał: ' + this.getClockSliderValue() + 'ms'}</span>
-                    <input
-                        type="range"
-                        min="0"
-                        max="2000"
-                        value={this.state.settings.clock}
-                        onChange={(e) => this.handleOnChangeSlider(e, 'clock')}
-                        className={styles.MainSectionSlider}
-                    />
+                    <div className={styles.MainSectionSubdivision}>
+                        <label className={styles.MainLabel}>
+                            Czas propagacji:
+                            <span className={styles.MainLabelValue}>
+                                {this.getClockSliderValue()}ms
+                            </span>
+                            </label>
+                        <input
+                            type="range"
+                            min="0"
+                            max="2000"
+                            value={this.state.settings.clock}
+                            onChange={(e) => this.handleOnChangeSlider(e, 'clock')}
+                            className={styles.MainSectionSlider}
+                        />
+                    </div>
                 </div>
-                <p>Pola wejścia/wyjścia</p>
+                <h2 className={styles.MainTitle}> Pola wejścia/wyjścia</h2>
                 <div className={styles.MainSection}>
-                    <span>pokaż nazwy</span>
-                    <input // na razie nie ma zastosowania TODO
-                        type="checkbox"
-                        checked={this.state.settings.showNodeNames}
-                        onChange={(e) => this.handleOnChangeCheckbox(e, 'showNodeNames')}
-                    />
+                    <div className={styles.MainSectionSubdivision}>
+                        <label className={styles.MainLabel}>Pokaż nazwy</label>
+
+                        <label className={customCheckbox.container}>
+                            <input // na razie nie ma zastosowania TODO
+                                type="checkbox"
+                                checked={this.state.settings.showNodeNames}
+                                onChange={(e) => this.handleOnChangeCheckbox(e, 'showNodeNames')}
+                            />
+                        <span className={customCheckbox.checkmark}></span>
+                        </label>
+
+                    </div>
                 </div>
             </div>
         ));

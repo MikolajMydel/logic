@@ -89,10 +89,14 @@
             // przypisywania atrybutu index dla Node
             transform: translateY((calc(var(--node-number) * -100%)));
             overflow: hidden;
+            pointer-events: none;
         }
     }
 
     .Node {
+        pointer-events: all;
+        user-select: none;
+
         background-color: transparent;
         // im wyzszy jest pin tym szybciej
         transition: calc(var(--node-number) * 0.2s) ease-in-out;

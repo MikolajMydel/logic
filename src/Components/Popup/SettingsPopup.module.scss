@@ -1,3 +1,7 @@
+$primary-color: #333;
+$secondary-color: #00C896;
+
+
 .Main {
 
     &Title {
@@ -6,6 +10,8 @@
         text-align: center;
     }
     &Section {
+        background-color: darken(#fff, 5%);
+
         margin: 10px 0 40px;
 
         padding: 10px;
@@ -14,6 +20,45 @@
 
         input {
             float: right;
+
+            &[type="range"]{
+                overflow: hidden;
+                background-color: $primary-color;
+                appearance: none;
+                border-radius: 15px;
+                outline: none;
+
+                &::-webkit-slider-runnable-track {
+                    appearance: none;
+                    background-color: $primary-color;
+                }
+
+                &::-webkit-slider-thumb {
+                    width: 20px;
+                    appearance: none;
+                    height: 10px;
+                    cursor: ew-resize;
+                    background-color: $secondary-color;
+                    border-radius: 15px;
+                }
+
+                &::-moz-range-progress, &::-ms-fill-lower{
+                    width: 20px;
+                    cursor: ew-resize;
+                    background-color: $secondary-color;
+                    border-radius: 15px;
+                }
+
+                &::-moz-range-track, &::-ms-fill-upper {
+                    background-color: $primary-color;
+                }
+
+                &::-moz-range-thumb {
+                    background-color: $secondary-color;
+                    outline: none;
+                    appearance: none;
+                }
+            }
         }
 
         &Slider {

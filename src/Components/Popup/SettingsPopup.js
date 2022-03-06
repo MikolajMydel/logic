@@ -32,7 +32,7 @@ class SettingsPopup extends Popup {
 
     getGridSliderValue = () => {
         var val = this.state.settings.grid;
-        if(val === '1') val = "off";
+        if(val === '1') val = "Wyłączona";
         return val;
     }
 

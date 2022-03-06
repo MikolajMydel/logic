@@ -58,39 +58,51 @@ class ProjectPopup extends Popup {
                 <div
                     className={styles.MainListProject}
                 >
-                    <div
+                    <button
                         className={styles.MainListProjectBody}
                         onClick={() => this.loadProject(proj)}
                     >
                         <p>{proj}</p>
-                    </div>
-                    <div
+                    </button>
+                    <button
                         className={styles.MainListProjectDelete}
                         onClick={() => this.deleteProject(proj)}
                     >
                         X
-                    </div>
+                    </button>
                 </div>
             );
+        }
+        let isEmpty = false;
+        if (projects.length === 0){
+            projects.push(<h2>Brak utworzonych projektów</h2>);
+            isEmpty = true;
         }
 
         return super.render((
             <div className={styles.Main}>
-                <input
-                    type="text"
-                    className={styles.MainNewText}
-                    placeholder="Nowy projekt"
-                    maxLength="24"
-                    onChange={this.handleOnChange}
-                />
-                <input
-                    type="button"
-                    value="+"
-                    className={styles.MainNewButton}
-                    onClick={() => this.loadProject(this.state.givenName)}
-                />
-                <hr/>
-                <div className={styles.MainList}>
+                <h1 className={styles.MainTitle}>Wybierz projekt</h1>
+                <div className={styles.MainNewProjectArea}>
+                    <div className={styles.AnimatedLabel}>
+                        <input
+                            type="text"
+                            className={`${styles.MainNewText} ${styles.AnimatedLabelInput}`}
+                            placeholder=" "
+                            maxLength="24"
+                            onChange={this.handleOnChange}
+                        />
+                        <label className={styles.AnimatedLabelLabel}>
+                            Nazwa nowego projektu
+                        </label>
+                    </div>
+                    <input
+                        type="button"
+                        value="Stwórz"
+                        className={styles.MainNewButton}
+                        onClick={() => this.loadProject(this.state.givenName)}
+                    />
+                </div>
+                <div className={`${styles.MainList} ${ isEmpty ? styles.MainListEmpty : "" }`}>
                     {projects}
                 </div>
             </div>

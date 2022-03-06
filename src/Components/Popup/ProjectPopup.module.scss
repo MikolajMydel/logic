@@ -1,37 +1,124 @@
+.AnimatedLabel {
+    position: relative;
+    width: 80%;
+
+    &Input {
+        width: 100%;
+
+        &:focus, &:not(:placeholder-shown) {
+            ~ .AnimatedLabelLabel {
+                transform: translateY(-65%);
+                font-size: 0.8em;
+            }
+        }
+    }
+
+    &Label {
+        padding: 0 15px 0 10px;
+        border-radius: 15px;
+        background-color: #fff;
+        position: absolute;
+        left: 5px;
+        transform: translateY(25%);
+        pointer-events: none;
+        color: gray;
+        transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+}
+
 .Main {
+
+    font-family: 'Ubuntu', sans-serif;
+    height: 100%;
+    overflow: hidden;
+
+    &NewProjectArea {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        margin-bottom: 30px;
+    }
+
+    &Title {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
     &NewText {
-        width: 80%;
+        font-size: 16px;
         height: 36px;
         padding-left: 10px;
+
+        outline: none;
+        border: 3px solid #000;
+        border-right: none;
+        border-top-left-radius: 15px;
+        border-bottom-left-radius: 15px;
+
+
+        ~ label {
+            font-size: 20px;
+        }
     }
     &NewButton {
-        margin: 10px 0 10px 0;
         width: 20%;
         height: 36px;
-        border: 3px solid #129c00;
+        border: 3px solid #000;
+        border-left: none;
+
         background-color: #6ad45c;
         color: white;
         font-weight: bold;
         font-size: 16px;
+
+        cursor: pointer;
+
+        border-top-right-radius: 15px;
+        border-bottom-right-radius: 15px;
     }
     &NewButton:hover {
         color: #129c00;
     }
     &List {
-        overflow-y: scroll;
+        border: 3px solid #000;
+        border-right: 2px solid #000;
+        border-radius: 15px;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+
+        background-color: darken(#fff, 5%);
+
+        padding: 5px;
+        height: 70%;
+        overflow-y: auto;
         margin-top: 10px;
 
         display: flex;
         flex-direction: column;
         max-height: 480px;
 
+        &Empty {
+            border-right: 3px solid #000;
+            border-radius: 15px;
+
+            h2 {
+                text-align: center;
+                font-size: 16px;
+                margin-top: 10px;
+            }
+        }
+
         &Project {
+            margin: 8px 0;
             flex-shrink: 0;
             padding: 5px;
             height: 50px;
             width: 100%;
 
             &Body {
+                font-size: 16px;
+
                 display: flex;
                 align-items: center;
 
@@ -40,7 +127,7 @@
                 height: 100%;
                 padding: 10px;
 
-                border: 3px solid #1181d8;
+                border: 3px solid #00C896;
                 background-color: white;
                 border-radius: 14px;
 
@@ -48,7 +135,7 @@
                 transition: 0.2s;
             }
             &Body:hover {
-                background-color: #88bfe9;
+                background-color: silver;
             }
             &Delete {
                 display: flex;

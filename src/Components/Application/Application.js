@@ -69,7 +69,9 @@ class Application extends React.Component {
 
         this.controlPanelObject = findReact(this.controlRef.current);
 
-        this.showPopup('project')
+        const recentProject = localStorage.getItem("recentProject");
+        if (recentProject !== null) this.loadProject(recentProject);
+        else this.showPopup('project');
     }
 
     // wczytaj zapisany projekt z localstorage
@@ -91,7 +93,7 @@ class Application extends React.Component {
         }
 
         this.currentProjectName = projectName;
-
+        localStorage.setItem("recentProject", projectName);
         this.controlPanelObject.reset(saved);
         this.clearCanvas();
     }

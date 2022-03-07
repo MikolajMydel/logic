@@ -274,22 +274,26 @@ class Application extends React.Component {
         let element = e.target;
         const elementType = element.getAttribute("data-element");
 
-        if (["LogicGate", "NodeHandle", "NodeSetHandle", "NodeSetFoldButton"].includes(elementType)) {
+        element.style.zIndex = 2;
+        this.setState({heldElement: element});
 
-            if (elementType === "NodeSetFoldButton")
-                element = element.parentElement;
+        let xo, yo;
 
-            element.style.zIndex = 2;
-            this.setState({heldElement: element});
-
+        if (["NodeHandle", "NodeSetHandle"].includes(elementType)) {
+            element = element.parentElement;
+            const board = this.boardRef.current;
+            xo = 0;
+            yo = e.clientY - element.offsetTop - board.offsetTop;
+            console.log(yo)
+        } else if(['LogicGate'].includes(elementType)){
             const grid = this.state.settings.grid
             // obliczenie różnicy koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku
             // uwzględnia szerokość siatki
-            const xo = e.clientX - element.offsetLeft - grid/2;
-            const yo = e.clientY - element.offsetTop - grid/2;
-            this.setState({heldElementOffset: [xo, yo]});
+            xo = e.clientX - element.offsetLeft - grid/2;
+            yo = e.clientY - element.offsetTop - grid/2;
         }
 
+        this.setState({heldElementOffset: [xo, yo]});
     }
 
     // przenieś trzymany element
@@ -330,15 +334,15 @@ class Application extends React.Component {
 
             case "NodeSetHandle": {
                 const nodeSet = element.parentElement;
-                let y = e.clientY;
+                let y = e.clientY - this.state.heldElementOffset[1];
 
-                if (y > nodeSet.parentElement.offsetHeight + 10)
-                    y = nodeSet.parentElement.offsetHeight + 10;
+                if (y > nodeSet.parentElement.offsetHeight - 10)
+                    y = nodeSet.parentElement.offsetHeight - 10;
 
-                if (y < nodeSet.parentElement.offsetTop + 20)
-                    y = nodeSet.parentElement.offsetTop + 20;
+                if (y < nodeSet.parentElement.offsetTop)
+                    y = nodeSet.parentElement.offsetTop;
 
-                nodeSet.style.top = y - 60 + 'px';
+                nodeSet.style.top = y - 40 + 'px';
                 nodeSet.dispatchEvent(move);
             }
 
@@ -346,15 +350,15 @@ class Application extends React.Component {
 
             case "NodeHandle": {
                 const node = element.parentElement;
-                let y = e.clientY;
+                let y = e.clientY - this.state.heldElementOffset[1];
 
-                if (y > node.parentElement.offsetHeight + 22)
-                    y = node.parentElement.offsetHeight + 22;
+                if (y > node.parentElement.offsetHeight + 10)
+                    y = node.parentElement.offsetHeight + 10;
 
-                if (y < node.parentElement.offsetTop + 20)
-                    y = node.parentElement.offsetTop + 20;
+                if (y < node.parentElement.offsetTop + 10)
+                    y = node.parentElement.offsetTop + 10;
 
-                node.style.top = y - 50 + 'px';
+                node.style.top = y - 40 + 'px';
                 node.dispatchEvent(move);
             }
             break;

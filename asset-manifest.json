@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/static/css/main.be885e90.chunk.css",
-    "main.js": "/static/js/main.31484dda.chunk.js",
-    "main.js.map": "/static/js/main.31484dda.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.568c587d.js",
-    "runtime-main.js.map": "/static/js/runtime-main.568c587d.js.map",
-    "static/js/2.d8e04dee.chunk.js": "/static/js/2.d8e04dee.chunk.js",
-    "static/js/2.d8e04dee.chunk.js.map": "/static/js/2.d8e04dee.chunk.js.map",
-    "index.html": "/index.html",
-    "static/css/main.be885e90.chunk.css.map": "/static/css/main.be885e90.chunk.css.map",
-    "static/js/2.d8e04dee.chunk.js.LICENSE.txt": "/static/js/2.d8e04dee.chunk.js.LICENSE.txt"
+    "main.css": "https://isayni.github.io/logic/static/css/main.be885e90.chunk.css",
+    "main.js": "https://isayni.github.io/logic/static/js/main.31484dda.chunk.js",
+    "main.js.map": "https://isayni.github.io/logic/static/js/main.31484dda.chunk.js.map",
+    "runtime-main.js": "https://isayni.github.io/logic/static/js/runtime-main.ba46262f.js",
+    "runtime-main.js.map": "https://isayni.github.io/logic/static/js/runtime-main.ba46262f.js.map",
+    "static/js/2.d8e04dee.chunk.js": "https://isayni.github.io/logic/static/js/2.d8e04dee.chunk.js",
+    "static/js/2.d8e04dee.chunk.js.map": "https://isayni.github.io/logic/static/js/2.d8e04dee.chunk.js.map",
+    "index.html": "https://isayni.github.io/logic/index.html",
+    "static/css/main.be885e90.chunk.css.map": "https://isayni.github.io/logic/static/css/main.be885e90.chunk.css.map",
+    "static/js/2.d8e04dee.chunk.js.LICENSE.txt": "https://isayni.github.io/logic/static/js/2.d8e04dee.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.568c587d.js",
+    "static/js/runtime-main.ba46262f.js",
     "static/js/2.d8e04dee.chunk.js",
     "static/css/main.be885e90.chunk.css",
     "static/js/main.31484dda.chunk.js"

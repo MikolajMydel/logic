@@ -273,9 +273,11 @@ class Application extends React.Component {
     grab(e) {
         let element = e.target;
         const elementType = element.getAttribute("data-element");
+        if(!["NodeHandle", "NodeSetHandle", "LogicGate"].includes(elementType))
+            return;
 
-        element.style.zIndex = 2;
         this.setState({heldElement: element});
+        element.style.zIndex = 2;
 
         let xo, yo;
 

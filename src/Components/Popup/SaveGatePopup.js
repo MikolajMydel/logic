@@ -64,12 +64,14 @@ class SaveGatePopup extends Popup {
                         onClick={() => this.saveGate()}
                     />
                 </div>
-                <input
-                    type="color"
-                    className={styles.MainColor}
-                    value={this.state.givenColor}
-                    onChange={this.handleOnChangeColor}
-                />
+                <div className={styles.MainColorWrapper}>
+                    <input
+                        type="color"
+                        className={styles.MainColor}
+                        value={this.state.givenColor}
+                        onChange={this.handleOnChangeColor}
+                    />
+                </div>
             </div>
         ));
     }

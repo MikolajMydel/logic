@@ -284,7 +284,6 @@ class Application extends React.Component {
             const board = this.boardRef.current;
             xo = 0;
             yo = e.clientY - element.offsetTop - board.offsetTop;
-            console.log(yo)
         } else if(['LogicGate'].includes(elementType)){
             const grid = this.state.settings.grid
             // obliczenie różnicy koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku

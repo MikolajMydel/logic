@@ -7,6 +7,6 @@ Ten program umożliwia budowę układów logicznych z predefiniowanych bramek or
 
 zobacz projekt na **[github pages](https://isayni.github.io/logic)**
 
-lub pobierz **[tutaj](https://github.com/isayni/logic)**
+lub pobierz **[tutaj](https://github.com/isayni/logic/releases/download/v1.0/logic.zip)**
 ***
 **[[instalacja]](https://github.com/isayni/logic/wiki/instalacja)** **[[User Manual]](https://github.com/isayni/logic/wiki/manual)** **[[FAQ]](https://github.com/isayni/logic/wiki/faq)**

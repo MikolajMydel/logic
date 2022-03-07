@@ -158,6 +158,13 @@ function calculatePath(firstPinBoundingClient, secondPinBoundingClient, paddings
     // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/path
     // przewod idzie od wyjscia do wejscia
 
+    if ( Math.abs(firstPinCoordinates[0] - secondPinCoordinates[0]) < 100 &&
+        Math.abs(firstPinCoordinates[1] - secondPinCoordinates[1]) < 100
+    ) return `
+        M ${firstPinCoordinates}
+        L ${secondPinCoordinates}
+    `;
+
     // jezeli docelowy punkt jest prawo
     if (secondPinCoordinates[0] > firstPinCoordinates[0] + 30)
         return calculatePathRight(firstPinCoordinates, secondPinCoordinates, paddings)

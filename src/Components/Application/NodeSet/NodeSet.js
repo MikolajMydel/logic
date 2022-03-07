@@ -4,27 +4,22 @@ import styles from './NodeSet.module.scss';
 import attributeChange from "../../../Events/attributeChange";
 import { findParentNode } from "../../../findingFunctions";
 class NodeSet extends React.Component {
-    constructor(props){
-        super(props);
+    state = {
+        ref: React.createRef(),
+        render: true,
+        position: this.props.position,
 
-        this.state = {
-            ref: React.createRef(),
-            render: true,
-            position: this.props.position,
+        name: "",
+        renderNameBox: false,
+        showName: true,
 
-            name: "",
-            renderNameBox: false,
-            showName: true,
+        nodes: this.props.nodes,
+        signed: this.props.isSigned,
 
-            nodes: this.props.nodes,
-            signed: this.props.isSigned,
-
-            folded: false,
-
-        }
-
-        this.style = this.props.isInputArea ? styles.NodeSetStart : styles.NodeSetEnd;
+        folded: false,
     }
+
+    style = this.props.isInputArea ? styles.NodeSetStart : styles.NodeSetEnd;
 
     toggleSignBit = () => {
         this.setState({
@@ -221,8 +216,8 @@ class NodeSet extends React.Component {
                         }
                     />
                     <div className={styles.NodeSetNameBoxButtons}>
-                        <button className={`${styles.Button} ${styles.ButtonDestruct}`} onClick={this.selfDestruct}>delete</button>
-                        <button className={`${styles.Button} ${styles.ButtonSignBit}`} onClick={this.toggleSignBit} >ZM</button>
+                        <button className={`${styles.Button} ${styles.ButtonDestruct}`} onClick={this.selfDestruct}>usuń</button>
+                        <button className={`${styles.Button} ${styles.ButtonSignBit}`} onClick={this.toggleSignBit} >bit znaku</button>
                     </div>
                 </div>
             )
@@ -242,7 +237,8 @@ class NodeSet extends React.Component {
         if (!this.state.render) return null;
 
         return (
-            <div ref={this.state.ref}
+            <div
+                ref={this.state.ref}
                 style={{top: this.state.position}}
                 className={`${styles.NodeSet} ${this.style} ${this.state.folded ? styles.NodeSetFolded : ""}`}
                 onClick={this.show}
@@ -250,7 +246,8 @@ class NodeSet extends React.Component {
                 data-signed={this.state.signed}
             >
 
-                <div className={styles.NodeSetHandle}
+                <div
+                    className={`${styles.NodeSetHandle} ${this.state.signed ? styles.NodeSetHandleSigned : ''}`}
                     data-element="NodeSetHandle"
                     onMouseUp={this.handleHandleMouseUp}
                 >

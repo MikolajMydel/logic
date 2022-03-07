@@ -273,9 +273,11 @@ class Application extends React.Component {
     grab(e) {
         let element = e.target;
         const elementType = element.getAttribute("data-element");
+        if(!["NodeHandle", "NodeSetHandle", "LogicGate"].includes(elementType))
+            return;
 
-        element.style.zIndex = 2;
         this.setState({heldElement: element});
+        element.style.zIndex = 2;
 
         let xo, yo;
 
@@ -284,7 +286,6 @@ class Application extends React.Component {
             const board = this.boardRef.current;
             xo = 0;
             yo = e.clientY - element.offsetTop - board.offsetTop;
-            console.log(yo)
         } else if(['LogicGate'].includes(elementType)){
             const grid = this.state.settings.grid
             // obliczenie różnicy koordynatów x i y, między punktem chwytu a faktycznym położeniem bloku

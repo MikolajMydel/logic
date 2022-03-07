@@ -46,19 +46,24 @@ class SaveGatePopup extends Popup {
     render(){
         return super.render((
             <div className={styles.Main}>
-                <input
-                    type="text"
-                    className={styles.MainNameText}
-                    placeHolder="NowaBramka"
-                    maxLength="12"
-                    onChange={this.handleOnChangeName}
-                />
-                <input
-                    type="button"
-                    value="+"
-                    className={styles.MainNewButton}
-                    onClick={() => this.saveGate()}
-                />
+                <div className={styles.MainSaveArea}>
+                    <div className={styles.AnimatedLabel}>
+                        <input
+                            type="text"
+                            className={`${styles.MainNameText} ${styles.AnimatedLabelInput}`}
+                            placeholder=" "
+                            maxLength="12"
+                            onChange={this.handleOnChangeName}
+                        />
+                        <label className={styles.AnimatedLabelLabel}>NowaBramka</label>
+                    </div>
+                    <input
+                        type="button"
+                        value="Zapisz"
+                        className={styles.MainNewButton}
+                        onClick={() => this.saveGate()}
+                    />
+                </div>
                 <input
                     type="color"
                     className={styles.MainColor}

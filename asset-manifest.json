@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/logic/static/css/main.be885e90.chunk.css",
-    "main.js": "/logic/static/js/main.fd980364.chunk.js",
-    "main.js.map": "/logic/static/js/main.fd980364.chunk.js.map",
-    "runtime-main.js": "/logic/static/js/runtime-main.e802385d.js",
-    "runtime-main.js.map": "/logic/static/js/runtime-main.e802385d.js.map",
-    "static/js/2.d8e04dee.chunk.js": "/logic/static/js/2.d8e04dee.chunk.js",
-    "static/js/2.d8e04dee.chunk.js.map": "/logic/static/js/2.d8e04dee.chunk.js.map",
-    "index.html": "/logic/index.html",
-    "static/css/main.be885e90.chunk.css.map": "/logic/static/css/main.be885e90.chunk.css.map",
-    "static/js/2.d8e04dee.chunk.js.LICENSE.txt": "/logic/static/js/2.d8e04dee.chunk.js.LICENSE.txt"
+    "main.css": "https://mikolajmydel.github.io/logic/static/css/main.be885e90.chunk.css",
+    "main.js": "https://mikolajmydel.github.io/logic/static/js/main.f8cece11.chunk.js",
+    "main.js.map": "https://mikolajmydel.github.io/logic/static/js/main.f8cece11.chunk.js.map",
+    "runtime-main.js": "https://mikolajmydel.github.io/logic/static/js/runtime-main.4f9b2c90.js",
+    "runtime-main.js.map": "https://mikolajmydel.github.io/logic/static/js/runtime-main.4f9b2c90.js.map",
+    "static/js/2.d8e04dee.chunk.js": "https://mikolajmydel.github.io/logic/static/js/2.d8e04dee.chunk.js",
+    "static/js/2.d8e04dee.chunk.js.map": "https://mikolajmydel.github.io/logic/static/js/2.d8e04dee.chunk.js.map",
+    "index.html": "https://mikolajmydel.github.io/logic/index.html",
+    "static/css/main.be885e90.chunk.css.map": "https://mikolajmydel.github.io/logic/static/css/main.be885e90.chunk.css.map",
+    "static/js/2.d8e04dee.chunk.js.LICENSE.txt": "https://mikolajmydel.github.io/logic/static/js/2.d8e04dee.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.e802385d.js",
+    "static/js/runtime-main.4f9b2c90.js",
     "static/js/2.d8e04dee.chunk.js",
     "static/css/main.be885e90.chunk.css",
-    "static/js/main.fd980364.chunk.js"
+    "static/js/main.f8cece11.chunk.js"
   ]
 }

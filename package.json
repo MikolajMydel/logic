@@ -1,5 +1,6 @@
 {
   "name": "logic-circuit-simulator",
+  "homepage": "https://mikolajmydel.github.io/logic",
   "version": "0.1.0",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.1",
@@ -16,7 +17,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build-gh": "PUBLIC_URL=https://isayni.github.io/logic react-scripts build"
+    "build-gh": "PUBLIC_URL=https://mikolajmydel.github.io/logic react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "browserslist": {
     "production": [
@@ -29,5 +32,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^4.0.0"
   }
 }
